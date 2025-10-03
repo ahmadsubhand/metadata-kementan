@@ -10,12 +10,11 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
+import { dashboard, metadata, manageUser } from '@/routes';
 import { SharedData, type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Users } from 'lucide-react';
+import { BookOpen, FileText, Folder, LayoutGrid, Users } from 'lucide-react';
 import AppLogo from './app-logo';
-import { index } from '@/routes/manage-user';
 
 export function AppSidebar() {
     const { auth } = usePage<SharedData>().props;
@@ -26,11 +25,16 @@ export function AppSidebar() {
             href: dashboard(),
             icon: LayoutGrid,
         },
+        {
+            title: 'Metadata Statistik',
+            href: metadata(),
+            icon: FileText,
+        },
         ...(auth.user.role === "admin"
         ? [
             {
                 title: 'Manajemen Pengguna',
-                href: index(),
+                href: manageUser(),
                 icon: Users,
             },
         ]

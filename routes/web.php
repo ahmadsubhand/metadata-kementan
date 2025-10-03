@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\MetadataController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -11,6 +12,12 @@ Route::middleware(['auth', 'verified', 'approved'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
+
+    Route::controller(MetadataController::class)
+        ->prefix('metadata')
+        ->group(function () {
+            Route::get('/', 'index')->name('metadata');
+        });
 });
 
 require __DIR__.'/settings.php';

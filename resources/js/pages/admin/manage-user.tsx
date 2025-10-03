@@ -3,7 +3,8 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
-import { index, approve, admin, destroy } from '@/routes/manage-user';
+import { approve, admin, destroy } from '@/routes/manage-user';
+import { manageUser } from '@/routes';
 import { SharedData, type BreadcrumbItem } from '@/types';
 import { Head, InertiaLinkProps, Link } from '@inertiajs/react';
 import dayjs from 'dayjs';
@@ -13,7 +14,7 @@ import { ReactNode } from 'react';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Manajemen Pengguna',
-        href: index().url,
+        href: manageUser().url,
     },
 ];
 
@@ -23,7 +24,7 @@ export default function ManageUser({ users } : { users: SharedData['auth']['user
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Manajemen Pengguna" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <h1>List Pengguna</h1>
+                <h1 className='font-bold'>List Pengguna</h1>
                 <Table>
                     <TableCaption>List Pengguna</TableCaption>
                     <TableHeader>
@@ -40,7 +41,7 @@ export default function ManageUser({ users } : { users: SharedData['auth']['user
                     <TableBody>
                         {
                             users.map((user, index) => (
-                                <TableRow>
+                                <TableRow key={index}>
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>{user.name}</TableCell>
                                     <TableCell>{user.email}</TableCell>
@@ -102,6 +103,7 @@ export default function ManageUser({ users } : { users: SharedData['auth']['user
         </AppLayout>
     );
 }
+
 type AlertProps = {
   isDisable?: boolean;
   label: string;
@@ -110,8 +112,6 @@ type AlertProps = {
   link: string;
   method?: InertiaLinkProps["method"];
 };
-
-
 function Alert({ isDisable, label, icon, alertDescription, link, method }: AlertProps) {
     return (
         <AlertDialog>
