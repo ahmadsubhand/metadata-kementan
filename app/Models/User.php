@@ -57,4 +57,14 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return !is_null($this->approved_at);
     }
+
+    public function forms()
+    {
+        return $this->hasMany(Form::class);
+    }
+
+    public function formResponses()
+    {
+        return $this->hasMany(FormResponse::class);
+    }
 }
