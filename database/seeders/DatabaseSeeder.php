@@ -18,15 +18,10 @@ class DatabaseSeeder extends Seeder
         $adminEmail = env('ADMIN_EMAIL');
         $adminPassword = env('ADMIN_PASSWORD');
 
-        User::firstOrCreate(
-            ['email' => $adminEmail],
-            [
-                'name' => 'Super Admin',
-                'password' => Hash::make($adminPassword),
-                'role' => 'admin',
-                'email_verified_at' => now(),
-                'approved_at' => now(),
-            ]
-        );
+        User::factory()->makeAdmin()->create([
+            'email' => $adminEmail,
+            'name' => 'Super Admin',
+            'password' => Hash::make($adminPassword),
+        ]);
     }
 }
