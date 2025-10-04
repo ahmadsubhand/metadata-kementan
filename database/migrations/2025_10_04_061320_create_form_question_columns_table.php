@@ -17,7 +17,7 @@ return new class extends Migration
             
             $table->string('code');
             $table->string('label');
-            $table->enum('type', ['text', 'number', 'date']);
+            $table->enum('type', ['text', 'textarea', 'number', 'date']);
             $table->integer('order');
         });
     }

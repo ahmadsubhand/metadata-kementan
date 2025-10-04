@@ -18,7 +18,7 @@ return new class extends Migration
             
             $table->string('code');
             $table->string('label');
-            $table->enum('type', ['text', 'number', 'date', 'radio', 'checkbox', 'select', 'table']);
+            $table->enum('type', ['text', 'textarea', 'number', 'date', 'radio', 'checkbox', 'select', 'table']);
             $table->integer('order');
         });
     }
