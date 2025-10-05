@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserRole;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,7 +21,7 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
 
-            $table->enum('role', ['user', 'admin'])->default('user');
+            $table->enum('role', array_column(UserRole::cases(), 'value'))->default(UserRole::User);
             $table->timestamp('approved_at')->nullable();
         });
 

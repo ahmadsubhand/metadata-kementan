@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -58,5 +59,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isApproved(): bool
     {
         return !is_null($this->approved_at);
+    }
+
+    public function metadataStatisticForms(): HasMany
+    {
+        return $this->hasMany(MetadataStatisticForm::class);
     }
 }
