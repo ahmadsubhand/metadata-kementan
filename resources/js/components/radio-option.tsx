@@ -11,6 +11,7 @@ import {
     RadioGroupItem,
 } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { ReactNode } from 'react';
 
 interface Option {
     label: string;
@@ -22,7 +23,7 @@ interface RadioOptionProps<T extends FieldValues> {
         control: Control<T>;
     };
     radioName: Path<T>;
-    radioLabel: string;
+    radioLabel: ReactNode;
     options: Option[];
     classNameWrapper?: string;
     classNameItem?: string;

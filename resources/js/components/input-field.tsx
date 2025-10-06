@@ -1,13 +1,14 @@
 import { Control, FieldValues, Path  } from 'react-hook-form';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from './ui/input';
+import { ReactNode } from 'react';
 
 interface InputFieldProps<T extends FieldValues> {
     form: {
         control: Control<T>;
     };
     inputName: Path<T>;
-    inputLabel: string;
+    inputLabel: ReactNode;
     inputPlaceholder: string;
     inputType?: "text" | "number";
     className?: string;

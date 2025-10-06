@@ -1,6 +1,7 @@
 import { Control, FieldValues, Path } from 'react-hook-form';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ReactNode } from 'react';
 
 interface Option {
     label: string;
@@ -12,7 +13,7 @@ interface SelectOptionProps<T extends FieldValues> {
         control: Control<T>;
     };
     selectName: Path<T>;
-    selectLabel: string;
+    selectLabel: ReactNode;
     selectPlaceholder: string;
     options: Option[];
     className?: string;

@@ -369,7 +369,7 @@ function FirstPage({ form } : SectionProps) {
     )
 }
 
-function Section1() {
+function Section1({ form } : SectionProps) {
     return (
         <FormWrapper>
             <H2 text='I. PENYELENGGARA' />
