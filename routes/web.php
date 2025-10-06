@@ -17,7 +17,8 @@ Route::middleware(['auth', 'verified', 'approved'])->group(function () {
         ->prefix('metadata')
         ->group(function () {
             Route::get('/', 'index')->name('metadata');
-        });
+            Route::post('/', 'saveAsDraft')->name('metadata.draft');
+        });    
 });
 
 require __DIR__.'/settings.php';

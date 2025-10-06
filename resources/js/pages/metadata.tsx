@@ -11,10 +11,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import { metadata } from '@/routes'
+import { draft } from '@/routes/metadata'
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
-import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Plus, Trash } from 'lucide-react';
-import { ReactNode, useState } from 'react';
+import { Head, router, usePage } from '@inertiajs/react';
+import { FieldErrors, Path, useForm, UseFormReturn  } from 'react-hook-form';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ChevronDown, ChevronUp, LoaderCircle, Plus, Trash } from 'lucide-react';
+import { ReactNode, useEffect, useState } from 'react';
+import { metadataStoreSchema, MetadataStoreType } from '@/validators/metadata';
+import { Form } from "@/components/ui/form";
+import InputField from '@/components/input-field';
+import SelectOption from '@/components/select-option';
+import RadioOption from '@/components/radio-option';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -24,87 +32,106 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Metadata() {
+    // Form
+
+    const { errors } = usePage().props;
+
+    const form = useForm({
+        resolver: zodResolver(metadataStoreSchema), mode: 'onChange', defaultValues: {
+            recommendation_identity: null
+        }
+    })
+
+    const [isLoading, setIsLoading] = useState(false);
+    function onSubmit(data:MetadataStoreType) {
+        setIsLoading(true);
+        router.post(draft.url(), data, {
+            onFinish: () => setIsLoading(false)
+        });
+    }
+
+    const [fieldToTab] = useState<Record<keyof MetadataStoreType, string>>({
+        activity_title: 'first_page',
+        activity_year: 'first_page',
+        data_collection_approach_id: 'first_page',
+        activity_sector_id: 'first_page',
+        statistical_activity_type_id: 'first_page',
+        statistical_activity_recommendation: 'first_page',
+        recommendation_identity: 'first_page',
+    })
+
+    // Navigate to tab which has error field
+    function onInvalid(errors: FieldErrors) {
+        const firstErrorField = Object.keys(errors)[0] as keyof MetadataStoreType;
+        console.log(firstErrorField);
+        if (firstErrorField) {
+            setStep(fieldToTab[firstErrorField]);
+        }
+    }
+
+    useEffect(() => {
+        if (errors) {
+            // Set error on specific field
+            (Object.keys(errors) as Path<MetadataStoreType>[]).forEach((field) => {
+                form.setError(field, { message: errors[field] as string })
+            })
+        }
+
+        // Navigate to tab which has error field
+        const firstErrorField = Object.keys(errors)[0] as keyof MetadataStoreType;
+        if (firstErrorField) {
+            setStep(fieldToTab[firstErrorField]);
+        }
+    }, [errors, form, fieldToTab])
+
+    // Component
+
     const menus = [
-        {
-            value: 'first_page',
-            label: 'Halaman Awal',
-            form: <FirstPage />
-        },
-        {
-            value: 'section_1',
-            label: 'Blok I',
-            form: <Section1 />
-        },
-        {
-            value: 'section_2',
-            label: 'Blok II',
-            form: <Section2 />
-        },
-        {
-            value: 'section_3',
-            label: 'Blok III',
-            form: <Section3 />
-        },
-        {
-            value: 'section_4',
-            label: 'Blok IV',
-            form: <Section4 />
-        },
-        {
-            value: 'section_5',
-            label: 'Blok V',
-            form: <Section5 />
-        },
-        {
-            value: 'section_6',
-            label: 'Blok VI',
-            form: <Section6 />
-        },
-        {
-            value: 'section_7',
-            label: 'Blok VII',
-            form: <Section7 />
-        },
-        {
-            value: 'section_8',
-            label: 'Blok VIII',
-            form: <Section8 />
-        },
+        { value: 'first_page', label: 'Halaman Awal', form: <FirstPage form={form} /> },
+        { value: 'section_1', label: 'Blok I', form: <Section1 /> },
+        { value: 'section_2', label: 'Blok II', form: <Section2 /> },
+        { value: 'section_3', label: 'Blok III', form: <Section3 /> },
+        { value: 'section_4', label: 'Blok IV', form: <Section4 /> },
+        { value: 'section_5', label: 'Blok V', form: <Section5 /> },
+        { value: 'section_6', label: 'Blok VI', form: <Section6 /> },
+        { value: 'section_7', label: 'Blok VII', form: <Section7 /> },
+        { value: 'section_8', label: 'Blok VIII', form: <Section8 /> },
     ]
 
     const [step, setStep] = useState(menus[0].value);
-
-    function nextStep() {
-        const currentIndex = menus.findIndex(menu => menu.value === step)
-        if (currentIndex < (menus.length - 1)) setStep(menus[currentIndex + 1].value);
-    }
-
-    function prevStep() {
-        const currentIndex = menus.findIndex(menu => menu.value === step)
-        if (currentIndex > 0) setStep(menus[currentIndex - 1].value);
-    }
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <h1 className='font-bold'>Formulir Metadata Statistik Kegiatan</h1>
-                <Tabs value={step} onValueChange={setStep} className='flex flex-col gap-8'>
-                    <TabsList>
+                <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit, onInvalid)}>
+                    <h1 className='font-bold'>Formulir Metadata Statistik Kegiatan</h1>
+
+                    <Tabs value={step} onValueChange={setStep} className='flex flex-col gap-8'>
+                        <TabsList>
+                            {menus.map((menu, index) => (
+                                <TabsTrigger value={menu.value} key={index}>{menu.label}</TabsTrigger>
+                            ))}
+                        </TabsList>
                         {menus.map((menu, index) => (
-                            <TabsTrigger value={menu.value} key={index}>{menu.label}</TabsTrigger>
+                            <TabsContent value={menu.value} key={index}>
+                                {menu.form}
+                            </TabsContent>
                         ))}
-                    </TabsList>
-                    {menus.map((menu, index) => (
-                        <TabsContent value={menu.value} key={index}>
-                            {menu.form}
-                        </TabsContent>
-                    ))}
-                    <div className="flex justify-between">
-                        <Button variant={'outline'} onClick={prevStep}><ChevronLeft /> Kembali</Button>
-                        <Button onClick={nextStep}>Lanjut <ChevronRight /></Button>
-                    </div>
-                </Tabs>
+                        <div className="flex gap-4">
+                            <Button type='submit' disabled={isLoading}>
+                                {isLoading && (<LoaderCircle className="animate-spin" />)}
+                                Kirim
+                            </Button>
+                            <Button type='submit' disabled={isLoading} variant={'outline'}>
+                                {isLoading && (<LoaderCircle className="animate-spin" />)}
+                                Simpan sebagai draft
+                            </Button>
+                        </div>
+                    </Tabs>
+                </form>
+                </Form>
             </div>
         </AppLayout>
     );
@@ -128,7 +155,7 @@ function InputWrapper({ children, className='' } : { children: ReactNode, classN
 
 function SectionWrapper({ children, className='' } : { children: ReactNode, className?: string }) {
     return (
-        <div className={`flex flex-row gap-4 items-center ${className}`}>
+        <div className={`flex flex-row gap-4 items-start ${className}`}>
             {children}
         </div>
     )
@@ -157,7 +184,7 @@ type SelectOptionProps = {
         }>
     }
 }
-function SelectOption({ data } : SelectOptionProps) {
+function SelectOptionOld({ data } : SelectOptionProps) {
     return (
         <Select>
             <SelectTrigger id={data.id} className='gap-2'>
@@ -183,7 +210,7 @@ type RadioOptionProps = {
     },
     className?: string
 }
-function RadioOption({ data, className='' } : RadioOptionProps ) {
+function RadioOptionOld({ data, className='' } : RadioOptionProps ) {
     return (
         <RadioGroup {...(data.defaultValue && { defaultValue: data.defaultValue })} className={`flex gap-12 ${className}`} id={data.id}>
             {data.items.map((item, i) => (
@@ -231,113 +258,112 @@ function InputSide({ type, placeholder, id, className='' } : InputSideProps) {
     )
 }
 
-function FirstPage() {
-    const caraPengumpulanData = {
-        id: 'cara-pengumpulan',
-        label: 'Cara Pengumpulan Data',
-        placeholder: 'Pilih cara pengumpulan data',
-        items: [
-            { label : 'Pencacahan Lengkap', value: '1' },
-            { label : 'Survei', value: '2' },
-            { label : 'Kompilasi Produk Administrasi', value: '3' },
-            { label : 'Cara lain sesuai dengan perkembangan TI', value: '4' },
-        ]
-    };
-
-    const sektorKegiatan = {
-        id: 'sektor-kegiatan',
-        label: 'Sektor Kegiatan',
-        placeholder: 'Pilih sektor kegiatan',
-        items: [
-            { label: 'Pertanian dan Perikanan', value: '1' },
-            { label: 'Demografi dan Kependudukan', value: '2' },
-            { label: 'Pembangunan', value: '3' },
-            { label: 'Proyeksi Ekonomi', value: '4' },
-            { label: 'Pendidikan dan Pelatihan', value: '5' },
-            { label: 'Lingkungan', value: '6' },
-            { label: 'Keuangan', value: '7' },
-            { label: 'Globalisasi', value: '8' },
-            { label: 'Kesehatan', value: '9' },
-            { label: 'Industri dan Jasa', value: '10' },
-            { label: 'Teknologi Informasi dan Komunikasi', value: '11' },
-            { label: 'Perdagangan Internasional dan Neraca Perdagangan', value: '12' },
-            { label: 'Ketenagakerjaan', value: '13' },
-            { label: 'Neraca Nasional', value: '14' },
-            { label: 'Indikator Ekonomi Bulanan', value: '15' },
-            { label: 'Produktivitas', value: '16' },
-            { label: 'Harga dan Paritas Daya Beli', value: '17' },
-            { label: 'Sektor Publik, Perpajakan, dan Regulasi Pasar', value: '18' },
-            { label: 'Perwilayahan dan Perkotaan', value: '19' },
-            { label: 'Ilmu Pengetahuan dan Hak Paten', value: '20' },
-            { label: 'Perlindungan Sosial dan Kesejahteraan', value: '21' },
-            { label: 'Transportasi', value: '22' },
-        ]
-    };
-
-    const jenisKegiatanStatistik = {
-        id: 'jenis-kegiatan',
-        label: 'Jenis Kegiatan Statistik',
-        placeholder: 'Pilih jenis kegiatan statistik',
-        items: [
-            { label: 'Statistik Dasar', value: '1' },
-            { label: 'Statistik Sektoral', value: '2' },
-            { label: 'Statistik Khusus', value: '3' },
-        ]
-    };
-
-    const rekomendasiKegiatan = {
-        id: 'rekomendasi',
-        defaultValue: 'no',
-        items: [
-            { label: 'Ya', value: 'yes' },
-            { label: 'Tidak', value: 'no' },
-        ]
-    }
-
+type SectionProps = {
+    form: UseFormReturn;
+}
+function FirstPage({ form } : SectionProps) {
     return (
         <FormWrapper>
             <SectionWrapper>
                 {/* Judul kegiatan */}
-                <InputWrapper className="w-full">
-                    <Label htmlFor='judul-kegiatan'>Judul kegiatan</Label>
-                    <Input type={'text'} placeholder='Judul kegiatan'/>
-                </InputWrapper>
+                <InputField 
+                    form={form}
+                    inputName={'activity_title'}
+                    inputLabel={'Judul Kegiatan'}
+                    inputPlaceholder={'Judul kegiatan'}
+                    inputType={'text'}
+                    className='w-full'
+                />
 
                 {/* Tahun */}
-                <InputWrapper>
-                    <Label htmlFor='judul-kegiatan'>Tahun</Label>
-                    <Input type={'number'} placeholder='Tahun'/>
-                </InputWrapper>
+                <InputField 
+                    form={form}
+                    inputName={'activity_year'}
+                    inputLabel={'Tahun'}
+                    inputPlaceholder={'Tahun kegiatan'}
+                    inputType={'number'}
+                />
             </SectionWrapper>
             
             <SectionWrapper className='grid grid-cols-3'>
                 {/* Cara Pengumpulan Data */}
-                <InputWrapper>
-                    <Label htmlFor={caraPengumpulanData.id}>{caraPengumpulanData.label}</Label>
-                    <SelectOption data={caraPengumpulanData} />
-                </InputWrapper>
+                <SelectOption 
+                    form={form}
+                    selectName={'data_collection_approach_id'}
+                    selectLabel={'Cara Pengumpulan Data'}
+                    selectPlaceholder={'Pilih cara pengumpulan data'}
+                    options={[
+                        { label : 'Pencacahan Lengkap', value: 1 },
+                        { label : 'Survei', value: 2 },
+                        { label : 'Kompilasi Produk Administrasi', value: 3 },
+                        { label : 'Cara lain sesuai dengan perkembangan TI', value: 40 },
+                    ]}
+                />
 
                 {/* Sektor Kegiatan */}
-                <InputWrapper>
-                    <Label htmlFor={sektorKegiatan.id}>{sektorKegiatan.label}</Label>
-                    <SelectOption data={sektorKegiatan} />
-                </InputWrapper>
+                <SelectOption 
+                    form={form}
+                    selectName={'activity_sector_id'}
+                    selectLabel={'Sektor Kegiatan'}
+                    selectPlaceholder={'Pilih sektor kegiatan'}
+                    options={[
+                        { label: 'Pertanian dan Perikanan', value: 1 },
+                        { label: 'Demografi dan Kependudukan', value: 2 },
+                        { label: 'Pembangunan', value: 3 },
+                        { label: 'Proyeksi Ekonomi', value: 4 },
+                        { label: 'Pendidikan dan Pelatihan', value: 5 },
+                        { label: 'Lingkungan', value: 6 },
+                        { label: 'Keuangan', value: 7 },
+                        { label: 'Globalisasi', value: 8 },
+                        { label: 'Kesehatan', value: 9 },
+                        { label: 'Industri dan Jasa', value: 10 },
+                        { label: 'Teknologi Informasi dan Komunikasi', value: 11 },
+                        { label: 'Perdagangan Internasional dan Neraca Perdagangan', value: 12 },
+                        { label: 'Ketenagakerjaan', value: 13 },
+                        { label: 'Neraca Nasional', value: 14 },
+                        { label: 'Indikator Ekonomi Bulanan', value: 15 },
+                        { label: 'Produktivitas', value: 16 },
+                        { label: 'Harga dan Paritas Daya Beli', value: 17 },
+                        { label: 'Sektor Publik, Perpajakan, dan Regulasi Pasar', value: 18 },
+                        { label: 'Perwilayahan dan Perkotaan', value: 19 },
+                        { label: 'Ilmu Pengetahuan dan Hak Paten', value: 20 },
+                        { label: 'Perlindungan Sosial dan Kesejahteraan', value: 21 },
+                        { label: 'Transportasi', value: 22 },
+                    ]}
+                />
 
                 {/* Jenis Kegiatan Statistik */}
-                <InputWrapper>
-                    <Label htmlFor={jenisKegiatanStatistik.id}>{jenisKegiatanStatistik.label}</Label>
-                    <SelectOption data={jenisKegiatanStatistik} />
-                </InputWrapper>
+                <SelectOption 
+                    form={form}
+                    selectName={'statistical_activity_type_id'}
+                    selectLabel={'Jenis Kegiatan Statistik'}
+                    selectPlaceholder={'Pilih jenis kegiatan statistik'}
+                    options={[
+                        { label: 'Statistik Dasar', value: 1 },
+                        { label: 'Statistik Sektoral', value: 2 },
+                        { label: 'Statistik Khusus', value: 3 },
+                    ]}
+                />
             </SectionWrapper>
 
             {/* Rekomendasi kegiatan */}
-            <InputWrapper>
-                <Label htmlFor='rekomendasi'>Jika kegiatan statistik sektoral, apakah mendapatkan rekomendasi kegiatan statistik dari BPS?</Label>
-                <RadioOption data={rekomendasiKegiatan} />
-            </InputWrapper>
+            <RadioOption 
+                form={form}
+                radioName={'statistical_activity_recommendation'}
+                radioLabel={'Jika kegiatan statistik sektoral, apakah mendapatkan rekomendasi kegiatan statistik dari BPS?'}
+                options={[
+                    { label: 'Ya', value: 1 },
+                    { label: 'Tidak', value: 2 },
+                ]}
+            />
             <SectionWrapper>
-                <Label htmlFor='identitas'>Jika “Ya”, Identitas Rekomendasi</Label>
-                <InputSide type='text' id='identitas' placeholder='Nama' />
+                <InputField 
+                    form={form}
+                    inputName={'recommendation_identity'}
+                    inputLabel={'Jika “Ya”, Identitas Rekomendasi'}
+                    inputPlaceholder={'Nama'}
+                    inputType={'text'}
+                />
             </SectionWrapper>
         </FormWrapper>
     )
@@ -763,7 +789,7 @@ function Section4() {
                 <Label htmlFor={kegiatanDilakukan.id}>
                     <H3 text={kegiatanDilakukan.label} />
                 </Label>
-                <RadioOption data={kegiatanDilakukan} />
+                <RadioOptionOld data={kegiatanDilakukan} />
             </InputWrapper>
 
             {/* Jika “berulang”, frekuensi penyelenggaraan */}
@@ -771,7 +797,7 @@ function Section4() {
                 <Label htmlFor={frekuensiPenyelenggaraan.id}>
                     <H3 text={frekuensiPenyelenggaraan.label} />
                 </Label>
-                <SelectOption data={frekuensiPenyelenggaraan} />
+                <SelectOptionOld data={frekuensiPenyelenggaraan} />
             </InputWrapper>
 
             {/* Tipe Pengumpulan Data */}
@@ -779,7 +805,7 @@ function Section4() {
                 <Label htmlFor={tipePengumpulanData.id}>
                     <H3 text={tipePengumpulanData.label} />
                 </Label>
-                <SelectOption data={tipePengumpulanData} />
+                <SelectOptionOld data={tipePengumpulanData} />
             </InputWrapper>
             
             {/* Cakupan Wilayah Pengumpulan Data */}
@@ -787,7 +813,7 @@ function Section4() {
                 <Label htmlFor={cakupanWilayah.id}>
                     <H3 text={cakupanWilayah.label} />
                 </Label>
-                <RadioOption data={cakupanWilayah} />
+                <RadioOptionOld data={cakupanWilayah} />
             </InputWrapper>
 
             {/* Jika “sebagian wilayah Indonesia”, wilayah kegiatan */}
@@ -938,35 +964,35 @@ function Section5() {
                 <Label htmlFor={jenisRancangan.id}>
                     <H3 text={jenisRancangan.label} />
                 </Label>
-                <RadioOption data={jenisRancangan} />
+                <RadioOptionOld data={jenisRancangan} />
             </InputWrapper>
 
             <InputWrapper>
                 <Label htmlFor={metodePemilihan.id}>
                     <H3 text={metodePemilihan.label} />
                 </Label>
-                <RadioOption data={metodePemilihan} />
+                <RadioOptionOld data={metodePemilihan} />
             </InputWrapper>
 
             <InputWrapper>
                 <Label htmlFor={metodeProbabilitas.id}>
                     <H3 text={metodeProbabilitas.label} />
                 </Label>
-                <SelectOption data={metodeProbabilitas} />
+                <SelectOptionOld data={metodeProbabilitas} />
             </InputWrapper>
 
             <InputWrapper>
                 <Label htmlFor={metodeNonProbabilitas.id}>
                     <H3 text={metodeNonProbabilitas.label} />
                 </Label>
-                <SelectOption data={metodeNonProbabilitas} />
+                <SelectOptionOld data={metodeNonProbabilitas} />
             </InputWrapper>
 
             <InputWrapper>
                 <Label htmlFor={kerangkaSampel.id}>
                     <H3 text={kerangkaSampel.label} />
                 </Label>
-                <RadioOption data={kerangkaSampel} />
+                <RadioOptionOld data={kerangkaSampel} />
             </InputWrapper>
             
             <InputWrapper>
@@ -1069,7 +1095,7 @@ function Section6() {
                 <Label htmlFor={pilotSurvey.id}>
                     <H3 text={pilotSurvey.label} />
                 </Label>
-                <RadioOption data={pilotSurvey} />
+                <RadioOptionOld data={pilotSurvey} />
             </InputWrapper>
 
             {/* Metode Pemeriksaan Kualitas */}
@@ -1085,7 +1111,7 @@ function Section6() {
                 <Label htmlFor={penyesuaianNonrespon.id}>
                     <H3 text={penyesuaianNonrespon.label} />
                 </Label>
-                <RadioOption data={penyesuaianNonrespon} />
+                <RadioOptionOld data={penyesuaianNonrespon} />
             </InputWrapper>
 
             {/* Petugas Pengumpulan Data */}
@@ -1093,7 +1119,7 @@ function Section6() {
                 <Label htmlFor={petugasPengumpulan.id}>
                     <H3 text={petugasPengumpulan.label} />
                 </Label>
-                <RadioOption data={petugasPengumpulan} className='flex-col gap-2' />
+                <RadioOptionOld data={petugasPengumpulan} className='flex-col gap-2' />
             </InputWrapper>
             
             {/* Persyaratan Pendidikan Terendah Petugas Pengumpulan Data */}
@@ -1101,7 +1127,7 @@ function Section6() {
                 <Label htmlFor={persyaratanTerendah.id}>
                     <H3 text={persyaratanTerendah.label} />
                 </Label>
-                <RadioOption data={persyaratanTerendah} className='flex-col gap-2' />
+                <RadioOptionOld data={persyaratanTerendah} className='flex-col gap-2' />
             </InputWrapper>
 
             {/* Jumlah Petugas */}
@@ -1124,7 +1150,7 @@ function Section6() {
                 <Label htmlFor={pelatihanPetugas.id}>
                     <H3 text={pelatihanPetugas.label} />
                 </Label>
-                <RadioOption data={pelatihanPetugas} />
+                <RadioOptionOld data={pelatihanPetugas} />
             </InputWrapper>
         </FormWrapper>
     )
@@ -1208,7 +1234,7 @@ function Section7() {
                 {tahapanPengolahan.map((tahapan, i) => (
                     <SectionWrapper key={i}>
                         <Label htmlFor={tahapan.id} className='w-50 font-normal'>{tahapan.label}</Label>
-                        <RadioOption data={tahapan}/>
+                        <RadioOptionOld data={tahapan}/>
                     </SectionWrapper>
                 ))}
             </InputWrapper>
@@ -1217,7 +1243,7 @@ function Section7() {
                 <Label htmlFor={metodeAnalisis.id}>
                     <H3 text={metodeAnalisis.label} />
                 </Label>
-                <RadioOption data={metodeAnalisis} />
+                <RadioOptionOld data={metodeAnalisis} />
             </InputWrapper>
 
             <InputWrapper>
@@ -1274,7 +1300,7 @@ function Section8() {
                 {produkKegiatan.map((produk, i) => (
                     <SectionWrapper key={i}>
                         <Label htmlFor={produk.id} className='w-50 font-normal'>{produk.label}</Label>
-                        <RadioOption data={produk}/>
+                        <RadioOptionOld data={produk}/>
                     </SectionWrapper>
                 ))}
             </InputWrapper>
