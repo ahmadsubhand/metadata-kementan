@@ -23,8 +23,7 @@ export default function Dashboard({ forms } : { forms: MetadataForm[] }) {
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <h1 className='font-bold'>List Metadata Kegiatan Tersimpan</h1>
-                <p>Anda belum pernah mengisi formulir metadata, klik tombol di bawah untuk mulai mengisi</p>
-                {(forms.length > 0) && (
+                {(forms.length > 0) ? (
                     <Table>
                         <TableCaption>List Metadata Kegiatan Tersimpan</TableCaption>
                         <TableHeader>
@@ -83,7 +82,10 @@ export default function Dashboard({ forms } : { forms: MetadataForm[] }) {
                             }
                         </TableBody>
                     </Table>
-                )}
+                ) : (
+                    <p>Anda belum pernah mengisi formulir metadata, klik tombol di bawah untuk mulai mengisi</p>
+                )
+                }
                 <Link as={'button'} href={metadata.url()} className='self-start'>
                     <Button>Tambah <FilePenLine /></Button>
                 </Link>

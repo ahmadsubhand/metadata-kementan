@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -53,7 +54,15 @@ class UserManagementController extends Controller
 
     public function destroyAccount($id)
     {
-        $user = DB::table('users')->where('id', $id)->select('name')->first();
+        $user = DB::table('users')->where('id', $id)->select(['id', 'name'])->first();
+
+        if ($user->id === 1) {
+            return redirect()->back()->with('error', 'Tidak bisa menghapus akun Super Admin');
+        }
+
+        if ($user->id === Auth::id()) {
+            return redirect()->back()->with('error', 'Tidak bisa menghapus akun sendiri');
+        }
 
         if (!$user) {
             return redirect()->back()->with('error', 'Pengguna tidak ditemukan');
