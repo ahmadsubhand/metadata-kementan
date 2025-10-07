@@ -15,7 +15,7 @@ class ActivityRegion extends Model
 
     public $timestamps = false;
 
-    public function metadataStatisticForms(): BelongsTo
+    public function metadataStatisticForm(): BelongsTo
     {
         return $this->belongsTo(MetadataStatisticForm::class);
     }

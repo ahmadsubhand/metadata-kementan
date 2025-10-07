@@ -81,77 +81,77 @@ class MetadataStatisticForm extends Model
 
     // Select / Radio
 
-    public function dataCollectionApproaches(): BelongsTo
+    public function dataCollectionApproach(): BelongsTo
     {
         return $this->belongsTo(DataCollectionApproach::class);
     }
 
-    public function activitySectors(): BelongsTo
+    public function activitySector(): BelongsTo
     {
         return $this->belongsTo(ActivitySector::class);
     }
 
-    public function statisticalActivityTypess(): BelongsTo
+    public function statisticalActivityType(): BelongsTo
     {
         return $this->belongsTo(StatisticalActivityType::class);
     }
 
-    public function activityConducts(): BelongsTo
+    public function activityConduct(): BelongsTo
     {
         return $this->belongsTo(ActivityConduct::class);
     }
 
-    public function frequencyOfImplementations(): BelongsTo
+    public function frequencyOfImplementation(): BelongsTo
     {
         return $this->belongsTo(FrequencyOfImplementation::class);
     }
 
-    public function dataCollectionTypes(): BelongsTo
+    public function dataCollectionType(): BelongsTo
     {
         return $this->belongsTo(DataCollectionType::class);
     }
 
-    public function dataCollectionCoverages(): BelongsTo
+    public function dataCollectionCoverage(): BelongsTo
     {
         return $this->belongsTo(DataCollectionCoverage::class);
     }
 
-    public function sampleDesignTypes(): BelongsTo
+    public function sampleDesignType(): BelongsTo
     {
         return $this->belongsTo(SampleDesignType::class);
     }
 
-    public function finalStageSamplingMethods(): BelongsTo
+    public function finalStageSamplingMethod(): BelongsTo
     {
         return $this->belongsTo(FinalStageSamplingMethod::class);
     }
 
-    public function probabilitySamplingMethods(): BelongsTo
+    public function probabilitySamplingMethod(): BelongsTo
     {
         return $this->belongsTo(ProbabilitySamplingMethod::class);
     }
 
-    public function nonprobabilitySamplingMethods(): BelongsTo
+    public function nonprobabilitySamplingMethod(): BelongsTo
     {
         return $this->belongsTo(NonprobabilitySamplingMethod::class);
     }
 
-    public function finalStageSamplingFrames(): BelongsTo
+    public function finalStageSamplingFrame(): BelongsTo
     {
         return $this->belongsTo(FinalStageSamplingFrame::class);
     }
 
-    public function dataCollectorTypes(): BelongsTo
+    public function dataCollectorType(): BelongsTo
     {
         return $this->belongsTo(DataCollectorType::class);
     }
 
-    public function minimumEducationRequirements(): BelongsTo
+    public function minimumEducationRequirement(): BelongsTo
     {
         return $this->belongsTo(MinimumEducationRequirement::class);
     }
 
-    public function analysisMethods(): BelongsTo
+    public function analysisMethod(): BelongsTo
     {
         return $this->belongsTo(AnalysisMethod::class);
     }

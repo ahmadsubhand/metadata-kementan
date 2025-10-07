@@ -15,7 +15,7 @@ class DataCollectionApproach extends Model
 
     public $timestamps = false;
 
-    public function metadataStatisticForms(): HasOne
+    public function metadataStatisticForm(): HasOne
     {
         return $this->hasOne(MetadataStatisticForm::class);
     }
