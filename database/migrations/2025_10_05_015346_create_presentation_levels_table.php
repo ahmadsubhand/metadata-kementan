@@ -17,10 +17,10 @@ return new class extends Migration
             $table->string('label');
         });
 
-        Schema::create('data_presentation_level_metadata_statistic_form', function (Blueprint $table) {
+        Schema::create('presentation_level_metadata_statistic_form', function (Blueprint $table) {
             $table->id();
             $table->foreignId('metadata_statistic_form_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('data_presentation_level_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('presentation_level_id')->constrained()->cascadeOnDelete();
         });
     }
 

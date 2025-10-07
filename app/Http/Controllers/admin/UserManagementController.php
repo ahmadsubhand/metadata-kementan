@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
-
+namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +13,7 @@ class UserManagementController extends Controller
     {
         $users = DB::table('users')
             ->orderBy('approved_at','asc')
-            ->orderBy('email_verified_at', 'asc')
+            ->orderBy('email_verified_at', 'desc')
             ->get();
 
         return Inertia::render('admin/manage-user', [

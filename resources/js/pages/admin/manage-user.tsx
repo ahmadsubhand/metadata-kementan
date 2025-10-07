@@ -10,6 +10,7 @@ import { Head, InertiaLinkProps, Link } from '@inertiajs/react';
 import dayjs from 'dayjs';
 import { KeyRound, MoreHorizontal, Trash, UserRoundCheck } from 'lucide-react';
 import { ReactNode } from 'react';
+import AlertButton from '@/components/alert-button';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -63,8 +64,16 @@ export default function ManageUser({ users } : { users: SharedData['auth']['user
                                                 <DropdownMenuLabel>Aksi</DropdownMenuLabel>
                                                 <DropdownMenuSeparator />
 
-                                                <Alert 
-                                                    isDisable={!!user.approved_at}
+                                                <AlertButton
+                                                    alertTrigger={
+                                                        <DropdownMenuItem 
+                                                            disabled={!!user.approved_at}
+                                                            className='flex justify-between gap-4'
+                                                            onSelect={(e) => e.preventDefault()}
+                                                        >
+                                                            Setujui akun <UserRoundCheck />
+                                                        </DropdownMenuItem>    
+                                                    } 
                                                     label={'Setujui akun'}
                                                     icon={<UserRoundCheck />}
                                                     alertDescription={
@@ -75,8 +84,16 @@ export default function ManageUser({ users } : { users: SharedData['auth']['user
                                                     method={'post'}
                                                 />
 
-                                                <Alert
-                                                    isDisable={user.role === "admin"}
+                                                <AlertButton
+                                                    alertTrigger={
+                                                        <DropdownMenuItem 
+                                                            disabled={user.role === 'admin'}
+                                                            className='flex justify-between gap-4'
+                                                            onSelect={(e) => e.preventDefault()}
+                                                        >
+                                                            Jadikan Admin <KeyRound />
+                                                        </DropdownMenuItem>    
+                                                    }
                                                     label="Jadikan Admin"
                                                     icon={<KeyRound />}
                                                     alertDescription={`Pengguna ${user.name} akan diberikan akses penuh aplikasi sebagai administrator sama seperti Anda. Hati-hati dalam memilih pengguna untuk dijadikan administrator. Tindakan ini tidak dapat dibatalkan.`}
@@ -84,7 +101,15 @@ export default function ManageUser({ users } : { users: SharedData['auth']['user
                                                     method="post"
                                                 />
 
-                                                <Alert
+                                                <AlertButton
+                                                    alertTrigger={
+                                                        <DropdownMenuItem 
+                                                            className='flex justify-between gap-4'
+                                                            onSelect={(e) => e.preventDefault()}
+                                                        >
+                                                            Hapus pengguna <Trash />
+                                                        </DropdownMenuItem>    
+                                                    }
                                                     label="Hapus pengguna"
                                                     icon={<Trash />}
                                                     alertDescription={`Akun ${user.name} akan dihapus secara permanen sehingga pengguna akan kehilangan akses terhadap aplikasi. Tindakan ini tidak dapat dibatalkan.`}

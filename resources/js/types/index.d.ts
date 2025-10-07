@@ -49,3 +49,29 @@ export interface User {
 export interface SectionProps {
     form: UseFormReturn;
 }
+
+export type MetadataForm = {
+    id: number
+    activity_title: string
+    activity_year: number
+    status: 'draft' | 'pending' | 'revising' | 'approved' | 'rejected' | 'finalized'
+
+    data_collection_approach_id: number | null
+    activity_sector_id: number | null
+    statistical_activity_type_id: number | null
+
+    data_collection_approach?: {
+        id: number
+        label: string
+    } | null
+
+    activity_sector?: {
+        id: number
+        label: string
+    } | null
+
+    statistical_activity_type?: {
+        id: number
+        label: string
+    } | null
+}

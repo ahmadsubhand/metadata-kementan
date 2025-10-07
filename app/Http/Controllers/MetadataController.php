@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers;
 
 use App\Enums\FormStatus;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\MetadataDraftRequest;
 use App\Models\MetadataStatisticForm;
 use Illuminate\Http\RedirectResponse;
@@ -20,7 +19,7 @@ class MetadataController extends Controller
 
     public function saveAsDraft(MetadataDraftRequest $request): RedirectResponse
     {
-        $user_id = Auth::user()->id;
+        $user_id = Auth::id();
         MetadataStatisticForm::create([
             ...$request->validated(),
             'status' => FormStatus::Draft->value,
@@ -28,5 +27,22 @@ class MetadataController extends Controller
         ]);
 
         return redirect()->route('dashboard')->with('success', "Formulir berhasil disimpan");
+    }
+
+    public function destroy($id): RedirectResponse
+    {
+        $user_id = Auth::id();
+        $form = MetadataStatisticForm::find($id);
+
+        if (!$form) {
+            return redirect()->back()->with('error', 'Metadata tidak ditemukan');
+        }
+
+        if ($form->user_id === $user_id) {
+            $form->delete();
+            return redirect()->back()->with('success', "Metadata {$form->activity_title} berhasil dihapus");
+        }
+
+        return redirect()->back()->with('error', 'Anda tidak memiliki izin untuk mengakses metadata ini');
     }
 }
