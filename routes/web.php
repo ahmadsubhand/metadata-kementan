@@ -16,6 +16,7 @@ Route::middleware(['auth', 'verified', 'approved'])->group(function () {
         ->prefix('metadata')
         ->group(function () {
             Route::get('/', 'index')->name('metadata');
+            Route::get('/{id}', 'update')->name('metadata.update');
             Route::post('/', 'saveAsDraft')->name('metadata.draft');
             Route::delete('/{id}', 'destroy')->name('metadata.destroy');
         });    

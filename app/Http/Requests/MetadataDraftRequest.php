@@ -72,7 +72,7 @@ class MetadataDraftRequest extends FormRequest
 
             // IV. DESAIN KEGIATAN
             'activity_conduct_id' => 'nullable|exists:activity_conducts,id',
-            'frequency_of_implementation' => 'nullable|exists:frequency_of_implementations,id',
+            'frequency_of_implementation_id' => 'nullable|exists:frequency_of_implementations,id',
             'data_collection_type_id' => 'nullable|exists:data_collection_types,id',
             'data_collection_coverage_id' => 'nullable|exists:data_collection_coverages,id',
             // activity_regions table

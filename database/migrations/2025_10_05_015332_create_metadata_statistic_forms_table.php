@@ -66,7 +66,7 @@ return new class extends Migration
 
             // IV. DESAIN KEGIATAN
             $table->foreignId('activity_conduct_id')->nullable()->constrained();
-            $table->foreignId('frequency_of_implementation')->nullable()->constrained();
+            $table->foreignId('frequency_of_implementation_id')->nullable()->constrained();
             $table->foreignId('data_collection_type_id')->nullable()->constrained();
             $table->foreignId('data_collection_coverage_id')->nullable()->constrained();
             // activity_regions table

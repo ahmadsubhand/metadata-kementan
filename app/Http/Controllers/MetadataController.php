@@ -29,6 +29,19 @@ class MetadataController extends Controller
         return redirect()->route('dashboard')->with('success', "Formulir berhasil disimpan");
     }
 
+    public function update($id)
+    {
+        $form = MetadataStatisticForm::find($id);
+
+        if (!$form || ($form->user_id !== Auth::id())) {
+            return redirect()->route('metadata');
+        }
+
+        return Inertia::render('metadata/metadata', [
+            "metadata_form" => $form
+        ]);
+    }
+
     public function destroy($id): RedirectResponse
     {
         $user_id = Auth::id();

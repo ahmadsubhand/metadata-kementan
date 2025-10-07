@@ -28,96 +28,110 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Metadata() {
+export default function Metadata({ metadata_form } : { metadata_form?: MetadataStoreType } ) {
     // Form
+
+    useEffect(() => {
+        console.log(metadata_form);
+    }, [metadata_form])
 
     const { errors } = usePage().props;
 
     const form = useForm({
         resolver: zodResolver(metadataStoreSchema), mode: 'onChange', defaultValues: {
-            // recommendation_identity: null,
-            // I. PENYELENGGARA
-            // organizing_agency: null,
-            // organizing_agency_full_address: null,
-            // organizing_agency_phone: null,
-            // organizing_agency_fax: null,
-            // organizing_agency_email: null,
-        
-            // II. PENANGGUNG JAWAB
-            // responsible_echelon_1_unit: null,
-            // responsible_echelon_2_unit: null,
-            // technical_responsible_name: null,
-            // technical_responsible_position: null,
-            // technical_responsible_address: null,
-            // technical_responsible_phone: null,
-            // technical_responsible_fax: null,
-            // technical_responsible_email: null,
-        
-            // III. PERENCANAAN DAN PERSIAPAN
-            // activity_background: null,
-            // activity_objective: null,
-            // activity_planning_start_date: null,
-            // activity_planning_end_date: null,
-            // design_start_date: null,
-            // design_end_date: null,
-            // data_collection_start_date: null,
-            // data_collection_end_date: null,
-            // data_processing_start_date: null,
-            // data_processing_end_date: null,
-            // data_analysis_start_date: null,
-            // data_analysis_end_date: null,
-            // result_dissemination_start_date: null,
-            // result_dissemination_end_date: null,
-            // evaluation_start_date: null,
-            // evaluation_end_date: null,
-            // collected_variables table
-        
-            // IV. DESAIN KEGIATAN
-            // activity_conduct_id: null,
-            // frequency_of_implementation: null,
-            // data_collection_type_id: null,
-            // data_collection_coverage_id: null,
-            // data_collection_methods: null,
-            // data_collection_tools: null,
-            // data_collection_units: null,
-        
-            // V. DESAIN SAMPEL
-            // sample_design_type_id: null,
-            // final_stage_sampling_method_id: null,
-            // probability_sampling_method_id: null,
-            // nonprobability_sampling_method_id: null,
-            // final_stage_sampling_frame_id: null,
-            // overall_sample_fraction: null,
-            // estimated_sampling_error: null,
-            // sampling_unit: null,
-            // observation_unit: null,
-        
-            // VI. PENGUMPULAN DATA
-            // pilot_survey: null,
-            // data_quality_check_method: null,
-            // nonresponse_adjustment: null,
-            // data_collector_type_id: null,
-            // minimum_education_requirement_id: null,
-            // number_of_supervisors: null,
-            // number_of_enumerators: null,
-            // training_of_data_collector: null,
-        
-            // VII. PENGOLAHAN DAN ANALISIS
-            // editing_step: null,
-            // coding_step: null,
-            // data_entry_step: null,
-            // validation_step: null,
-            // analysis_method_id: null,
-            // analysis_units: null,
-            // presentation_levels: null,
-        
-            // VIII. DISEMINASI HASIL
-            // printed_product: null,
-            // digital_product: null,
-            // microdata_product: null,
-            // printed_release_date: null,
-            // digital_release_date: null,
-            // microdata_release_date: null,
+            ...(metadata_form && {
+                // Halaman awal
+                activity_title: metadata_form?.activity_title,
+                activity_year: metadata_form?.activity_year,
+                data_collection_approach_id: metadata_form?.data_collection_approach_id.toString(),
+                activity_sector_id: metadata_form?.activity_sector_id.toString(),
+                statistical_activity_type_id: metadata_form?.statistical_activity_type_id.toString(),
+                statistical_activity_recommendation: metadata_form?.statistical_activity_recommendation,
+                recommendation_identity: metadata_form?.recommendation_identity,
+            
+                // I. PENYELENGGARA
+                organizing_agency: metadata_form?.organizing_agency,
+                organizing_agency_full_address: metadata_form?.organizing_agency_full_address,
+                organizing_agency_phone: metadata_form?.organizing_agency_phone,
+                organizing_agency_fax: metadata_form?.organizing_agency_fax,
+                organizing_agency_email: metadata_form?.organizing_agency_email,
+            
+                // II. PENANGGUNG JAWAB
+                responsible_echelon_1_unit: metadata_form?.responsible_echelon_1_unit,
+                responsible_echelon_2_unit: metadata_form?.responsible_echelon_2_unit,
+                technical_responsible_name: metadata_form?.technical_responsible_name,
+                technical_responsible_position: metadata_form?.technical_responsible_position,
+                technical_responsible_address: metadata_form?.technical_responsible_address,
+                technical_responsible_phone: metadata_form?.technical_responsible_phone,
+                technical_responsible_fax: metadata_form?.technical_responsible_fax,
+                technical_responsible_email: metadata_form?.technical_responsible_email,
+            
+                // III. PERENCANAAN DAN PERSIAPAN
+                activity_background: metadata_form?.activity_background,
+                activity_objective: metadata_form?.activity_objective,
+                activity_planning_start_date: metadata_form?.activity_planning_start_date,
+                activity_planning_end_date: metadata_form?.activity_planning_end_date,
+                design_start_date: metadata_form?.design_start_date,
+                design_end_date: metadata_form?.design_end_date,
+                data_collection_start_date: metadata_form?.data_collection_start_date,
+                data_collection_end_date: metadata_form?.data_collection_end_date,
+                data_processing_start_date: metadata_form?.data_processing_start_date,
+                data_processing_end_date: metadata_form?.data_processing_end_date,
+                data_analysis_start_date: metadata_form?.data_analysis_start_date,
+                data_analysis_end_date: metadata_form?.data_analysis_end_date,
+                result_dissemination_start_date: metadata_form?.result_dissemination_start_date,
+                result_dissemination_end_date: metadata_form?.result_dissemination_end_date,
+                evaluation_start_date: metadata_form?.evaluation_start_date,
+                evaluation_end_date: metadata_form?.evaluation_end_date,
+                // collected_variables table
+            
+                // IV. DESAIN KEGIATAN
+                activity_conduct_id: metadata_form?.activity_conduct_id ? metadata_form?.activity_conduct_id.toString() : undefined,
+                frequency_of_implementation_id: metadata_form?.frequency_of_implementation_id ? metadata_form?.frequency_of_implementation_id?.toString() : undefined,
+                data_collection_type_id: metadata_form?.data_collection_type_id ? metadata_form?.data_collection_type_id.toString() : undefined,
+                data_collection_coverage_id: metadata_form?.data_collection_coverage_id ? metadata_form?.data_collection_coverage_id.toString() : undefined,
+                // data_collection_methods: metadataForm?.activity_title,
+                // data_collection_tools: metadataForm?.activity_title,
+                // data_collection_units: metadataForm?.activity_title,
+            
+                // V. DESAIN SAMPEL
+                sample_design_type_id: metadata_form?.sample_design_type_id ? metadata_form?.sample_design_type_id.toString() : undefined,
+                final_stage_sampling_method_id: metadata_form?.final_stage_sampling_method_id ? metadata_form?.final_stage_sampling_method_id.toString() : undefined,
+                probability_sampling_method_id: metadata_form?.probability_sampling_method_id ? metadata_form?.probability_sampling_method_id.toString() : undefined,
+                nonprobability_sampling_method_id: metadata_form?.nonprobability_sampling_method_id ? metadata_form?.nonprobability_sampling_method_id.toString() : undefined,
+                final_stage_sampling_frame_id: metadata_form?.final_stage_sampling_frame_id ? metadata_form?.final_stage_sampling_frame_id.toString() : undefined,
+                overall_sample_fraction: metadata_form?.overall_sample_fraction,
+                estimated_sampling_error: metadata_form?.estimated_sampling_error,
+                sampling_unit: metadata_form?.sampling_unit,
+                observation_unit: metadata_form?.observation_unit,
+            
+                // VI. PENGUMPULAN DATA
+                pilot_survey: metadata_form?.pilot_survey,
+                // data_quality_check_method: metadataForm?.activity_title,
+                nonresponse_adjustment: metadata_form?.nonresponse_adjustment,
+                data_collector_type_id: metadata_form?.data_collector_type_id ? metadata_form?.data_collector_type_id.toString() : undefined,
+                minimum_education_requirement_id: metadata_form?.minimum_education_requirement_id ? metadata_form?.minimum_education_requirement_id.toString() : undefined,
+                number_of_supervisors: metadata_form?.number_of_supervisors,
+                number_of_enumerators: metadata_form?.number_of_enumerators,
+                training_of_data_collector: metadata_form?.training_of_data_collector,
+            
+                // VII. PENGOLAHAN DAN ANALISIS
+                editing_step: metadata_form?.editing_step,
+                coding_step: metadata_form?.coding_step,
+                data_entry_step: metadata_form?.data_entry_step,
+                validation_step: metadata_form?.validation_step,
+                analysis_method_id: metadata_form?.analysis_method_id ? metadata_form?.analysis_method_id.toString() : undefined,
+                // analysis_units: metadataForm?.activity_title,
+                // presentation_levels: metadataForm?.activity_title,
+            
+                // VIII. DISEMINASI HASIL
+                printed_product: metadata_form?.printed_product,
+                digital_product: metadata_form?.digital_product,
+                microdata_product: metadata_form?.microdata_product,
+                printed_release_date: metadata_form?.printed_release_date,
+                digital_release_date: metadata_form?.digital_release_date,
+                microdata_release_date: metadata_form?.microdata_release_date,
+            })
         }
     })
 
@@ -176,7 +190,7 @@ export default function Metadata() {
 
         // IV. DESAIN KEGIATAN
         activity_conduct_id: 'section_4',
-        frequency_of_implementation: 'section_4',
+        frequency_of_implementation_id: 'section_4',
         data_collection_type_id: 'section_4',
         data_collection_coverage_id: 'section_4',
         // data_collection_methods: 'section_4',
@@ -244,11 +258,6 @@ export default function Metadata() {
             setStep(fieldToTab[firstErrorField]);
         }
     }, [errors, form, fieldToTab])
-
-    const test = form.watch('activity_planning_start_date');
-    useEffect(() => {
-        console.log(test);
-    }, [test])
 
     // Component
 

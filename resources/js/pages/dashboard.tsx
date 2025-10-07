@@ -5,8 +5,8 @@ import { Head, Link } from '@inertiajs/react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { FilePenLine, MoreHorizontal, Trash } from 'lucide-react';
-import { destroy } from '@/routes/metadata';
+import { FilePenLine, MoreHorizontal, Pencil, Trash } from 'lucide-react';
+import { destroy, update } from '@/routes/metadata';
 import AlertButton from '@/components/alert-button';
 
 
@@ -59,6 +59,11 @@ export default function Dashboard({ forms } : { forms: MetadataForm[] }) {
                                                 <DropdownMenuContent>
                                                     <DropdownMenuLabel>Aksi</DropdownMenuLabel>
                                                     <DropdownMenuSeparator />
+                                                    <DropdownMenuItem asChild>
+                                                        <Link className='flex justify-between gap-4' href={update(form.id).url}>
+                                                            Edit data <Pencil />
+                                                        </Link>
+                                                    </DropdownMenuItem>
                                                     <AlertButton
                                                         alertTrigger={
                                                             <DropdownMenuItem 

@@ -99,7 +99,7 @@ export default function DesignPage({ form } : SectionProps) {
             <SelectOption
                 form={form}
                 selectLabel={<H3 text='4.2. Jika “berulang”, frekuensi Penyelenggaraan' />}
-                selectName='frequency_of_implementation'
+                selectName='frequency_of_implementation_id'
                 selectPlaceholder={'Pilih frekuensi penyelenggaraan'}
                 options={[
                     { label: 'Harian', value: 1 },

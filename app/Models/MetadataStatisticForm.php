@@ -46,7 +46,7 @@ class MetadataStatisticForm extends Model
         // One-to-many: collected_variables
         
         // IV. DESAIN KEGIATAN
-        'activity_conduct_id', 'frequency_of_implementation',
+        'activity_conduct_id', 'frequency_of_implementation_id',
         'data_collection_type_id', 'data_collection_coverage_id',
         // One-to-many: activity_regions
         // Many-to-many: data_collection_methods, data_collection_tools, data_collection_units

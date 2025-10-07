@@ -54,7 +54,7 @@ export const metadataStoreSchema = z.object({
 
     // IV. DESAIN KEGIATAN
     activity_conduct_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    frequency_of_implementation: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
+    frequency_of_implementation_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
     data_collection_type_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
     data_collection_coverage_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
     // data_collection_methods: z.array(z.number()).nullable(),
