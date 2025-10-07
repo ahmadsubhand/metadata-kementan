@@ -1,7 +1,6 @@
 import AppLayout from '@/layouts/app-layout';
 import { dashboard, metadata } from '@/routes'
 import { MetadataForm, type BreadcrumbItem } from '@/types';
-import { MetadataStoreType } from '@/validators/metadata';
 import { Head, Link } from '@inertiajs/react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';

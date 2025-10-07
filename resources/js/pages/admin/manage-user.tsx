@@ -1,4 +1,3 @@
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -6,10 +5,9 @@ import AppLayout from '@/layouts/app-layout';
 import { approve, admin, destroy } from '@/routes/manage-user';
 import { manageUser } from '@/routes';
 import { SharedData, type BreadcrumbItem } from '@/types';
-import { Head, InertiaLinkProps, Link } from '@inertiajs/react';
+import { Head, } from '@inertiajs/react';
 import dayjs from 'dayjs';
 import { KeyRound, MoreHorizontal, Trash, UserRoundCheck } from 'lucide-react';
-import { ReactNode } from 'react';
 import AlertButton from '@/components/alert-button';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -127,44 +125,4 @@ export default function ManageUser({ users } : { users: SharedData['auth']['user
             </div>
         </AppLayout>
     );
-}
-
-type AlertProps = {
-  isDisable?: boolean;
-  label: string;
-  icon?: ReactNode;
-  alertDescription: string;
-  link: string;
-  method?: InertiaLinkProps["method"];
-};
-function Alert({ isDisable, label, icon, alertDescription, link, method }: AlertProps) {
-    return (
-        <AlertDialog>
-            <AlertDialogTrigger asChild>
-                <DropdownMenuItem 
-                    className='flex justify-between gap-4'
-                    disabled={isDisable}
-                    onSelect={(e) => e.preventDefault()}
-                    >
-                        {label} {icon}
-                </DropdownMenuItem>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-                <AlertDialogHeader>
-                    <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                        {alertDescription}
-                    </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                    <AlertDialogCancel>Batal</AlertDialogCancel>
-                    <AlertDialogAction asChild>
-                        <Link href={link} method={method} as={'button'} className='w-fit flex items-center gap-4'>
-                            {label} {icon}
-                        </Link>
-                    </AlertDialogAction>
-                </AlertDialogFooter>
-            </AlertDialogContent>
-        </AlertDialog>
-    )
 }
