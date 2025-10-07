@@ -1,5 +1,6 @@
 import { InertiaLinkProps } from '@inertiajs/react';
 import { LucideIcon } from 'lucide-react';
+import { UseFormReturn } from 'react-hook-form';
 
 export interface Auth {
     user: User;
@@ -43,4 +44,8 @@ export interface User {
     updated_at: string;
 
     [key: string]: unknown; // This allows for additional properties...
+}
+
+export interface SectionProps {
+    form: UseFormReturn;
 }

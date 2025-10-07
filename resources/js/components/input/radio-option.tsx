@@ -27,6 +27,7 @@ interface RadioOptionProps<T extends FieldValues> {
     options: Option[];
     classNameWrapper?: string;
     classNameItem?: string;
+    classNameLabel?: string;
 }
 
 export default function RadioOption<T extends FieldValues>({
@@ -35,7 +36,8 @@ export default function RadioOption<T extends FieldValues>({
     radioLabel,
     options,
     classNameWrapper = '',
-    classNameItem = ''
+    classNameItem = '',
+    classNameLabel = ''
 }: RadioOptionProps<T>) {
     return (
         <FormField
@@ -43,7 +45,7 @@ export default function RadioOption<T extends FieldValues>({
             name={radioName}
             render={({ field }) => (
                 <FormItem className={`flex flex-col gap-2 ${classNameWrapper}`}>
-                    <FormLabel>{radioLabel}</FormLabel>
+                    <FormLabel className={`${classNameLabel}`}>{radioLabel}</FormLabel>
                     <FormControl>
                         <RadioGroup
                             onValueChange={(value) => field.onChange(Number(value))}

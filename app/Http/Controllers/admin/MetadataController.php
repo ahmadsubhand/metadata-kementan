@@ -4,7 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Enums\FormStatus;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\MetadataStoreRequest;
+use App\Http\Requests\MetadataDraftRequest;
 use App\Models\MetadataStatisticForm;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -15,13 +15,10 @@ class MetadataController extends Controller
 {
     public function index(): Response
     {
-        return Inertia::render('metadata');
+        return Inertia::render('metadata/metadata');
     }
 
-    /**
-     * @param \App\Http\Requests\MetadataStoreRequest $request
-     */
-    public function saveAsDraft(MetadataStoreRequest $request): RedirectResponse
+    public function saveAsDraft(MetadataDraftRequest $request): RedirectResponse
     {
         $user_id = Auth::user()->id;
         MetadataStatisticForm::create([
