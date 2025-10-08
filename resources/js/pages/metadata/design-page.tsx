@@ -11,46 +11,8 @@ import RadioOption from "@/components/input/radio-option"
 import SelectOption from "@/components/input/select-option"
 import { Input } from "@/components/ui/input"
 import CheckboxOption from "@/components/input/checkbox-option"
-import { Label } from "@/components/ui/label"
-import InputLayout from "./input-layout"
 
 export default function DesignPage({ form } : SectionProps) {
-    const metodePengumpulanData = {
-        id: 'r-4-6',
-        label: '4.6. Metode Pengumpulan Data',
-        items: [
-            { label: 'Wawancara', value: '1' },
-            { label: 'Mengisi kuesioner sendiri (swacacah)', value: '2' },
-            { label: 'Pengamatan (observasi)', value: '4' },
-            { label: 'Pengumpulan data sekunder', value: '8' },
-            { label: 'Lainnya', value: '16' },
-        ]
-    }
-
-    const saranaPengumpulanData = {
-        id: 'r-4-7',
-        label: '4.7. Sarana Pengumpulan Data',
-        items: [
-            { label: 'Pencil-and-Paper Interviewing (PAPI)', value: '1' },
-            { label: 'Computer-assisted Personal Interviewing (CAPI)', value: '2' },
-            { label: 'Computer-assisted Telephones Interviewing (CATI)', value: '4' },
-            { label: 'Computer Aided Web Interviewing (CAWI)', value: '8' },
-            { label: 'Mail', value: '16' },
-            { label: 'Lainnya', value: '32' },
-        ]
-    };
-
-    const unitPengumpulanData = {
-        id: 'r-4-8',
-        label: '4.8. Unit Pengumpulan Data',
-        items: [
-            { label: 'Individu', value: '1' },
-            { label: 'Rumah tangga', value: '2' },
-            { label: 'Usaha/perusahaan', value: '4' },
-            { label: 'Lainnya', value: '8' },
-        ]
-    };
-
     type Row = {
         id: number,
         provinsi: string,
@@ -198,28 +160,46 @@ export default function DesignPage({ form } : SectionProps) {
             </div>
             
             {/* Metode Pengumpulan Data */}
-            <InputLayout>
-                <Label htmlFor={metodePengumpulanData.id}>
-                    <H3 text={metodePengumpulanData.label} />
-                </Label>
-                <CheckboxOption data={metodePengumpulanData} />
-            </InputLayout>
+            <CheckboxOption 
+                form={form}
+                checkboxLabel={<H3 text='4.6. Metode Pengumpulan Data' />}
+                checkboxName={'data_collection_methods'}
+                options={[
+                    { label: 'Wawancara', value: 1 },
+                    { label: 'Mengisi kuesioner sendiri (swacacah)', value: 2 },
+                    { label: 'Pengamatan (observasi)', value: 3 },
+                    { label: 'Pengumpulan data sekunder', value: 4 },
+                    { label: 'Lainnya', value: 5 },
+                ]}
+            />
 
             {/* Sarana Pengumpulan Data */}
-            <InputLayout>
-                <Label htmlFor={saranaPengumpulanData.id}>
-                    <H3 text={saranaPengumpulanData.label} />
-                </Label>
-                <CheckboxOption data={saranaPengumpulanData} />
-            </InputLayout>
+            <CheckboxOption 
+                form={form}
+                checkboxLabel={<H3 text='4.7. Sarana Pengumpulan Data' />}
+                checkboxName={'data_collection_tools'}
+                options={[
+                    { label: 'Pencil-and-Paper Interviewing (PAPI)', value: 1 },
+                    { label: 'Computer-assisted Personal Interviewing (CAPI)', value: 2 },
+                    { label: 'Computer-assisted Telephones Interviewing (CATI)', value: 3 },
+                    { label: 'Computer Aided Web Interviewing (CAWI)', value: 4 },
+                    { label: 'Mail', value: 5 },
+                    { label: 'Lainnya', value: 6 },
+                ]}
+            />
 
             {/* Unit Pengumpulan Data */}
-            <InputLayout>
-                <Label htmlFor={unitPengumpulanData.id}>
-                    <H3 text={unitPengumpulanData.label} />
-                </Label>
-                <CheckboxOption data={unitPengumpulanData} />
-            </InputLayout>
+            <CheckboxOption 
+                form={form}
+                checkboxLabel={<H3 text='4.8. Unit Pengumpulan Data' />}
+                checkboxName={'data_collection_units'}
+                options={[
+                    { label: 'Individu', value: 1 },
+                    { label: 'Rumah tangga', value: 2 },
+                    { label: 'Usaha/perusahaan', value: 3 },
+                    { label: 'Lainnya', value: 4 },
+                ]}
+            />
         </FormLayout> 
     )
 }

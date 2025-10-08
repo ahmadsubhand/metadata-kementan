@@ -17,6 +17,6 @@ class DataCollectionUnit extends Model
 
     public function metadataStatisticForms(): BelongsToMany
     {
-        return $this->belongsToMany(MetadataStatisticForm::class);
+        return $this->belongsToMany(MetadataStatisticForm::class)->withTimestamps();
     }
 }

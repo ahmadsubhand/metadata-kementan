@@ -17,29 +17,69 @@ class MetadataController extends Controller
         return Inertia::render('metadata/metadata');
     }
 
-    public function saveAsDraft(MetadataDraftRequest $request): RedirectResponse
-    {
-        $user_id = Auth::id();
-        MetadataStatisticForm::create([
-            ...$request->validated(),
-            'status' => FormStatus::Draft->value,
-            'user_id' => $user_id
-        ]);
-
-        return redirect()->route('dashboard')->with('success', "Formulir berhasil disimpan");
-    }
-
-    public function update($id)
+    // GET - Create or Update
+    public function editOrCreate(?int $id = null): Response
     {
         $form = MetadataStatisticForm::find($id);
 
-        if (!$form || ($form->user_id !== Auth::id())) {
-            return redirect()->route('metadata');
+        if (!$id || !$form || ($form->user_id !== Auth::id())) {
+            return Inertia::render('metadata/metadata');
         }
 
+        $relations = [
+            'data_collection_methods' => $form->dataCollectionMethods()->pluck('data_collection_methods.id'),
+            'data_collection_tools' => $form->dataCollectionTools()->pluck('data_collection_tools.id'),
+            'data_collection_units' => $form->dataCollectionUnits()->pluck('data_collection_units.id'),
+            'data_quality_check_methods' => $form->dataQualityCheckMethods()->pluck('data_quality_check_methods.id'),
+            'analysis_units' => $form->analysisUnits()->pluck('analysis_units.id'),
+            'presentation_levels' => $form->presentationLevels()->pluck('presentation_levels.id')
+        ];
+
         return Inertia::render('metadata/metadata', [
-            "metadata_form" => $form
+            "metadata_form" => [
+                ...$form->toArray(),
+                ...$relations
+            ]
         ]);
+    }
+
+    // POST - Create or Update
+    public function saveAsDraft(MetadataDraftRequest $request, ?int $id = null): RedirectResponse
+    {
+        $data = $request->validated();
+
+        $user = Auth::user();
+
+        $form = $id
+            ? MetadataStatisticForm::where('user_id', $user->id)->findOrFail($id)
+            : $user->metadataStatisticForms()->make();
+
+        $form->fill([
+            ...$data,
+            'status' => FormStatus::Draft->value,
+        ]);
+
+        $form->save();
+
+        $relations = [
+            'dataCollectionMethods' => 'data_collection_methods',
+            'dataCollectionTools' => 'data_collection_tools',
+            'dataCollectionUnits' => 'data_collection_units',
+            'dataQualityCheckMethods' => 'data_quality_check_methods',
+            'analysisUnits' => 'analysis_units',
+            'presentationLevels' => 'presentation_levels',
+        ];
+
+        foreach ($relations as $relation => $key) {
+            if (isset($data[$key])) {
+                $form->{$relation}()->sync($data[$key]);
+            }
+        }
+
+        return redirect()->route('dashboard')->with('success', $id
+            ? 'Formulir berhasil diperbarui'
+            : 'Formulir berhasil disimpan sebagai draft'
+        );
     }
 
     public function destroy($id): RedirectResponse

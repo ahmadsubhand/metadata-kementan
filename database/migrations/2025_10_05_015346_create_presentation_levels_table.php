@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('label');
         });
 
-        Schema::create('presentation_level_metadata_statistic_form', function (Blueprint $table) {
+        Schema::create('metadata_statistic_form_presentation_level', function (Blueprint $table) {
             $table->id();
             $table->foreignId('metadata_statistic_form_id')->constrained()->cascadeOnDelete();
             $table->foreignId('presentation_level_id')->constrained()->cascadeOnDelete();

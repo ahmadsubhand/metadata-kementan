@@ -77,12 +77,12 @@ class MetadataDraftRequest extends FormRequest
             'data_collection_coverage_id' => 'nullable|exists:data_collection_coverages,id',
             // activity_regions table
             // Untuk checkbox banyak, validasi bisa menggunakan array
-            // 'data_collection_methods' => 'nullable|array',
-            // 'data_collection_methods.*' => 'exists:data_collection_methods,id',
-            // 'data_collection_tools' => 'nullable|array',
-            // 'data_collection_tools.*' => 'exists:data_collection_tools,id',
-            // 'data_collection_units' => 'nullable|array',
-            // 'data_collection_units.*' => 'exists:data_collection_units,id',
+            'data_collection_methods' => 'nullable|array',
+            'data_collection_methods.*' => 'exists:data_collection_methods,id',
+            'data_collection_tools' => 'nullable|array',
+            'data_collection_tools.*' => 'exists:data_collection_tools,id',
+            'data_collection_units' => 'nullable|array',
+            'data_collection_units.*' => 'exists:data_collection_units,id',
 
             // V. DESAIN SAMPEL
             'sample_design_type_id' => 'nullable|exists:sample_design_types,id',
@@ -97,8 +97,8 @@ class MetadataDraftRequest extends FormRequest
 
             // VI. PENGUMPULAN DATA
             'pilot_survey' => 'nullable|in:' . implode(',', array_column(BooleanType::cases(), 'value')),
-            // 'data_quality_check_method' => 'nullable|array',
-            // 'data_quality_check_method.*' => 'exists:data_quality_check_methods,id',
+            'data_quality_check_methods' => 'nullable|array',
+            'data_quality_check_methods.*' => 'exists:data_quality_check_methods,id',
             'nonresponse_adjustment' => 'nullable|in:' . implode(',', array_column(BooleanType::cases(), 'value')),
             'data_collector_type_id' => 'nullable|exists:data_collector_types,id',
             'minimum_education_requirement_id' => 'nullable|exists:minimum_education_requirements,id',
@@ -112,10 +112,10 @@ class MetadataDraftRequest extends FormRequest
             'data_entry_step' => 'nullable|in:' . implode(',', array_column(BooleanType::cases(), 'value')),
             'validation_step' => 'nullable|in:' . implode(',', array_column(BooleanType::cases(), 'value')),
             'analysis_method_id' => 'nullable|exists:analysis_methods,id',
-            // 'analysis_units' => 'nullable|array',
-            // 'analysis_units.*' => 'exists:analysis_units,id',
-            // 'presentation_levels' => 'nullable|array',
-            // 'presentation_levels.*' => 'exists:presentation_levels,id',
+            'analysis_units' => 'nullable|array',
+            'analysis_units.*' => 'exists:analysis_units,id',
+            'presentation_levels' => 'nullable|array',
+            'presentation_levels.*' => 'exists:presentation_levels,id',
 
             // VIII. DISEMINASI HASIL
             'printed_product' => 'nullable|in:' . implode(',', array_column(BooleanType::cases(), 'value')),

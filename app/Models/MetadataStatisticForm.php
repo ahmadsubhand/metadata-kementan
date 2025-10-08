@@ -195,8 +195,8 @@ class MetadataStatisticForm extends Model
         return $this->belongsToMany(PresentationLevel::class);
     }
 
-    public function dataAnalysisUnits(): BelongsToMany
+    public function analysisUnits(): BelongsToMany
     {
-        return $this->belongsToMany(DataAnalysisUnit::class);
+        return $this->belongsToMany(analysisUnit::class);
     }
 }

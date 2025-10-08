@@ -21,7 +21,7 @@ use App\Models\DataQualityCheckMethod;
 use App\Models\DataCollectorType;
 use App\Models\MinimumEducationRequirement;
 use App\Models\AnalysisMethod;
-use App\Models\DataAnalysisUnit;
+use App\Models\AnalysisUnit;
 use App\Models\MetadataStatisticForm;
 use App\Models\PresentationLevel;
 use App\Models\User;
@@ -205,7 +205,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Analysis Units
-        DataAnalysisUnit::factory()->createMany([
+        AnalysisUnit::factory()->createMany([
             ['label' => 'Individu', 'code' => 1],
             ['label' => 'Rumah tangga', 'code' => 2],
             ['label' => 'Usaha/perusahaan', 'code' => 4],

@@ -15,9 +15,10 @@ Route::middleware(['auth', 'verified', 'approved'])->group(function () {
     Route::controller(MetadataController::class)
         ->prefix('metadata')
         ->group(function () {
-            Route::get('/', 'index')->name('metadata');
-            Route::get('/{id}', 'update')->name('metadata.update');
+            Route::get('/', 'editOrCreate')->name('metadata');
+            Route::get('/{id}', 'editOrCreate')->name('metadata.edit');
             Route::post('/', 'saveAsDraft')->name('metadata.draft');
+            Route::post('/{id}', 'saveAsDraft')->name('metadata.draft-update');
             Route::delete('/{id}', 'destroy')->name('metadata.destroy');
         });    
 });

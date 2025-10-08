@@ -11,16 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('data_analysis_units', function (Blueprint $table) {
+        Schema::create('analysis_units', function (Blueprint $table) {
             $table->id();
             $table->integer('code');
             $table->string('label');
         });
 
-        Schema::create('data_analysis_unit_metadata_statistic_form', function (Blueprint $table) {
+        Schema::create('analysis_unit_metadata_statistic_form', function (Blueprint $table) {
             $table->id();
             $table->foreignId('metadata_statistic_form_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('data_analysis_unit_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('analysis_unit_id')->constrained()->cascadeOnDelete();
         });
     }
 
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('data_analysis_units');
+        Schema::dropIfExists('analysis_units');
     }
 };

@@ -4,22 +4,10 @@ import H2 from "@/components/h2"
 import RadioOption from "@/components/input/radio-option"
 import H3 from "@/components/h3"
 import InputLayout from "./input-layout"
-import { Label } from "@/components/ui/label"
 import CheckboxOption from "@/components/input/checkbox-option"
 import InputSide from "@/components/input/input-side"
 
 export default function CollectionPage({ form } : SectionProps) {
-    const metodePemeriksaanKualitas = {
-        id: 'metode_pemeriksaan_kualitas',
-        label: '6.2. Metode Pemeriksaan Kualitas Pengumpulan Data:',
-        items: [
-            { label : 'Kunjungan kembali (revisit)', value: '1' },
-            { label : 'Supervisi', value: '2' },
-            { label : 'Task Force', value: '4' },
-            { label : 'Lainnya', value: '8' },
-        ]
-    }
-
     return (
         <FormLayout>
             <H2 text='VI. PENGUMPULAN DATA' />
@@ -36,12 +24,17 @@ export default function CollectionPage({ form } : SectionProps) {
             />
 
              {/* Metode Pemeriksaan Kualitas */}
-            <InputLayout>
-                <Label htmlFor={metodePemeriksaanKualitas.id}>
-                    <H3 text={metodePemeriksaanKualitas.label} />
-                </Label>
-                <CheckboxOption data={metodePemeriksaanKualitas} />
-            </InputLayout>
+            <CheckboxOption 
+                form={form}
+                checkboxName="data_quality_check_methods"
+                checkboxLabel={<H3 text='6.2. Metode Pemeriksaan Kualitas Pengumpulan Data' />}
+                options={[
+                    { label : 'Kunjungan kembali (revisit)', value: 1 },
+                    { label : 'Supervisi', value: 2 },
+                    { label : 'Task Force', value: 3 },
+                    { label : 'Lainnya', value: 4 },
+                ]}
+            />
 
             {/* Penyesuaian Nonrespon */}
             <RadioOption

@@ -7,3 +7,9 @@ export const dateOptional = z.preprocess(val => !val ? null : val, z.string({ me
         "Tanggal tidak valid"
     )
     .nullable())
+
+export const arrayOptional = z.preprocess(val => !val ? null : val,  z.array(z.coerce.number()).nullable());
+
+// export const arrayRequired = z.array(z.coerce.number()).refine((value) => value.some((item) => item), {
+//     error: 'Minimal pilih satu'
+// });

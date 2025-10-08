@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class DataAnalysisUnit extends Model
+class AnalysisUnit extends Model
 {
     /** @use HasFactory<\Database\Factories\DataAnalysisUnitFactory> */
     use HasFactory;
@@ -17,6 +17,6 @@ class DataAnalysisUnit extends Model
 
     public function metadataStatisticForms(): BelongsToMany
     {
-        return $this->belongsToMany(MetadataStatisticForm::class);
+        return $this->belongsToMany(MetadataStatisticForm::class)->withTimestamps();
     }
 }

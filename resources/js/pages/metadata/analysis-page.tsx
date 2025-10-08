@@ -4,38 +4,9 @@ import H2 from "@/components/h2"
 import InputLayout from "./input-layout"
 import H3 from "@/components/h3"
 import RadioOption from "@/components/input/radio-option"
-import { Label } from "@/components/ui/label"
 import CheckboxOption from "@/components/input/checkbox-option"
 
 export default function AnalysisPage({ form } : SectionProps) {
-    const unitAnalisis = {
-        id: 'unit_analisis',
-        label: '7.3 Unit Analisis',
-        items: [
-            { value: '1', label: 'Individu' },
-            { value: '2', label: 'Rumah tangga' },
-            { value: '4', label: 'Usaha/perusahaan' },
-            { value: '8', label: 'Lainnya' },
-        ]
-    }
-
-    const tingkatPenyajian = {
-        id: 'tingkat_penyajian',
-        label: '7.4 Tingkat Penyajian Hasil Analisis',
-        items: [
-            { value: '1', label: 'Nasional' },
-            { value: '2', label: 'Provinsi' },
-            { value: '4', label: 'Kabupaten/Kota' },
-            { value: '8', label: 'Kecamatan' },
-            { value: '16', label: 'Lainnya' },
-        ]
-    }
-
-    // Penyuntingan (Editing)
-        // Penyandian (Coding)
-        // Data Entry
-        // Penyahihan (Validasi)
-
     return (
         <FormLayout>
             <H2 text='VII. PENGOLAHAN DAN ANALISIS' />
@@ -99,19 +70,30 @@ export default function AnalysisPage({ form } : SectionProps) {
                 ]}
             />
 
-            <InputLayout>
-                <Label htmlFor={unitAnalisis.id}>
-                    <H3 text={unitAnalisis.label} />
-                </Label>
-                <CheckboxOption data={unitAnalisis} />
-            </InputLayout>
+            <CheckboxOption 
+                form={form}
+                checkboxLabel={<H3 text='7.3 Unit Analisis' />}
+                checkboxName="analysis_units"
+                options={[
+                    { value: 1, label: 'Individu' },
+                    { value: 2, label: 'Rumah tangga' },
+                    { value: 3, label: 'Usaha/perusahaan' },
+                    { value: 4, label: 'Lainnya' },
+                ]}
+            />
 
-            <InputLayout>
-                <Label htmlFor={tingkatPenyajian.id}>
-                    <H3 text={tingkatPenyajian.label} />
-                </Label>
-                <CheckboxOption data={tingkatPenyajian} />
-            </InputLayout>
+            <CheckboxOption 
+                form={form}
+                checkboxLabel={<H3 text='7.4 Tingkat Penyajian Hasil Analisis' />}
+                checkboxName="presentation_levels"
+                options={[
+                    { value: 1, label: 'Nasional' },
+                    { value: 2, label: 'Provinsi' },
+                    { value: 3, label: 'Kabupaten/Kota' },
+                    { value: 4, label: 'Kecamatan' },
+                    { value: 5, label: 'Lainnya' },
+                ]}
+            />
         </FormLayout>
     )
 }

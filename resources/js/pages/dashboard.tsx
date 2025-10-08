@@ -6,7 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem,
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { FilePenLine, MoreHorizontal, Pencil, Trash } from 'lucide-react';
-import { destroy, update } from '@/routes/metadata';
+import { destroy, edit } from '@/routes/metadata';
 import AlertButton from '@/components/alert-button';
 
 
@@ -60,7 +60,7 @@ export default function Dashboard({ forms } : { forms: MetadataForm[] }) {
                                                     <DropdownMenuLabel>Aksi</DropdownMenuLabel>
                                                     <DropdownMenuSeparator />
                                                     <DropdownMenuItem asChild>
-                                                        <Link className='flex justify-between gap-4' href={update(form.id).url}>
+                                                        <Link className='flex justify-between gap-4' href={edit(form.id).url}>
                                                             Edit data <Pencil />
                                                         </Link>
                                                     </DropdownMenuItem>

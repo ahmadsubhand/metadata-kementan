@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AppLayout from '@/layouts/app-layout';
 import { metadata } from '@/routes'
-import { draft } from '@/routes/metadata'
+import { draft, draftUpdate } from '@/routes/metadata'
 import { type BreadcrumbItem } from '@/types';
 import { Head, router, usePage } from '@inertiajs/react';
 import { FieldErrors, Path, useForm  } from 'react-hook-form';
@@ -28,7 +28,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Metadata({ metadata_form } : { metadata_form?: MetadataStoreType } ) {
+export default function Metadata({ metadata_form } : { metadata_form?: Omit<MetadataStoreType, 'id'> & { id: string | number }} ) {
     // Form
 
     useEffect(() => {
@@ -90,9 +90,9 @@ export default function Metadata({ metadata_form } : { metadata_form?: MetadataS
                 frequency_of_implementation_id: metadata_form?.frequency_of_implementation_id ? metadata_form?.frequency_of_implementation_id?.toString() : undefined,
                 data_collection_type_id: metadata_form?.data_collection_type_id ? metadata_form?.data_collection_type_id.toString() : undefined,
                 data_collection_coverage_id: metadata_form?.data_collection_coverage_id ? metadata_form?.data_collection_coverage_id.toString() : undefined,
-                // data_collection_methods: metadataForm?.activity_title,
-                // data_collection_tools: metadataForm?.activity_title,
-                // data_collection_units: metadataForm?.activity_title,
+                data_collection_methods: metadata_form?.data_collection_methods,
+                data_collection_tools: metadata_form?.data_collection_tools,
+                data_collection_units: metadata_form?.data_collection_units,
             
                 // V. DESAIN SAMPEL
                 sample_design_type_id: metadata_form?.sample_design_type_id ? metadata_form?.sample_design_type_id.toString() : undefined,
@@ -107,7 +107,7 @@ export default function Metadata({ metadata_form } : { metadata_form?: MetadataS
             
                 // VI. PENGUMPULAN DATA
                 pilot_survey: metadata_form?.pilot_survey,
-                // data_quality_check_method: metadataForm?.activity_title,
+                data_quality_check_methods: metadata_form?.data_quality_check_methods,
                 nonresponse_adjustment: metadata_form?.nonresponse_adjustment,
                 data_collector_type_id: metadata_form?.data_collector_type_id ? metadata_form?.data_collector_type_id.toString() : undefined,
                 minimum_education_requirement_id: metadata_form?.minimum_education_requirement_id ? metadata_form?.minimum_education_requirement_id.toString() : undefined,
@@ -121,8 +121,8 @@ export default function Metadata({ metadata_form } : { metadata_form?: MetadataS
                 data_entry_step: metadata_form?.data_entry_step,
                 validation_step: metadata_form?.validation_step,
                 analysis_method_id: metadata_form?.analysis_method_id ? metadata_form?.analysis_method_id.toString() : undefined,
-                // analysis_units: metadataForm?.activity_title,
-                // presentation_levels: metadataForm?.activity_title,
+                analysis_units: metadata_form?.analysis_units,
+                presentation_levels: metadata_form?.presentation_levels,
             
                 // VIII. DISEMINASI HASIL
                 printed_product: metadata_form?.printed_product,
@@ -138,9 +138,15 @@ export default function Metadata({ metadata_form } : { metadata_form?: MetadataS
     const [isLoading, setIsLoading] = useState(false);
     function onSubmit(data:MetadataStoreType) {
         setIsLoading(true);
-        router.post(draft.url(), data, {
-            onFinish: () => setIsLoading(false)
-        });
+        if (metadata_form) {
+            router.post(draftUpdate(metadata_form.id).url, data, {
+                onFinish: () => setIsLoading(false)    
+            })
+        } else {
+            router.post(draft.url(), data, {
+                onFinish: () => setIsLoading(false)
+            });
+        }
     }
 
     const [fieldToTab] = useState<Record<keyof MetadataStoreType, string>>({
@@ -154,86 +160,86 @@ export default function Metadata({ metadata_form } : { metadata_form?: MetadataS
         recommendation_identity: 'first_page',
 
         // I. PENYELENGGARA
-        organizing_agency: 'section_1',
-        organizing_agency_full_address: 'section_1',
-        organizing_agency_phone: 'section_1',
-        organizing_agency_fax: 'section_1',
-        organizing_agency_email: 'section_1',
+        organizing_agency: 'organizer_page',
+        organizing_agency_full_address: 'organizer_page',
+        organizing_agency_phone: 'organizer_page',
+        organizing_agency_fax: 'organizer_page',
+        organizing_agency_email: 'organizer_page',
 
         // II. PENANGGUNG JAWAB
-        responsible_echelon_1_unit: 'section_2',
-        responsible_echelon_2_unit: 'section_2',
-        technical_responsible_name: 'section_2',
-        technical_responsible_position: 'section_2',
-        technical_responsible_address: 'section_2',
-        technical_responsible_phone: 'section_2',
-        technical_responsible_fax: 'section_2',
-        technical_responsible_email: 'section_2',
+        responsible_echelon_1_unit: 'responsible_page',
+        responsible_echelon_2_unit: 'responsible_page',
+        technical_responsible_name: 'responsible_page',
+        technical_responsible_position: 'responsible_page',
+        technical_responsible_address: 'responsible_page',
+        technical_responsible_phone: 'responsible_page',
+        technical_responsible_fax: 'responsible_page',
+        technical_responsible_email: 'responsible_page',
 
         // III. PERENCANAAN DAN PERSIAPAN
-        activity_background: 'section_3',
-        activity_objective: 'section_3',
-        activity_planning_start_date: 'section_3',
-        activity_planning_end_date: 'section_3',
-        design_start_date: 'section_3',
-        design_end_date: 'section_3',
-        data_collection_start_date: 'section_3',
-        data_collection_end_date: 'section_3',
-        data_processing_start_date: 'section_3',
-        data_processing_end_date: 'section_3',
-        data_analysis_start_date: 'section_3',
-        data_analysis_end_date: 'section_3',
-        result_dissemination_start_date: 'section_3',
-        result_dissemination_end_date: 'section_3',
-        evaluation_start_date: 'section_3',
-        evaluation_end_date: 'section_3',
+        activity_background: 'plannig_page',
+        activity_objective: 'plannig_page',
+        activity_planning_start_date: 'plannig_page',
+        activity_planning_end_date: 'plannig_page',
+        design_start_date: 'plannig_page',
+        design_end_date: 'plannig_page',
+        data_collection_start_date: 'plannig_page',
+        data_collection_end_date: 'plannig_page',
+        data_processing_start_date: 'plannig_page',
+        data_processing_end_date: 'plannig_page',
+        data_analysis_start_date: 'plannig_page',
+        data_analysis_end_date: 'plannig_page',
+        result_dissemination_start_date: 'plannig_page',
+        result_dissemination_end_date: 'plannig_page',
+        evaluation_start_date: 'plannig_page',
+        evaluation_end_date: 'plannig_page',
 
         // IV. DESAIN KEGIATAN
-        activity_conduct_id: 'section_4',
-        frequency_of_implementation_id: 'section_4',
-        data_collection_type_id: 'section_4',
-        data_collection_coverage_id: 'section_4',
-        // data_collection_methods: 'section_4',
-        // data_collection_tools: 'section_4',
-        // data_collection_units: 'section_4',
+        activity_conduct_id: 'design_page',
+        frequency_of_implementation_id: 'design_page',
+        data_collection_type_id: 'design_page',
+        data_collection_coverage_id: 'design_page',
+        data_collection_methods: 'design_page',
+        data_collection_tools: 'design_page',
+        data_collection_units: 'design_page',
 
         // V. DESAIN SAMPEL
-        sample_design_type_id: 'section_5',
-        final_stage_sampling_method_id: 'section_5',
-        probability_sampling_method_id: 'section_5',
-        nonprobability_sampling_method_id: 'section_5',
-        final_stage_sampling_frame_id: 'section_5',
-        overall_sample_fraction: 'section_5',
-        estimated_sampling_error: 'section_5',
-        sampling_unit: 'section_5',
-        observation_unit: 'section_5',
+        sample_design_type_id: 'sampling_page',
+        final_stage_sampling_method_id: 'sampling_page',
+        probability_sampling_method_id: 'sampling_page',
+        nonprobability_sampling_method_id: 'sampling_page',
+        final_stage_sampling_frame_id: 'sampling_page',
+        overall_sample_fraction: 'sampling_page',
+        estimated_sampling_error: 'sampling_page',
+        sampling_unit: 'sampling_page',
+        observation_unit: 'sampling_page',
 
         // VI. PENGUMPULAN DATA
-        pilot_survey: 'section_6',
-        // data_quality_check_method: 'section_6',
-        nonresponse_adjustment: 'section_6',
-        data_collector_type_id: 'section_6',
-        minimum_education_requirement_id: 'section_6',
-        number_of_supervisors: 'section_6',
-        number_of_enumerators: 'section_6',
-        training_of_data_collector: 'section_6',
+        pilot_survey: 'collection_page',
+        data_quality_check_methods: 'collection_page',
+        nonresponse_adjustment: 'collection_page',
+        data_collector_type_id: 'collection_page',
+        minimum_education_requirement_id: 'collection_page',
+        number_of_supervisors: 'collection_page',
+        number_of_enumerators: 'collection_page',
+        training_of_data_collector: 'collection_page',
 
         // VII. PENGOLAHAN DAN ANALISIS
-        editing_step: 'section_7',
-        coding_step: 'section_7',
-        data_entry_step: 'section_7',
-        validation_step: 'section_7',
-        analysis_method_id: 'section_7',
-        // analysis_units: 'section_7',
-        // presentation_levels: 'section_7',
+        editing_step: 'analysis_page',
+        coding_step: 'analysis_page',
+        data_entry_step: 'analysis_page',
+        validation_step: 'analysis_page',
+        analysis_method_id: 'analysis_page',
+        analysis_units: 'analysis_page',
+        presentation_levels: 'analysis_page',
 
         // VIII. DISEMINASI HASIL
-        printed_product: 'section_8',
-        digital_product: 'section_8',
-        microdata_product: 'section_8',
-        printed_release_date: 'section_8',
-        digital_release_date: 'section_8',
-        microdata_release_date: 'section_8',
+        printed_product: 'dissemination_page',
+        digital_product: 'dissemination_page',
+        microdata_product: 'dissemination_page',
+        printed_release_date: 'dissemination_page',
+        digital_release_date: 'dissemination_page',
+        microdata_release_date: 'dissemination_page',
     })
 
     // Navigate to tab which has error field
@@ -263,14 +269,14 @@ export default function Metadata({ metadata_form } : { metadata_form?: MetadataS
 
     const menus = [
         { value: 'first_page', label: 'Halaman Awal', form: <FirstPage form={form} /> },
-        { value: 'section_1', label: 'Blok I', form: <OrganizerPage form={form} /> },
-        { value: 'section_2', label: 'Blok II', form: <ResponsiblePage form={form} /> },
-        { value: 'section_3', label: 'Blok III', form: <PlanningPage form={form} /> },
-        { value: 'section_4', label: 'Blok IV', form: <DesignPage form={form} /> },
-        { value: 'section_5', label: 'Blok V', form: <SamplingPage form={form} /> },
-        { value: 'section_6', label: 'Blok VI', form: <CollectionPage form={form}/> },
-        { value: 'section_7', label: 'Blok VII', form: <AnalysisPage form={form} /> },
-        { value: 'section_8', label: 'Blok VIII', form: <DisseminationPage form={form}/> },
+        { value: 'organizer_page', label: 'Blok I', form: <OrganizerPage form={form} /> },
+        { value: 'responsible_page', label: 'Blok II', form: <ResponsiblePage form={form} /> },
+        { value: 'plannig_page', label: 'Blok III', form: <PlanningPage form={form} /> },
+        { value: 'design_page', label: 'Blok IV', form: <DesignPage form={form} /> },
+        { value: 'sampling_page', label: 'Blok V', form: <SamplingPage form={form} /> },
+        { value: 'collection_page', label: 'Blok VI', form: <CollectionPage form={form}/> },
+        { value: 'analysis_page', label: 'Blok VII', form: <AnalysisPage form={form} /> },
+        { value: 'dissemination_page', label: 'Blok VIII', form: <DisseminationPage form={form}/> },
     ]
 
     const [step, setStep] = useState(menus[0].value);

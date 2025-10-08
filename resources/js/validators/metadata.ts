@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { z } from 'zod';
-import { dateOptional } from '.';
+import { arrayOptional, dateOptional } from '.';
 
 export const metadataStoreSchema = z.object({
     // Halaman awal
@@ -57,9 +57,9 @@ export const metadataStoreSchema = z.object({
     frequency_of_implementation_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
     data_collection_type_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
     data_collection_coverage_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    // data_collection_methods: z.array(z.number()).nullable(),
-    // data_collection_tools: z.array(z.number()).nullable(),
-    // data_collection_units: z.array(z.number()).nullable(),
+    data_collection_methods: arrayOptional,
+    data_collection_tools: arrayOptional,
+    data_collection_units: arrayOptional,
 
     // V. DESAIN SAMPEL
     sample_design_type_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
@@ -74,7 +74,7 @@ export const metadataStoreSchema = z.object({
 
     // VI. PENGUMPULAN DATA
     pilot_survey: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    // data_quality_check_method: z.array(z.number()).nullable(),
+    data_quality_check_methods: arrayOptional,
     nonresponse_adjustment: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
     data_collector_type_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
     minimum_education_requirement_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
@@ -88,8 +88,8 @@ export const metadataStoreSchema = z.object({
     data_entry_step: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
     validation_step: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
     analysis_method_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    // analysis_units: z.array(z.number()).nullable(),
-    // presentation_levels: z.array(z.number()).nullable(),
+    analysis_units: arrayOptional,
+    presentation_levels: arrayOptional,
 
     // VIII. DISEMINASI HASIL
     printed_product: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
