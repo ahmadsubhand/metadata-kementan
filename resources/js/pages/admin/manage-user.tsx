@@ -42,8 +42,8 @@ export default function ManageUser({ users } : { users: SharedData['auth']['user
                             users.map((user, index) => (
                                 <TableRow key={index}>
                                     <TableCell>{index + 1}</TableCell>
-                                    <TableCell>{user.name}</TableCell>
-                                    <TableCell>{user.email}</TableCell>
+                                    <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{user.name}</TableCell>
+                                    <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{user.email}</TableCell>
                                     <TableCell className='capitalize'>{user.role}</TableCell>
                                     <TableCell>
                                         {user.email_verified_at ? dayjs(user.email_verified_at).format('DD/MM/YYYY') : '-'}

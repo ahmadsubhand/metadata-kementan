@@ -77,6 +77,7 @@ export default function Dashboard({ forms, api_token_requests } : { forms: Metad
                     </Card>
                 )}
 
+                {/* List Metadata Statistic */}
                 <div className="flex flex-col gap-4 overflow-x-auto rounded-xl p-4">
                     <h1 className='font-bold'>List Metadata Kegiatan Tersimpan</h1>
                     {(forms.length > 0) ? (
@@ -99,7 +100,7 @@ export default function Dashboard({ forms, api_token_requests } : { forms: Metad
                                     forms.map((form, index) => (
                                         <TableRow key={form.id}>
                                             <TableCell>{index + 1}</TableCell>
-                                            <TableCell>{form.activity_title}</TableCell>
+                                            <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{form.activity_title}</TableCell>
                                             <TableCell>{form.activity_year}</TableCell>
                                             <TableCell>{form.data_collection_approach?.label}</TableCell>
                                             <TableCell>{form.activity_sector?.label}</TableCell>
@@ -152,6 +153,7 @@ export default function Dashboard({ forms, api_token_requests } : { forms: Metad
                     </Link>
                 </div>
                 
+                {/* List API Token */}
                 <div className="flex flex-col gap-4 overflow-x-auto rounded-xl p-4">
                     <h1 className='font-bold'>List Token API</h1>
                     {(api_token_requests.length > 0) ? (
@@ -172,8 +174,8 @@ export default function Dashboard({ forms, api_token_requests } : { forms: Metad
                                     api_token_requests.map((api, index) => (
                                         <TableRow key={api.id}>
                                             <TableCell>{index + 1}</TableCell>
-                                            <TableCell>{api.application_name}</TableCell>
-                                            <TableCell>{api.application_description}</TableCell>
+                                            <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{api.application_name}</TableCell>
+                                            <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{api.application_description}</TableCell>
                                             <TableCell className='capitalize'>{api.status}</TableCell>
                                             <TableCell>{api.message || '-'}</TableCell>
                                             <TableCell>

@@ -42,8 +42,8 @@ export default function ManageApi({ api_token_request } : { api_token_request: A
                                 <TableRow key={index}>
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>{'Aku adalah manusia'}</TableCell>
-                                    <TableCell>{api.application_name}</TableCell>
-                                    <TableCell>{api.application_description}</TableCell>
+                                    <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{api.application_name}</TableCell>
+                                    <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{api.application_description}</TableCell>
                                     <TableCell className='capitalize'>{api.status}</TableCell>
                                     <TableCell>{api.message || '-'}</TableCell>
                                     <TableCell>
