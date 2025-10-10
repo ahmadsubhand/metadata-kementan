@@ -16,9 +16,9 @@ return new class extends Migration
             $table->foreignId('metadata_statistic_form_id')->constrained();
             $table->integer('variable_number');
             $table->text('variable_name');
-            $table->text('variable_concept');
-            $table->text('variable_definition');
-            $table->text('reference_time');
+            $table->text('variable_concept')->nullable();
+            $table->text('variable_definition')->nullable();
+            $table->text('reference_time')->nullable();
         });
     }
 

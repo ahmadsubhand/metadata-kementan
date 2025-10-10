@@ -12,13 +12,8 @@ use Inertia\Response;
 
 class MetadataController extends Controller
 {
-    public function index(): Response
-    {
-        return Inertia::render('metadata/metadata');
-    }
-
     // GET - Create or Update
-    public function editOrCreate(?int $id = null): Response
+    public function editOrCreate($id = null): Response
     {
         $form = MetadataStatisticForm::find($id);
 
@@ -38,7 +33,9 @@ class MetadataController extends Controller
         return Inertia::render('metadata/metadata', [
             "metadata_form" => [
                 ...$form->toArray(),
-                ...$relations
+                ...$relations,
+                'activity_regions' => $form->activityRegions->all(),
+                'collected_variables' => $form->collectedVariables->all(),
             ]
         ]);
     }
@@ -54,12 +51,16 @@ class MetadataController extends Controller
             ? MetadataStatisticForm::where('user_id', $user->id)->findOrFail($id)
             : $user->metadataStatisticForms()->make();
 
+        // Normal input
+
         $form->fill([
             ...$data,
             'status' => FormStatus::Draft->value,
         ]);
 
         $form->save();
+
+        // Checkbox
 
         $relations = [
             'dataCollectionMethods' => 'data_collection_methods',
@@ -71,9 +72,21 @@ class MetadataController extends Controller
         ];
 
         foreach ($relations as $relation => $key) {
-            if (isset($data[$key])) {
+            if (!empty($data[$key])) {
                 $form->{$relation}()->sync($data[$key]);
             }
+        }
+
+        // Table 
+
+        $form->collectedVariables()->delete();
+        if (!empty($data['collected_variables'])) {
+            $form->collectedVariables()->createMany($data['collected_variables']);
+        }
+        
+        $form->activityRegions()->delete();
+        if (!empty($data['activity_regions'])) {
+            $form->activityRegions()->createMany($data['activity_regions']);
         }
 
         return redirect()->route('dashboard')->with('success', $id

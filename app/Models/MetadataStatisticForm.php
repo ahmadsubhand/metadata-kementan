@@ -163,7 +163,7 @@ class MetadataStatisticForm extends Model
         return $this->hasMany(CollectedVariable::class);
     }
 
-    public function ActivityRegions(): HasMany
+    public function activityRegions(): HasMany
     {
         return $this->hasMany(ActivityRegion::class);
     }

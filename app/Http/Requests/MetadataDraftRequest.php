@@ -68,15 +68,22 @@ class MetadataDraftRequest extends FormRequest
             'result_dissemination_end_date' => 'nullable|date',
             'evaluation_start_date' => 'nullable|date',
             'evaluation_end_date' => 'nullable|date',
-            // collected_variables table
+            'collected_variables' => 'nullable|array',
+            'collected_variables.*.variable_number' => 'required|integer|min:1',
+            'collected_variables.*.variable_name' => 'required|string',
+            'collected_variables.*.variable_concept' => 'nullable|string',
+            'collected_variables.*.variable_definition' => 'nullable|string',
+            'collected_variables.*.reference_time' => 'nullable|string',
 
             // IV. DESAIN KEGIATAN
             'activity_conduct_id' => 'nullable|exists:activity_conducts,id',
             'frequency_of_implementation_id' => 'nullable|exists:frequency_of_implementations,id',
             'data_collection_type_id' => 'nullable|exists:data_collection_types,id',
             'data_collection_coverage_id' => 'nullable|exists:data_collection_coverages,id',
-            // activity_regions table
-            // Untuk checkbox banyak, validasi bisa menggunakan array
+            'activity_regions' => 'nullable|array',
+            'activity_regions.*.number' => 'required_with:activity_regions|integer|min:1',
+            'activity_regions.*.province' => 'required_with:activity_regions|string',
+            'activity_regions.*.city_or_regency' => 'required_with:activity_regions|string',
             'data_collection_methods' => 'nullable|array',
             'data_collection_methods.*' => 'exists:data_collection_methods,id',
             'data_collection_tools' => 'nullable|array',

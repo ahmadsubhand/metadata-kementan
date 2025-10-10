@@ -31,106 +31,103 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Metadata({ metadata_form } : { metadata_form?: Omit<MetadataStoreType, 'id'> & { id: string | number }} ) {
     // Form
 
-    useEffect(() => {
-        console.log(metadata_form);
-    }, [metadata_form])
-
     const { errors } = usePage().props;
 
     const form = useForm({
         resolver: zodResolver(metadataStoreSchema), mode: 'onChange', defaultValues: {
             ...(metadata_form && {
                 // Halaman awal
-                activity_title: metadata_form?.activity_title,
-                activity_year: metadata_form?.activity_year,
-                data_collection_approach_id: metadata_form?.data_collection_approach_id.toString(),
-                activity_sector_id: metadata_form?.activity_sector_id.toString(),
-                statistical_activity_type_id: metadata_form?.statistical_activity_type_id.toString(),
-                statistical_activity_recommendation: metadata_form?.statistical_activity_recommendation,
-                recommendation_identity: metadata_form?.recommendation_identity,
+                activity_title: metadata_form.activity_title,
+                activity_year: metadata_form.activity_year,
+                data_collection_approach_id: metadata_form.data_collection_approach_id.toString(),
+                activity_sector_id: metadata_form.activity_sector_id.toString(),
+                statistical_activity_type_id: metadata_form.statistical_activity_type_id.toString(),
+                statistical_activity_recommendation: metadata_form.statistical_activity_recommendation,
+                recommendation_identity: metadata_form.recommendation_identity,
             
                 // I. PENYELENGGARA
-                organizing_agency: metadata_form?.organizing_agency,
-                organizing_agency_full_address: metadata_form?.organizing_agency_full_address,
-                organizing_agency_phone: metadata_form?.organizing_agency_phone,
-                organizing_agency_fax: metadata_form?.organizing_agency_fax,
-                organizing_agency_email: metadata_form?.organizing_agency_email,
+                organizing_agency: metadata_form.organizing_agency,
+                organizing_agency_full_address: metadata_form.organizing_agency_full_address,
+                organizing_agency_phone: metadata_form.organizing_agency_phone,
+                organizing_agency_fax: metadata_form.organizing_agency_fax,
+                organizing_agency_email: metadata_form.organizing_agency_email,
             
                 // II. PENANGGUNG JAWAB
-                responsible_echelon_1_unit: metadata_form?.responsible_echelon_1_unit,
-                responsible_echelon_2_unit: metadata_form?.responsible_echelon_2_unit,
-                technical_responsible_name: metadata_form?.technical_responsible_name,
-                technical_responsible_position: metadata_form?.technical_responsible_position,
-                technical_responsible_address: metadata_form?.technical_responsible_address,
-                technical_responsible_phone: metadata_form?.technical_responsible_phone,
-                technical_responsible_fax: metadata_form?.technical_responsible_fax,
-                technical_responsible_email: metadata_form?.technical_responsible_email,
+                responsible_echelon_1_unit: metadata_form.responsible_echelon_1_unit,
+                responsible_echelon_2_unit: metadata_form.responsible_echelon_2_unit,
+                technical_responsible_name: metadata_form.technical_responsible_name,
+                technical_responsible_position: metadata_form.technical_responsible_position,
+                technical_responsible_address: metadata_form.technical_responsible_address,
+                technical_responsible_phone: metadata_form.technical_responsible_phone,
+                technical_responsible_fax: metadata_form.technical_responsible_fax,
+                technical_responsible_email: metadata_form.technical_responsible_email,
             
                 // III. PERENCANAAN DAN PERSIAPAN
-                activity_background: metadata_form?.activity_background,
-                activity_objective: metadata_form?.activity_objective,
-                activity_planning_start_date: metadata_form?.activity_planning_start_date,
-                activity_planning_end_date: metadata_form?.activity_planning_end_date,
-                design_start_date: metadata_form?.design_start_date,
-                design_end_date: metadata_form?.design_end_date,
-                data_collection_start_date: metadata_form?.data_collection_start_date,
-                data_collection_end_date: metadata_form?.data_collection_end_date,
-                data_processing_start_date: metadata_form?.data_processing_start_date,
-                data_processing_end_date: metadata_form?.data_processing_end_date,
-                data_analysis_start_date: metadata_form?.data_analysis_start_date,
-                data_analysis_end_date: metadata_form?.data_analysis_end_date,
-                result_dissemination_start_date: metadata_form?.result_dissemination_start_date,
-                result_dissemination_end_date: metadata_form?.result_dissemination_end_date,
-                evaluation_start_date: metadata_form?.evaluation_start_date,
-                evaluation_end_date: metadata_form?.evaluation_end_date,
-                // collected_variables table
+                activity_background: metadata_form.activity_background,
+                activity_objective: metadata_form.activity_objective,
+                activity_planning_start_date: metadata_form.activity_planning_start_date,
+                activity_planning_end_date: metadata_form.activity_planning_end_date,
+                design_start_date: metadata_form.design_start_date,
+                design_end_date: metadata_form.design_end_date,
+                data_collection_start_date: metadata_form.data_collection_start_date,
+                data_collection_end_date: metadata_form.data_collection_end_date,
+                data_processing_start_date: metadata_form.data_processing_start_date,
+                data_processing_end_date: metadata_form.data_processing_end_date,
+                data_analysis_start_date: metadata_form.data_analysis_start_date,
+                data_analysis_end_date: metadata_form.data_analysis_end_date,
+                result_dissemination_start_date: metadata_form.result_dissemination_start_date,
+                result_dissemination_end_date: metadata_form.result_dissemination_end_date,
+                evaluation_start_date: metadata_form.evaluation_start_date,
+                evaluation_end_date: metadata_form.evaluation_end_date,
+                collected_variables: metadata_form.collected_variables,
             
                 // IV. DESAIN KEGIATAN
-                activity_conduct_id: metadata_form?.activity_conduct_id ? metadata_form?.activity_conduct_id.toString() : undefined,
-                frequency_of_implementation_id: metadata_form?.frequency_of_implementation_id ? metadata_form?.frequency_of_implementation_id?.toString() : undefined,
-                data_collection_type_id: metadata_form?.data_collection_type_id ? metadata_form?.data_collection_type_id.toString() : undefined,
-                data_collection_coverage_id: metadata_form?.data_collection_coverage_id ? metadata_form?.data_collection_coverage_id.toString() : undefined,
-                data_collection_methods: metadata_form?.data_collection_methods,
-                data_collection_tools: metadata_form?.data_collection_tools,
-                data_collection_units: metadata_form?.data_collection_units,
+                activity_conduct_id: metadata_form.activity_conduct_id?.toString(),
+                frequency_of_implementation_id: metadata_form.frequency_of_implementation_id?.toString(),
+                data_collection_type_id: metadata_form.data_collection_type_id?.toString(),
+                data_collection_coverage_id: metadata_form.data_collection_coverage_id?.toString(),
+                data_collection_methods: metadata_form.data_collection_methods,
+                data_collection_tools: metadata_form.data_collection_tools,
+                data_collection_units: metadata_form.data_collection_units,
+                activity_regions: metadata_form.activity_regions,
             
                 // V. DESAIN SAMPEL
-                sample_design_type_id: metadata_form?.sample_design_type_id ? metadata_form?.sample_design_type_id.toString() : undefined,
-                final_stage_sampling_method_id: metadata_form?.final_stage_sampling_method_id ? metadata_form?.final_stage_sampling_method_id.toString() : undefined,
-                probability_sampling_method_id: metadata_form?.probability_sampling_method_id ? metadata_form?.probability_sampling_method_id.toString() : undefined,
-                nonprobability_sampling_method_id: metadata_form?.nonprobability_sampling_method_id ? metadata_form?.nonprobability_sampling_method_id.toString() : undefined,
-                final_stage_sampling_frame_id: metadata_form?.final_stage_sampling_frame_id ? metadata_form?.final_stage_sampling_frame_id.toString() : undefined,
-                overall_sample_fraction: metadata_form?.overall_sample_fraction,
-                estimated_sampling_error: metadata_form?.estimated_sampling_error,
-                sampling_unit: metadata_form?.sampling_unit,
-                observation_unit: metadata_form?.observation_unit,
+                sample_design_type_id: metadata_form.sample_design_type_id?.toString(),
+                final_stage_sampling_method_id: metadata_form.final_stage_sampling_method_id?.toString(),
+                probability_sampling_method_id: metadata_form.probability_sampling_method_id?.toString(),
+                nonprobability_sampling_method_id: metadata_form.nonprobability_sampling_method_id?.toString(),
+                final_stage_sampling_frame_id: metadata_form.final_stage_sampling_frame_id?.toString(),
+                overall_sample_fraction: metadata_form.overall_sample_fraction,
+                estimated_sampling_error: metadata_form.estimated_sampling_error,
+                sampling_unit: metadata_form.sampling_unit,
+                observation_unit: metadata_form.observation_unit,
             
                 // VI. PENGUMPULAN DATA
-                pilot_survey: metadata_form?.pilot_survey,
-                data_quality_check_methods: metadata_form?.data_quality_check_methods,
-                nonresponse_adjustment: metadata_form?.nonresponse_adjustment,
-                data_collector_type_id: metadata_form?.data_collector_type_id ? metadata_form?.data_collector_type_id.toString() : undefined,
-                minimum_education_requirement_id: metadata_form?.minimum_education_requirement_id ? metadata_form?.minimum_education_requirement_id.toString() : undefined,
-                number_of_supervisors: metadata_form?.number_of_supervisors,
-                number_of_enumerators: metadata_form?.number_of_enumerators,
-                training_of_data_collector: metadata_form?.training_of_data_collector,
+                pilot_survey: metadata_form.pilot_survey,
+                data_quality_check_methods: metadata_form.data_quality_check_methods,
+                nonresponse_adjustment: metadata_form.nonresponse_adjustment,
+                data_collector_type_id: metadata_form.data_collector_type_id?.toString(),
+                minimum_education_requirement_id: metadata_form.minimum_education_requirement_id?.toString(),
+                number_of_supervisors: metadata_form.number_of_supervisors,
+                number_of_enumerators: metadata_form.number_of_enumerators,
+                training_of_data_collector: metadata_form.training_of_data_collector,
             
                 // VII. PENGOLAHAN DAN ANALISIS
-                editing_step: metadata_form?.editing_step,
-                coding_step: metadata_form?.coding_step,
-                data_entry_step: metadata_form?.data_entry_step,
-                validation_step: metadata_form?.validation_step,
-                analysis_method_id: metadata_form?.analysis_method_id ? metadata_form?.analysis_method_id.toString() : undefined,
-                analysis_units: metadata_form?.analysis_units,
-                presentation_levels: metadata_form?.presentation_levels,
+                editing_step: metadata_form.editing_step,
+                coding_step: metadata_form.coding_step,
+                data_entry_step: metadata_form.data_entry_step,
+                validation_step: metadata_form.validation_step,
+                analysis_method_id: metadata_form.analysis_method_id?.toString(),
+                analysis_units: metadata_form.analysis_units,
+                presentation_levels: metadata_form.presentation_levels,
             
                 // VIII. DISEMINASI HASIL
-                printed_product: metadata_form?.printed_product,
-                digital_product: metadata_form?.digital_product,
-                microdata_product: metadata_form?.microdata_product,
-                printed_release_date: metadata_form?.printed_release_date,
-                digital_release_date: metadata_form?.digital_release_date,
-                microdata_release_date: metadata_form?.microdata_release_date,
+                printed_product: metadata_form.printed_product,
+                digital_product: metadata_form.digital_product,
+                microdata_product: metadata_form.microdata_product,
+                printed_release_date: metadata_form.printed_release_date,
+                digital_release_date: metadata_form.digital_release_date,
+                microdata_release_date: metadata_form.microdata_release_date,
             })
         }
     })
@@ -193,6 +190,7 @@ export default function Metadata({ metadata_form } : { metadata_form?: Omit<Meta
         result_dissemination_end_date: 'plannig_page',
         evaluation_start_date: 'plannig_page',
         evaluation_end_date: 'plannig_page',
+        collected_variables: 'plannig_page',
 
         // IV. DESAIN KEGIATAN
         activity_conduct_id: 'design_page',
@@ -202,6 +200,7 @@ export default function Metadata({ metadata_form } : { metadata_form?: Omit<Meta
         data_collection_methods: 'design_page',
         data_collection_tools: 'design_page',
         data_collection_units: 'design_page',
+        activity_regions: 'design_page',
 
         // V. DESAIN SAMPEL
         sample_design_type_id: 'sampling_page',

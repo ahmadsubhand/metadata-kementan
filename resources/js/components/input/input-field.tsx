@@ -8,8 +8,8 @@ interface InputFieldProps<T extends FieldValues> {
         control: Control<T>;
     };
     inputName: Path<T>;
-    inputLabel: ReactNode;
-    inputPlaceholder: string;
+    inputLabel?: ReactNode;
+    inputPlaceholder?: string;
     inputType?: "text" | "number";
     className?: string;
 }
@@ -28,9 +28,12 @@ export default function InputField<T extends FieldValues>({
             name={inputName}
             render={({ field }) => (
                 <FormItem className={`flex flex-col gap-2 ${className}`}>
-                    <FormLabel>{inputLabel}</FormLabel>
+                    {
+                        !!inputLabel &&
+                        <FormLabel>{inputLabel}</FormLabel>
+                    }
                     <FormControl>
-                        <Input placeholder={inputPlaceholder} {...field} type={inputType} />
+                        <Input {...(inputPlaceholder && { placeholder: inputPlaceholder })} {...field} type={inputType} />
                     </FormControl>
                     <FormMessage />
                 </FormItem>

@@ -8,7 +8,7 @@ interface TextareaFieldProps<T extends FieldValues> {
         control: Control<T>;
     };
     inputName: Path<T>;
-    inputLabel: ReactNode;
+    inputLabel?: ReactNode;
     inputPlaceholder?: string;
     className?: string;
 }
@@ -26,7 +26,10 @@ export default function TextareaField<T extends FieldValues>({
             name={inputName}
             render={({ field }) => (
                 <FormItem className={`flex flex-col gap-2 ${className}`}>
-                    <FormLabel>{inputLabel}</FormLabel>
+                    {
+                        !!inputLabel &&
+                        <FormLabel>{inputLabel}</FormLabel>
+                    }
                     <FormControl>
                         <Textarea
                             placeholder={inputPlaceholder}

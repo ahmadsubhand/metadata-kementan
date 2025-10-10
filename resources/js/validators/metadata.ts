@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { z } from 'zod';
-import { arrayOptional, dateOptional } from '.';
+import { arrayOptional, dateOptional, tableOptional } from '.';
 
 export const metadataStoreSchema = z.object({
     // Halaman awal
@@ -50,7 +50,17 @@ export const metadataStoreSchema = z.object({
     result_dissemination_end_date: dateOptional,
     evaluation_start_date: dateOptional,
     evaluation_end_date: dateOptional,
-    // collected_variables table
+    collected_variables: z.preprocess(val => !val ? null : val, 
+        z.array(
+            z.object({
+                variable_number: z.int().positive(),
+                variable_name: z.string().nonempty('Wajib diisi'),
+                variable_concept: z.preprocess(val => !val ? null : val, z.string().nullable()),
+                variable_definition: z.preprocess(val => !val ? null : val, z.string().nullable()),
+                reference_time: z.preprocess(val => !val ? null : val, z.string().nullable()),
+            })
+        ).nullable()
+    ),
 
     // IV. DESAIN KEGIATAN
     activity_conduct_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
@@ -60,6 +70,15 @@ export const metadataStoreSchema = z.object({
     data_collection_methods: arrayOptional,
     data_collection_tools: arrayOptional,
     data_collection_units: arrayOptional,
+    activity_regions: z.preprocess(val => !val ? null : val, 
+        z.array(
+            z.object({
+                number: z.int().positive(),
+                province: z.string().nonempty('Wajib diisi'),
+                city_or_regency: z.string().nonempty('Wajib diisi'),
+            })
+        ).nullable()
+    ),
 
     // V. DESAIN SAMPEL
     sample_design_type_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),

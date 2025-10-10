@@ -1,47 +1,34 @@
 import { SectionProps } from "@/types"
-import { useState } from "react"
 import FormLayout from "./form-layout"
 import H2 from "@/components/h2"
 import TextareaField from "@/components/input/textarea-field"
 import H3 from "@/components/h3"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { DatePicker } from "@/components/input/date-picker"
-import { Textarea } from "@/components/ui/textarea"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { ChevronUp, Plus, Trash } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useFieldArray } from "react-hook-form"
 
 export default function PlanningPage({ form } : SectionProps) {
-    type Row = {
-        id: number
-        nama: string
-        konsep: string
-        definisi: string
-        referensi: string
-    }
-
-    const [rows, setRows] = useState<Row[]>([
-        { id: 1, nama: "", konsep: "", definisi: "", referensi: "" },
-    ])
+    const { fields, append, remove } = useFieldArray({
+        control: form.control,
+        name: "collected_variables",
+    });
 
     const addRow = () => {
-        setRows((prev) => [
-            ...prev,
-            { id: prev.length + 1, nama: "", konsep: "", definisi: "", referensi: "" },
-        ])
-    }
+        append({
+            variable_number: fields.length + 1,
+            variable_name: "",
+            variable_concept: "",
+            variable_definition: "",
+            reference_time: "",
+        });
+    };
 
     const removeLastRow = () => {
-        setRows((prev) => (prev.length > 1 ? prev.slice(0, -1) : prev))
-    }
-
-    const updateRow = (id: number, field: keyof Row, value: string) => {
-        setRows((prev) =>
-            prev.map((row) =>
-                row.id === id ? { ...row, [field]: value } : row
-            )
-        )
-    }
+        if (fields.length) remove(fields.length - 1);
+    };
 
     return (
         <FormLayout>
@@ -152,37 +139,48 @@ export default function PlanningPage({ form } : SectionProps) {
                         <TableHead className="text-center">Referensi Waktu (Periode Enumerasi)</TableHead>
                     </TableRow>
                 </TableHeader>
-                <TableBody>
-                    {rows.map((row, index) => (
-                        <TableRow key={row.id}>
-                            <TableCell className="text-center">{index + 1}</TableCell>
-                            <TableCell>
-                                <Textarea
-                                    value={row.nama}
-                                    onChange={(e) => updateRow(row.id, "nama", e.target.value)}
-                                />
-                            </TableCell>
-                            <TableCell>
-                                <Textarea
-                                    value={row.konsep}
-                                    onChange={(e) => updateRow(row.id, "konsep", e.target.value)}
-                                />
-                            </TableCell>
-                            <TableCell>
-                                <Textarea
-                                    value={row.definisi}
-                                    onChange={(e) => updateRow(row.id, "definisi", e.target.value)}
-                                />
-                            </TableCell>
-                            <TableCell>
-                                <Textarea
-                                    value={row.referensi}
-                                    onChange={(e) => updateRow(row.id, "referensi", e.target.value)}
-                                />
+                {
+                    fields.length > 0 ? (
+                        <TableBody>
+                            {fields.map((field, index) => (
+                                <TableRow key={field.id}>
+                                    <TableCell className="text-center">{index + 1}</TableCell>
+                                    <TableCell>
+                                        <TextareaField 
+                                            form={form}
+                                            inputName={`collected_variables.${index}.variable_name`}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        <TextareaField 
+                                            form={form}
+                                            inputName={`collected_variables.${index}.variable_concept`}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        <TextareaField 
+                                            form={form}
+                                            inputName={`collected_variables.${index}.variable_definition`}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        <TextareaField 
+                                            form={form}
+                                            inputName={`collected_variables.${index}.reference_time`}
+                                        />
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    ) : (
+                        <TableRow>
+                            <TableCell colSpan={5} className="text-center py-4">
+                                Silakan tambahkan baris baru pada menu aksi tabel di kanan bawah tabel untuk mulai mengisi data
                             </TableCell>
                         </TableRow>
-                    ))}
-                </TableBody>
+                    )
+                }
+                
             </Table>
             <div className="self-end">
                 <DropdownMenu>

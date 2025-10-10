@@ -1,5 +1,4 @@
 import { SectionProps } from "@/types"
-import { useState } from "react"
 import FormLayout from "./form-layout"
 import H2 from "@/components/h2"
 import H3 from "@/components/h3"
@@ -9,38 +8,28 @@ import { ChevronDown, Plus, Trash } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import RadioOption from "@/components/input/radio-option"
 import SelectOption from "@/components/input/select-option"
-import { Input } from "@/components/ui/input"
 import CheckboxOption from "@/components/input/checkbox-option"
+import { useFieldArray } from "react-hook-form"
+import InputField from "@/components/input/input-field"
 
 export default function DesignPage({ form } : SectionProps) {
-    type Row = {
-        id: number,
-        provinsi: string,
-        kota: string,
-    }
-
-    const [rows, setRows] = useState<Row[]>([
-        { id: 1, provinsi: "", kota: "" },
-    ])
+    const { fields, append, remove } = useFieldArray({
+        control: form.control,
+        name: "activity_regions",
+    });
 
     const addRow = () => {
-        setRows((prev) => [
-            ...prev,
-            { id: prev.length + 1, provinsi: "", kota: "" },
-        ])
-    }
+        append({
+            number: fields.length + 1,
+            province: "",
+            variable_definition: "",
+            city_or_regency: "",
+        });
+    };
 
     const removeLastRow = () => {
-        setRows((prev) => (prev.length > 1 ? prev.slice(0, -1) : prev))
-    }
-
-    const updateRow = (id: number, field: keyof Row, value: string) => {
-        setRows((prev) =>
-            prev.map((row) =>
-                row.id === id ? { ...row, [field]: value } : row
-            )
-        )
-    }
+        if (fields.length) remove(fields.length - 1);
+    };
 
     return (
         <FormLayout>
@@ -111,27 +100,36 @@ export default function DesignPage({ form } : SectionProps) {
                         <TableHead className="text-center">Kabupaten/Kota</TableHead>
                     </TableRow>
                 </TableHeader>
-                <TableBody>
-                    {rows.map((row, index) => (
-                        <TableRow key={row.id}>
-                            <TableCell className="text-center">{index + 1}</TableCell>
-                            <TableCell>
-                                <Input
-                                    type='text'
-                                    value={row.provinsi}
-                                    onChange={(e) => updateRow(row.id, "provinsi", e.target.value)}
-                                />
-                            </TableCell>
-                            <TableCell>
-                                <Input
-                                    type='text'
-                                    value={row.kota}
-                                    onChange={(e) => updateRow(row.id, "kota", e.target.value)}
-                                />
+                {
+                    fields.length > 0 ? (
+                        <TableBody>
+                            {fields.map((field, index) => (
+                                <TableRow key={field.id}>
+                                    <TableCell className="text-center">{index + 1}</TableCell>
+                                    <TableCell>
+                                        <InputField 
+                                            form={form}
+                                            inputName={`activity_regions.${index}.province`}
+                                            inputPlaceholder=""
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        <InputField 
+                                            form={form}
+                                            inputName={`activity_regions.${index}.city_or_regency`}
+                                        />
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    ) : (
+                        <TableRow>
+                            <TableCell colSpan={5} className="text-center py-4">
+                                Silakan tambahkan baris baru pada menu aksi tabel di kanan bawah tabel untuk mulai mengisi data
                             </TableCell>
                         </TableRow>
-                    ))}
-                </TableBody>
+                    )
+                }
             </Table>
             <div className="self-end">
                 <DropdownMenu>
