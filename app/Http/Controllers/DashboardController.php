@@ -25,8 +25,11 @@ class DashboardController extends Controller
         ->orderBy('updated_at', 'desc')
         ->get();
 
+        $api_list = Auth::user()->apiTokenRequests()->get();
+
         return Inertia::render('dashboard', [
-            "forms" => $forms
+            "forms" => $forms,
+            'api_token_requests' => $api_list,
         ]);
     }
 }

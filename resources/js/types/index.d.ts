@@ -75,3 +75,13 @@ export type MetadataForm = {
         label: string
     } | null
 }
+
+export type ApiTokenRequestType = {
+    id: number;
+    personal_access_token_id: number | null;
+    user_id: number;
+    application_name: string;
+    application_description: string;
+    status: "pending" | "approved" | "rejected";
+    message: string | null;
+}

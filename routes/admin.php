@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ApiAccessManagementController;
 use App\Http\Controllers\Admin\UserManagementController;
 use Illuminate\Support\Facades\Route;
 
@@ -11,5 +12,13 @@ Route::middleware('admin')->group(function() {
             Route::post('/{id}/approve', 'approveAccount')->name('manage-user.approve');
             Route::post('/{id}/make-admin', 'makeAdmin')->name('manage-user.admin');
             Route::delete('/{id}', 'destroyAccount')->name('manage-user.destroy');
+        });
+    
+    Route::controller(ApiAccessManagementController::class)
+        ->prefix('manage-api')
+        ->group(function () {
+            Route::get('/', 'index')->name('manage-api');
+            Route::post('/{id}/approve', 'approveAccess')->name('manage-api.approve');
+            Route::delete('/{id}', 'removeAccess')->name('manage-api.remove');
         });
 });
