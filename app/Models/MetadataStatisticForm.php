@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\FormStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,7 +16,7 @@ class MetadataStatisticForm extends Model
 
     protected $fillable = [
         // User
-        'user_id', 'status',
+        'user_id', 'status', 'approved_at',
 
         // Halaman Awal
         'activity_title', 'activity_year',
@@ -73,6 +74,13 @@ class MetadataStatisticForm extends Model
         'printed_product', 'digital_product', 'microdata_product',
         'printed_release_date', 'digital_release_date', 'microdata_release_date',
     ];
+
+    public function approve()
+    {
+        $this->status = FormStatus::Approved->value;
+        $this->approved_at = now();
+        $this->save();
+    }
 
     public function user(): BelongsTo
     {

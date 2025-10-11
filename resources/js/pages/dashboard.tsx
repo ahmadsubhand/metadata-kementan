@@ -51,7 +51,7 @@ export default function Dashboard({ forms, api_token_requests } : { forms: Metad
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
-            <div className="flex h-full flex-1 flex-col gap-8 overflow-x-auto rounded-xl p-4">
+            <div className="flex h-full flex-1 flex-col gap-8 overflow-x-auto rounded-xl">
                 {tokenVisible && (
                     <Card className="p-4 bg-primary text-sm text-primary-foreground w-fit flex flex-col gap-4 relative">
                         <p className="font-bold">Token API Baru:</p>

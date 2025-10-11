@@ -22,10 +22,15 @@ class DashboardController extends Controller
             'activity_sector_id', 'statistical_activity_type_id', 'status'
         ])
         ->where('user_id', Auth::id())
+        ->orderBy('approved_at','asc')
         ->orderBy('updated_at', 'desc')
         ->get();
 
-        $api_list = Auth::user()->apiTokenRequests()->get();
+        $api_list = Auth::user()
+            ->apiTokenRequests()
+            ->orderBy('approved_at','asc')
+            ->orderBy('updated_at', 'desc')
+            ->get();
 
         return Inertia::render('dashboard', [
             "forms" => $forms,

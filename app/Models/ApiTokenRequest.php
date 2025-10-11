@@ -17,6 +17,7 @@ class ApiTokenRequest extends Model
        'application_description',
        'status',
        'message',
+       'approved_at'
     ];
 
     public function user(): BelongsTo
@@ -31,7 +32,8 @@ class ApiTokenRequest extends Model
 
     public function approveAccess()
     {
-        $this->status = ApiRequestStatus::Approved;
+        $this->status = ApiRequestStatus::Approved->value;
+        $this->approved_at = now();
         $this->save();
     }
 }

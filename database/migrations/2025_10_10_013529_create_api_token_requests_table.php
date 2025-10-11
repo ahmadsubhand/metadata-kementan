@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('application_description');
             $table->enum('status', array_column(ApiRequestStatus::cases(), 'value'))->default(ApiRequestStatus::Pending->value);
             $table->text('message')->nullable();
+            $table->timestamp('approved_at')->nullable();
             $table->timestamps();
         });
     }
