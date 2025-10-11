@@ -16,7 +16,14 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function ManageApi({ api_token_request } : { api_token_request: ApiTokenRequestType[] }) {
+type ManageApiType = {
+    api_token_requests : (ApiTokenRequestType & {
+        user: {
+            name: string
+        }
+    })[]
+}
+export default function ManageApi({ api_token_requests } : ManageApiType) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -38,14 +45,14 @@ export default function ManageApi({ api_token_request } : { api_token_request: A
                     </TableHeader>
                     <TableBody>
                         {
-                            api_token_request.map((api, index) => (
+                            api_token_requests.map((api, index) => (
                                 <TableRow key={index}>
                                     <TableCell>{index + 1}</TableCell>
-                                    <TableCell>{'Aku adalah manusia'}</TableCell>
+                                    <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{api.user.name}</TableCell>
                                     <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{api.application_name}</TableCell>
                                     <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{api.application_description}</TableCell>
                                     <TableCell className='capitalize'>{api.status}</TableCell>
-                                    <TableCell>{api.message || '-'}</TableCell>
+                                    <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{api.message || '-'}</TableCell>
                                     <TableCell>
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>

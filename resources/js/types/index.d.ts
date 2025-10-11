@@ -55,6 +55,7 @@ export type MetadataForm = {
     activity_title: string
     activity_year: number
     status: 'draft' | 'pending' | 'revising' | 'approved' | 'rejected' | 'finalized'
+    message: string | null;
 
     data_collection_approach_id: number | null
     activity_sector_id: number | null

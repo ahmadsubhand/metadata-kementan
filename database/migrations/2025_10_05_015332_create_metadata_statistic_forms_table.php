@@ -19,6 +19,8 @@ return new class extends Migration
             $table->timestamps();
             $table->enum('status', array_column(FormStatus::cases(), 'value'))->default(FormStatus::Draft->value);
             $table->timestamp('approved_at')->nullable();
+            $table->text('message')->nullable();
+
 
             // Halaman awal
             $table->string('activity_title');

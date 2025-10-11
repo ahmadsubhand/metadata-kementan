@@ -14,18 +14,19 @@ class MetadataManagementController extends Controller
     public function index(): Response
     {
         $metadata_forms = MetadataStatisticForm::with([
+            'user:id,name',
             'dataCollectionApproach:id,label',
             'activitySector:id,label',
             'statisticalActivityType:id,label'
         ])
         ->select([
             'id', 'activity_title', 'activity_year', 'data_collection_approach_id', 
-            'activity_sector_id', 'statistical_activity_type_id', 'status'
+            'activity_sector_id', 'statistical_activity_type_id', 'status', 'user_id'
         ])
         ->orderBy('approved_at','asc')
         ->orderBy('updated_at', 'desc')
         ->get();
-
+        
         return Inertia::render('admin/manage-metadata', [
             'metadata_forms' => $metadata_forms
         ]);

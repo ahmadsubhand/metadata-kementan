@@ -12,12 +12,15 @@ class ApiAccessManagementController extends Controller
 {
     public function index(): Response
     {
-        $api_token_request = ApiTokenRequest::orderBy('approved_at','asc')
-            ->orderBy('updated_at', 'desc')
-            ->get();
+        $api_token_requests = ApiTokenRequest::with([
+            'user:id,name'
+        ])
+        ->orderBy('approved_at','asc')
+        ->orderBy('updated_at', 'desc')
+        ->get();
 
         return Inertia::render('admin/manage-api', [
-            'api_token_request' => $api_token_request
+            'api_token_requests' => $api_token_requests
         ]);
     }
 

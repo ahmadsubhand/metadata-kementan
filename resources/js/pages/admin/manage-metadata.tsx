@@ -16,7 +16,14 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function ManageMetadata({ metadata_forms } : { metadata_forms: MetadataForm[] }) {
+type ManageMetadataType = {
+    metadata_forms : (MetadataForm & {
+        user: {
+            name: string
+        }
+    })[]
+}
+export default function ManageMetadata({ metadata_forms } : ManageMetadataType) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Manajemen Metadata" />
@@ -27,12 +34,11 @@ export default function ManageMetadata({ metadata_forms } : { metadata_forms: Me
                     <TableHeader>
                         <TableRow>
                             <TableHead>No</TableHead>
+                            <TableHead>Nama Pengguna</TableHead>
                             <TableHead>Judul</TableHead>
                             <TableHead>Tahun</TableHead>
-                            <TableHead>Cara pengumpulan data</TableHead>
-                            <TableHead>Sektor kegiatan</TableHead>
-                            <TableHead>Jenis kegiatan statistik</TableHead>
                             <TableHead>Status</TableHead>
+                            <TableHead>Pesan Admin</TableHead>
                             <TableHead>Aksi lainnya</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -41,12 +47,11 @@ export default function ManageMetadata({ metadata_forms } : { metadata_forms: Me
                             metadata_forms.map((form, index) => (
                                 <TableRow key={form.id}>
                                     <TableCell>{index + 1}</TableCell>
+                                    <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{form.user.name}</TableCell>
                                     <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{form.activity_title}</TableCell>
                                     <TableCell>{form.activity_year}</TableCell>
-                                    <TableCell>{form.data_collection_approach?.label}</TableCell>
-                                    <TableCell>{form.activity_sector?.label}</TableCell>
-                                    <TableCell>{form.statistical_activity_type?.label}</TableCell>
                                     <TableCell className='capitalize'>{form.status}</TableCell>
+                                    <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{form.message || '-'}</TableCell>
                                     <TableCell>
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>

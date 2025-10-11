@@ -16,7 +16,7 @@ class MetadataStatisticForm extends Model
 
     protected $fillable = [
         // User
-        'user_id', 'status', 'approved_at',
+        'user_id', 'status', 'approved_at', 'message',
 
         // Halaman Awal
         'activity_title', 'activity_year',

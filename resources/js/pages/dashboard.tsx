@@ -10,7 +10,7 @@ import { destroy as destroyMetadata, edit as editMetadata } from '@/routes/metad
 import { destroy as destroyApi, edit as editApi, generate } from '@/routes/api';
 import AlertButton from '@/components/alert-button';
 import { Card } from '@/components/ui/card';
-import { useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -33,20 +33,21 @@ export default function Dashboard({ forms, api_token_requests } : { forms: Metad
         setTokenVisible(Boolean(flash?.token));
     }, [flash?.token])
 
-    function copy(e) {
-        const textToCopy = e.currentTarget.parentElement.querySelector('#token').textContent;
-        const div = e.currentTarget.parentElement.querySelector('#copy');
+    function copy(e: MouseEvent<HTMLButtonElement>) {
+        const textToCopy = e.currentTarget.parentElement?.querySelector('#token')?.textContent ?? '';
+        const div = e.currentTarget.parentElement?.querySelector('#copy') as HTMLElement | null;
 
         navigator.clipboard.writeText(textToCopy);
-        div.classList.add('absolute');
-        div.classList.remove('hidden');
-        
-        setTimeout(() => {
-            div.classList.remove('absolute');
-            div.classList.add('hidden');
-        }, 2000)
-    }
+        if (div) {
+            div.classList.add('absolute');
+            div.classList.remove('hidden');
 
+            setTimeout(() => {
+                div.classList.remove('absolute');
+                div.classList.add('hidden');
+            }, 2000);
+        }
+    }
  
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
