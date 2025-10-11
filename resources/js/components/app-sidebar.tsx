@@ -9,10 +9,10 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard, metadata, manageUser, api, manageApi } from '@/routes';
+import { dashboard, metadata, manageUser, api, manageApi, manageMetadata } from '@/routes';
 import { SharedData, type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { FileText, FolderKey, KeyRound, LayoutGrid, Users } from 'lucide-react';
+import { FileText, FolderKey, KeyRound, LayoutGrid, LibraryBig, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
 export function AppSidebar() {
@@ -37,6 +37,11 @@ export function AppSidebar() {
         ...(auth.user.role === "admin"
         ? [
             {
+                title: 'Manajemen Metadata',
+                href: manageMetadata(),
+                icon: LibraryBig,
+            },
+            {
                 title: 'Manajemen Pengguna',
                 href: manageUser(),
                 icon: Users,
@@ -45,7 +50,8 @@ export function AppSidebar() {
                 title: 'Manajemen Akses API',
                 href: manageApi(),
                 icon: FolderKey,
-            }
+            },
+
         ]
         : []),
     ];
