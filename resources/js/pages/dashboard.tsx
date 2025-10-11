@@ -11,9 +11,6 @@ import { destroy as destroyApi, edit as editApi, generate } from '@/routes/api';
 import AlertButton from '@/components/alert-button';
 import { Card } from '@/components/ui/card';
 import { useEffect, useState } from 'react';
-import { Tooltip } from '@/components/ui/tooltip';
-import { TooltipContent, TooltipTrigger } from '@radix-ui/react-tooltip';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -188,7 +185,7 @@ export default function Dashboard({ forms, api_token_requests } : { forms: Metad
                                                     <DropdownMenuContent>
                                                         <DropdownMenuLabel>Aksi</DropdownMenuLabel>
                                                         <DropdownMenuSeparator />
-                                                        <DropdownMenuItem asChild>
+                                                        <DropdownMenuItem asChild disabled={api.status !== 'approved'}>
                                                             <Link className='flex justify-between gap-4 w-full' href={generate(api.id).url} method='post'>
                                                                 Buat token baru <RefreshCw />
                                                             </Link>

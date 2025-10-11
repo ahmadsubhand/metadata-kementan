@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { z } from 'zod';
-import { arrayOptional, dateOptional, tableOptional } from '.';
+import { arrayOptional, dateOptional } from '.';
 
 export const metadataStoreSchema = z.object({
     // Halaman awal
