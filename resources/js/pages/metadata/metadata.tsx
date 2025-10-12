@@ -20,6 +20,7 @@ import SamplingPage from './sampling-page';
 import CollectionPage from './collection-page';
 import AnalysisPage from './analysis-page';
 import DisseminationPage from './dissemination-page';
+import PreviewPage from './preview-page';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -39,10 +40,10 @@ export default function Metadata({ metadata_form } : { metadata_form?: Omit<Meta
                 // Halaman awal
                 activity_title: metadata_form.activity_title,
                 activity_year: metadata_form.activity_year,
-                data_collection_approach_id: metadata_form.data_collection_approach_id.toString(),
-                activity_sector_id: metadata_form.activity_sector_id.toString(),
-                statistical_activity_type_id: metadata_form.statistical_activity_type_id.toString(),
-                statistical_activity_recommendation: metadata_form.statistical_activity_recommendation,
+                data_collection_approach_id: metadata_form.data_collection_approach_id,
+                activity_sector_id: metadata_form.activity_sector_id,
+                statistical_activity_type_id: metadata_form.statistical_activity_type_id,
+                statistical_activity_recommendation: parseInt(metadata_form.statistical_activity_recommendation.toString()), // sqlite cannot handle number enum (auto convert to string)
                 recommendation_identity: metadata_form.recommendation_identity,
             
                 // I. PENYELENGGARA
@@ -82,49 +83,49 @@ export default function Metadata({ metadata_form } : { metadata_form?: Omit<Meta
                 collected_variables: metadata_form.collected_variables,
             
                 // IV. DESAIN KEGIATAN
-                activity_conduct_id: metadata_form.activity_conduct_id?.toString(),
-                frequency_of_implementation_id: metadata_form.frequency_of_implementation_id?.toString(),
-                data_collection_type_id: metadata_form.data_collection_type_id?.toString(),
-                data_collection_coverage_id: metadata_form.data_collection_coverage_id?.toString(),
+                activity_conduct_id: metadata_form.activity_conduct_id,
+                frequency_of_implementation_id: metadata_form.frequency_of_implementation_id,
+                data_collection_type_id: metadata_form.data_collection_type_id,
+                data_collection_coverage_id: metadata_form.data_collection_coverage_id,
                 data_collection_methods: metadata_form.data_collection_methods,
                 data_collection_tools: metadata_form.data_collection_tools,
                 data_collection_units: metadata_form.data_collection_units,
                 activity_regions: metadata_form.activity_regions,
             
                 // V. DESAIN SAMPEL
-                sample_design_type_id: metadata_form.sample_design_type_id?.toString(),
-                final_stage_sampling_method_id: metadata_form.final_stage_sampling_method_id?.toString(),
-                probability_sampling_method_id: metadata_form.probability_sampling_method_id?.toString(),
-                nonprobability_sampling_method_id: metadata_form.nonprobability_sampling_method_id?.toString(),
-                final_stage_sampling_frame_id: metadata_form.final_stage_sampling_frame_id?.toString(),
+                sample_design_type_id: metadata_form.sample_design_type_id,
+                final_stage_sampling_method_id: metadata_form.final_stage_sampling_method_id,
+                probability_sampling_method_id: metadata_form.probability_sampling_method_id,
+                nonprobability_sampling_method_id: metadata_form.nonprobability_sampling_method_id,
+                final_stage_sampling_frame_id: metadata_form.final_stage_sampling_frame_id,
                 overall_sample_fraction: metadata_form.overall_sample_fraction,
                 estimated_sampling_error: metadata_form.estimated_sampling_error,
                 sampling_unit: metadata_form.sampling_unit,
                 observation_unit: metadata_form.observation_unit,
             
                 // VI. PENGUMPULAN DATA
-                pilot_survey: metadata_form.pilot_survey,
+                pilot_survey: metadata_form.pilot_survey ? parseInt(metadata_form.pilot_survey.toString()) : null,
                 data_quality_check_methods: metadata_form.data_quality_check_methods,
-                nonresponse_adjustment: metadata_form.nonresponse_adjustment,
-                data_collector_type_id: metadata_form.data_collector_type_id?.toString(),
-                minimum_education_requirement_id: metadata_form.minimum_education_requirement_id?.toString(),
+                nonresponse_adjustment: metadata_form.nonresponse_adjustment ? parseInt(metadata_form.nonresponse_adjustment.toString()) : null,
+                data_collector_type_id: metadata_form.data_collector_type_id,
+                minimum_education_requirement_id: metadata_form.minimum_education_requirement_id,
                 number_of_supervisors: metadata_form.number_of_supervisors,
                 number_of_enumerators: metadata_form.number_of_enumerators,
-                training_of_data_collector: metadata_form.training_of_data_collector,
+                training_of_data_collector: metadata_form.training_of_data_collector ? parseInt(metadata_form.training_of_data_collector.toString()) : null,
             
                 // VII. PENGOLAHAN DAN ANALISIS
-                editing_step: metadata_form.editing_step,
-                coding_step: metadata_form.coding_step,
-                data_entry_step: metadata_form.data_entry_step,
-                validation_step: metadata_form.validation_step,
-                analysis_method_id: metadata_form.analysis_method_id?.toString(),
+                editing_step: metadata_form.editing_step ? parseInt(metadata_form.editing_step.toString()) : null,
+                coding_step: metadata_form.coding_step ? parseInt(metadata_form.coding_step.toString()) : null,
+                data_entry_step: metadata_form.data_entry_step ? parseInt(metadata_form.data_entry_step.toString()) : null,
+                validation_step: metadata_form.validation_step ? parseInt(metadata_form.validation_step.toString()) : null,
+                analysis_method_id: metadata_form.analysis_method_id,
                 analysis_units: metadata_form.analysis_units,
                 presentation_levels: metadata_form.presentation_levels,
             
                 // VIII. DISEMINASI HASIL
-                printed_product: metadata_form.printed_product,
-                digital_product: metadata_form.digital_product,
-                microdata_product: metadata_form.microdata_product,
+                printed_product: metadata_form.printed_product ? parseInt(metadata_form.printed_product.toString()) : null,
+                digital_product: metadata_form.digital_product ? parseInt(metadata_form.digital_product.toString()) : null,
+                microdata_product: metadata_form.microdata_product ? parseInt(metadata_form.microdata_product.toString()) : null,
                 printed_release_date: metadata_form.printed_release_date,
                 digital_release_date: metadata_form.digital_release_date,
                 microdata_release_date: metadata_form.microdata_release_date,
@@ -276,6 +277,7 @@ export default function Metadata({ metadata_form } : { metadata_form?: Omit<Meta
         { value: 'collection_page', label: 'Blok VI', form: <CollectionPage form={form}/> },
         { value: 'analysis_page', label: 'Blok VII', form: <AnalysisPage form={form} /> },
         { value: 'dissemination_page', label: 'Blok VIII', form: <DisseminationPage form={form}/> },
+        { value: 'preview_page', label: 'Pratinjau', form: <PreviewPage data={form.watch()}/> },
     ]
 
     const [step, setStep] = useState(menus[0].value);

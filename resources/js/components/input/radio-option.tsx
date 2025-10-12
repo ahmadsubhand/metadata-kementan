@@ -48,8 +48,8 @@ export default function RadioOption<T extends FieldValues>({
                     <FormLabel className={`${classNameLabel}`}>{radioLabel}</FormLabel>
                     <FormControl>
                         <RadioGroup
-                            onValueChange={(value) => field.onChange(Number(value))}
-                            value={field.value ? String(field.value) : ""}
+                            onValueChange={(val) => field.onChange(parseInt(val))}
+                            value={field.value ? String(field.value) : ''}
                             className={`flex gap-12 ${classNameItem}`}
                         >
                             {options.map((option) => (

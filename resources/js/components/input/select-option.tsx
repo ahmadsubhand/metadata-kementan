@@ -36,8 +36,8 @@ export default function SelectOption<T extends FieldValues>({
                     <FormLabel>{selectLabel}</FormLabel>
                     <FormControl>
                         <Select
-                            onValueChange={field.onChange}
-                            value={field.value}
+                            onValueChange={(val) => field.onChange(parseInt(val))}
+                            value={field.value ? String(field.value) : ''}
                         >
                             <SelectTrigger className='gap-2'>
                                 <SelectValue placeholder={selectPlaceholder} />
