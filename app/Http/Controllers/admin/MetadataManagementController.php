@@ -15,17 +15,34 @@ class MetadataManagementController extends Controller
     {
         $metadata_forms = MetadataStatisticForm::with([
             'user:id,name',
-            'dataCollectionApproach:id,label',
-            'activitySector:id,label',
-            'statisticalActivityType:id,label'
-        ])
-        ->select([
-            'id', 'activity_title', 'activity_year', 'data_collection_approach_id', 
-            'activity_sector_id', 'statistical_activity_type_id', 'status', 'user_id'
+
+            // Checkbox
+            'dataCollectionMethods:id',
+            'dataCollectionTools:id',
+            'dataCollectionUnits:id',
+            'dataQualityCheckMethods:id',
+            'analysisUnits:id',
+            'presentationLevels:id',
+
+            // Table
+            'activityRegions',
+            'collectedVariables'
         ])
         ->orderBy('approved_at','asc')
         ->orderBy('updated_at', 'desc')
-        ->get();
+        ->get()
+        ->map(function ($item) {
+            $arr = $item->toArray();
+
+            $arr['data_collection_methods'] = $item->dataCollectionMethods->pluck('id')->all();
+            $arr['data_collection_tools'] = $item->dataCollectionTools->pluck('id')->all();
+            $arr['data_collection_units'] = $item->dataCollectionUnits->pluck('id')->all();
+            $arr['data_quality_check_methods'] = $item->dataQualityCheckMethods->pluck('id')->all();
+            $arr['analysis_units'] = $item->analysisUnits->pluck('id')->all();
+            $arr['presentation_levels'] = $item->presentationLevels->pluck('id')->all();
+
+            return $arr;
+        });
         
         return Inertia::render('admin/manage-metadata', [
             'metadata_forms' => $metadata_forms

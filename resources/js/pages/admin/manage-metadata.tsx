@@ -4,10 +4,15 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import AppLayout from '@/layouts/app-layout';
 import { approve, destroy } from '@/routes/manage-metadata';
 import { manageUser } from '@/routes';
-import { MetadataForm, type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem } from '@/types';
 import { Head, Link, } from '@inertiajs/react';
-import { FileCheck2, MoreHorizontal, Trash } from 'lucide-react';
+import { Download, FileCheck2, MoreHorizontal, Trash } from 'lucide-react';
 import AlertButton from '@/components/alert-button';
+import { MetadataStoreType } from '@/validators/metadata';
+import { pdf, PDFDownloadLink } from '@react-pdf/renderer';
+import { MetadataDocument } from '../metadata/preview-page';
+import { useEffect } from 'react';
+import { saveAs } from 'file-saver';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -17,13 +22,21 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 type ManageMetadataType = {
-    metadata_forms : (MetadataForm & {
+    metadata_forms : (MetadataStoreType & {
+        id: number,
         user: {
             name: string
-        }
+        },
+        status: 'draft' | 'pending' | 'revising' | 'approved' | 'rejected' | 'finalized'
+        message: string | null;
     })[]
 }
 export default function ManageMetadata({ metadata_forms } : ManageMetadataType) {
+    
+    const handleDownload = async (form: MetadataStoreType) => {
+        const blob = await pdf(<MetadataDocument data={form} />).toBlob();
+        saveAs(blob, `Metadata ${form.activity_title} ${form.activity_year}.pdf`);
+    }
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Manajemen Metadata" />
@@ -62,6 +75,11 @@ export default function ManageMetadata({ metadata_forms } : ManageMetadataType) 
                                             <DropdownMenuContent>
                                                 <DropdownMenuLabel>Aksi</DropdownMenuLabel>
                                                 <DropdownMenuSeparator />
+                                                <DropdownMenuItem className='flex justify-between gap-4'
+                                                    onClick={() => handleDownload(form)}
+                                                >
+                                                    Unduh pratinjau <Download />
+                                                </DropdownMenuItem>
                                                 <DropdownMenuItem asChild disabled={form.status === 'approved'}>
                                                     <Link className='flex justify-between gap-4' href={approve(form.id).url}
                                                       method='post'

@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     }
 })
 
-const MetadataDocument = ({ data } : { data: MetadataStoreType }) => (
+export const MetadataDocument = ({ data } : { data: MetadataStoreType }) => (
   <Document>
     <Page size={[611.33, 935.53]} style={styles.page}>
       <FirstPage data={data} />
@@ -398,7 +398,7 @@ const PlanningPage = ({ data } : { data: MetadataStoreType }) => (
     <H1View>III. PERENCANAAN DAN PERSIAPAN</H1View>
 
     {/* Latar Belakang Kegiatan */}
-    <QuestionView number={'3.1.'} label={'Latar Belakang Kegiatan:'} style={[styles.minHeightHalf]}>
+    <QuestionView number={'3.1.'} label={'Latar Belakang Kegiatan:'} {...(!data.activity_background && { style: [styles.minHeightHalf] })}>
       <View style={[styles.paragraphView]}>
         <Text style={[styles.justify]}>
           {data.activity_background}
@@ -407,7 +407,7 @@ const PlanningPage = ({ data } : { data: MetadataStoreType }) => (
     </QuestionView>
 
     {/* Tujuan Kegiatan */}
-    <QuestionView number={'3.2.'} label={'Tujuan Kegiatan:'} style={[styles.minHeightHalf]}>
+    <QuestionView number={'3.2.'} label={'Tujuan Kegiatan:'} {...(!data.activity_objective && { style: [styles.minHeightHalf] })}>
       <View style={[styles.paragraphView]}>
         <Text style={[styles.justify]}>
           {data.activity_objective}

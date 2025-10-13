@@ -75,6 +75,20 @@ class MetadataStatisticForm extends Model
         'printed_release_date', 'digital_release_date', 'microdata_release_date',
     ];
 
+    protected $casts = [
+        'statistical_activity_recommendation' => 'integer',
+        'pilot_survey' => 'integer',
+        'nonresponse_adjustment' => 'integer',
+        'training_of_data_collector' => 'integer',
+        'editing_step' => 'integer',
+        'coding_step' => 'integer',
+        'data_entry_step' => 'integer',
+        'validation_step' => 'integer',
+        'printed_product' => 'integer',
+        'digital_product' => 'integer',
+        'microdata_product' => 'integer',
+    ];
+
     public function approve()
     {
         $this->status = FormStatus::Approved->value;

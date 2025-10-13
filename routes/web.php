@@ -12,9 +12,6 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified', 'approved'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('preview', function () {
-        return Inertia::render('preview-page');
-    });
 
     Route::controller(MetadataController::class)
         ->prefix('metadata')
