@@ -1,16 +1,20 @@
 import AppLayout from '@/layouts/app-layout';
 import { api, dashboard, metadata } from '@/routes'
-import { ApiTokenRequestType, MetadataForm, type BreadcrumbItem } from '@/types';
+import { ApiTokenRequestType, type BreadcrumbItem } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { Copy, FilePenLine, KeyRound, MoreHorizontal, Pencil, RefreshCw, Trash, X } from 'lucide-react';
+import { Copy, Download, FilePenLine, KeyRound, MoreHorizontal, Pencil, RefreshCw, Trash, X } from 'lucide-react';
 import { destroy as destroyMetadata, edit as editMetadata } from '@/routes/metadata';
 import { destroy as destroyApi, edit as editApi, generate } from '@/routes/api';
 import AlertButton from '@/components/alert-button';
 import { Card } from '@/components/ui/card';
 import { MouseEvent, useEffect, useState } from 'react';
+import { MetadataStoreType } from '@/validators/metadata';
+import { MetadataDocument } from './metadata/preview-page';
+import { pdf } from '@react-pdf/renderer';
+import { saveAs } from 'file-saver';
 
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -19,8 +23,27 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: dashboard().url,
     },
 ];
-
-export default function Dashboard({ forms, api_token_requests } : { forms: MetadataForm[], api_token_requests: ApiTokenRequestType[] }) {
+type DashboardType = {
+    forms : (MetadataStoreType & {
+        id: number;
+        status: 'draft' | 'pending' | 'revising' | 'approved' | 'rejected' | 'finalized';
+        message: string | null;
+        data_collection_approach?: {
+            id: number
+            label: string
+        } | null;
+        activity_sector?: {
+            id: number
+            label: string
+        } | null;
+        statistical_activity_type?: {
+            id: number
+            label: string
+        } | null;
+    })[],
+    api_token_requests: ApiTokenRequestType[]
+}
+export default function Dashboard({ forms, api_token_requests } : DashboardType) {
     const { flash } = usePage().props as {
         flash?: {
             token?: string;
@@ -48,13 +71,18 @@ export default function Dashboard({ forms, api_token_requests } : { forms: Metad
             }, 2000);
         }
     }
+
+    const handleDownload = async (form: MetadataStoreType) => {
+        const blob = await pdf(<MetadataDocument data={form} />).toBlob();
+        saveAs(blob, `Metadata ${form.activity_title} ${form.activity_year}.pdf`);
+    }
  
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-8 overflow-x-auto rounded-xl">
                 {tokenVisible && (
-                    <Card className="p-4 bg-primary text-sm text-primary-foreground w-fit flex flex-col gap-4 relative">
+                    <Card className="m-4 p-4 bg-primary text-sm text-primary-foreground w-fit flex flex-col gap-4 relative">
                         <p className="font-bold">Token API Baru:</p>
                         <code className="break-all italic flex items-center relative">
                             <p id='token'>{flash?.token}</p>
@@ -114,6 +142,11 @@ export default function Dashboard({ forms, api_token_requests } : { forms: Metad
                                                     <DropdownMenuContent>
                                                         <DropdownMenuLabel>Aksi</DropdownMenuLabel>
                                                         <DropdownMenuSeparator />
+                                                        <DropdownMenuItem className='flex justify-between gap-4'
+                                                            onClick={() => handleDownload(form)}
+                                                        >
+                                                            Unduh pratinjau <Download />
+                                                        </DropdownMenuItem>
                                                         <DropdownMenuItem asChild>
                                                             <Link className='flex justify-between gap-4' href={editMetadata(form.id).url}>
                                                                 Edit data <Pencil />
