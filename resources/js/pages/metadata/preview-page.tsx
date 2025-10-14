@@ -553,8 +553,8 @@ const DesignPage = ({ data } : { data: MetadataStoreType }) => (
     </QuestionView>
 
     {/* Metode Pengumpulan Data */}
-    <OptionView number="4.6." label="Metode Pengumpulan Data:" selectedValues={data.data_collection_methods}>
-      <OptionColumn selectedValues={data.data_collection_methods} options={[
+    <OptionView number="4.6." isCheckbox={true} label="Metode Pengumpulan Data:" selectedValues={data.data_collection_methods}>
+      <OptionColumn isCheckbox={true} selectedValues={data.data_collection_methods} options={[
         { label: 'Wawancara', value: 1 },
         { label: 'Mengisi kuesioner sendiri (swacacah)', value: 2 },
         { label: 'Pengamatan (observasi)', value: 3 },
@@ -564,8 +564,8 @@ const DesignPage = ({ data } : { data: MetadataStoreType }) => (
     </OptionView>
 
     {/* Sarana Pengumpulan Data */}
-    <OptionView number="4.7." label="Sarana Pengumpulan Data:" selectedValues={data.data_collection_tools}>
-      <OptionColumn style={[{ maxWidth: '500px' }]} selectedValues={data.data_collection_tools} options={[
+    <OptionView number="4.7." isCheckbox={true} label="Sarana Pengumpulan Data:" selectedValues={data.data_collection_tools}>
+      <OptionColumn isCheckbox={true} style={[{ maxWidth: '500px' }]} selectedValues={data.data_collection_tools} options={[
         { label: 'Pencil-and-Paper Interviewing (PAPI)', value: 1 },
         { label: 'Computer-assisted Personal Interviewing (CAPI)', value: 2 },
         { label: 'Computer-assisted Telephones Interviewing (CATI)', value: 3 },
@@ -576,8 +576,8 @@ const DesignPage = ({ data } : { data: MetadataStoreType }) => (
     </OptionView>
 
     {/* Unit Pengumpulan Data */}
-    <OptionView number="4.8." label="Unit Pengumpulan Data:"selectedValues={data.data_collection_units} >
-      <OptionColumn selectedValues={data.data_collection_units} options={[
+    <OptionView number="4.8." isCheckbox={true} label="Unit Pengumpulan Data:"selectedValues={data.data_collection_units} >
+      <OptionColumn isCheckbox={true} selectedValues={data.data_collection_units} options={[
         { label: 'Individu', value: 1 },
         { label: 'Rumah tangga', value: 2 },
         { label: 'Usaha/perusahaan', value: 3 },
@@ -629,7 +629,7 @@ const SamplingPage = ({ data } : { data: MetadataStoreType }) => (
         { label: 'Accidental Sampling', value: 7 },
         { label: 'Purposive Sampling', value: 8 },
         { label: 'Snowball Sampling', value: 9 },
-        { label: 'Saturation Sampling', value: 1 },
+        { label: 'Saturation Sampling', value: 10 },
       ]} />
     </OptionView>
 
@@ -675,8 +675,9 @@ const CollectionPage = ({ data } : { data: MetadataStoreType }) => (
     </OptionView>
 
     {/* Metode Pemeriksaan Kualitas Pengumpulan Data */}
-    <OptionView label="Metode Pemeriksaan Kualitas Pengumpulan Data:" number="6.2." selectedValues={data.data_quality_check_methods}>
-      <OptionColumn selectedValues={data.data_quality_check_methods} options={[
+    <OptionView isCheckbox={true} label="Metode Pemeriksaan Kualitas Pengumpulan Data:" number="6.2." 
+      selectedValues={data.data_quality_check_methods}>
+      <OptionColumn isCheckbox={true} selectedValues={data.data_quality_check_methods} options={[
         { label: 'Kunjungan kembali (revisit)', value: 1 },
         { label: 'Supervisi', value: 2 },
         { label: 'Task Force', value: 3 },
@@ -760,14 +761,14 @@ const AnalysisPage = ({ data } : { data: MetadataStoreType }) => (
     </OptionView>
 
     {/* Unit Analisis */}
-    <OptionView number="7.3." label="Unit Analisis:" selectedValues={data.analysis_units}>
-      <OptionColumn selectedValues={data.analysis_units} 
+    <OptionView number="7.3." isCheckbox={true} label="Unit Analisis:" selectedValues={data.analysis_units}>
+      <OptionColumn isCheckbox={true} selectedValues={data.analysis_units} 
         options={[
           { value: 1, label: 'Individu' },
           { value: 2, label: 'Rumah tangga' },
         ]}
       />
-      <OptionColumn selectedValues={data.analysis_units}
+      <OptionColumn isCheckbox={true} selectedValues={data.analysis_units}
         options={[
           { value: 3, label: 'Usaha/perusahaan' },
           { value: 4, label: 'Lainnya' },
@@ -776,15 +777,16 @@ const AnalysisPage = ({ data } : { data: MetadataStoreType }) => (
     </OptionView>
 
     {/* Tingkat Penyajian Hasil Analisis */}
-    <OptionView number="7.4." label="Tingkat Penyajian Hasil Analisis:" selectedValues={data.presentation_levels}>
-      <OptionColumn selectedValues={data.presentation_levels} 
+    <OptionView number="7.4." isCheckbox={true} label="Tingkat Penyajian Hasil Analisis:" 
+      selectedValues={data.presentation_levels}>
+      <OptionColumn isCheckbox={true} selectedValues={data.presentation_levels} 
         options={[
           { value: 1, label: 'Nasional' },
           { value: 2, label: 'Provinsi' },
           { value: 3, label: 'Kabupaten/Kota' },
         ]}
       />
-      <OptionColumn selectedValues={data.presentation_levels}
+      <OptionColumn isCheckbox={true} selectedValues={data.presentation_levels}
         options={[
           { value: 4, label: 'Kecamatan' },
           { value: 5, label: 'Lainnya' },
@@ -949,44 +951,60 @@ const WrapView = ({ children, style, wrap=false } : { children: ReactNode, style
 )
 
 const OptionColumn = (
-  { options, style=[], selectedValues=[] } : 
-  { options: {label: string, value: number}[], style?: Style[], selectedValues?: (number | null)[] | number[] | null }) => (
+  { options, style=[], selectedValues=[], isCheckbox=false } : 
+  { 
+    options: {label: string, value: number}[], style?: Style[], 
+    selectedValues?: (number | null)[] | number[] | null, isCheckbox?: boolean
+  }
+) => (
   <View style={[styles.optionColumn, styles.optionLabel, ...(style && [...style])]}>
-    {options.map((option, index) => (
-      <View style={[styles.optionRow]} key={index}>
-        <Text>{option.label}</Text>
-        <View style={{ position: 'relative' }}>
-          <Text>
-            - {option.value}
-          </Text>
-          {selectedValues?.includes(option.value) && (<View style={styles.optionChecked} />)}
+    {options.map((option, index) => {
+      const displayValue = isCheckbox ? Math.pow(2, (option.value - 1)) : option.value;
+      return (
+        <View style={[styles.optionRow]} key={index}>
+          <Text>{option.label}</Text>
+          <View style={{ position: 'relative' }}>
+            <Text>
+              - {displayValue}
+            </Text>
+            {selectedValues?.includes(option.value) && (<View style={[styles.optionChecked, {...((displayValue > 9) && { left: '-4px' })}]} />)}
+          </View>
         </View>
-      </View>
-    ))}
+      )
+    })}
   </View>
 )
 
 const OptionView = (
-  { children, selectedValues, label, number='', style=[] } :
-  { children: ReactNode, selectedValues?: (number | null)[] | number[] | null, label: string, number?: string, style?: Style[] }
-) => (
-  <WrapView style={[styles.body, styles.border, styles.marginTop, styles.sectionPadding, styles.kegiatanView]}>
-    {number !== '' &&
-      <View style={[styles.body]}>
-        <Text style={styles.bold}>{number}</Text>
+  { children, selectedValues, label, number='', style=[], isCheckbox=false } :
+  { 
+    children: ReactNode, selectedValues?: (number | null)[] | number[] | null, 
+    label: string, number?: string, style?: Style[], isCheckbox?: boolean
+  }
+) => {
+  const displayValue = (isCheckbox && selectedValues && (typeof(selectedValues[0]) === 'number')) ?
+    selectedValues.map(value => typeof(value) === 'number' ? Math.pow(2, (value - 1)) : value) :
+    selectedValues;
+    
+  return (
+    <WrapView style={[styles.body, styles.border, styles.marginTop, styles.sectionPadding, styles.kegiatanView]}>
+      {number !== '' &&
+        <View style={[styles.body]}>
+          <Text style={styles.bold}>{number}</Text>
+        </View>
+      }
+      <View style={{ flex: 1 }}>
+        <Text style={[styles.bold, styles.h2MarginBottomText]}>{label}</Text>
+        <View style={[styles.optionView, ...(style && [...style])]}>
+          {children}
+        </View>
       </View>
-    }
-    <View style={{ flex: 1 }}>
-      <Text style={[styles.bold, styles.h2MarginBottomText]}>{label}</Text>
-      <View style={[styles.optionView, ...(style && [...style])]}>
-        {children}
+      <View style={[styles.border, styles.sectionPadding]}>
+        <Text>{(displayValue && (typeof(displayValue[0]) === 'number')) ? displayValue.join(', ') : '  '}</Text>
       </View>
-    </View>
-    <View style={[styles.border, styles.sectionPadding]}>
-      <Text>{(selectedValues && (typeof(selectedValues[0]) === 'number')) ? selectedValues.join(', ') : '  '}</Text>
-    </View>
-  </WrapView>
-)
+    </WrapView>
+  )
+}
 
 type OptionType = {
   value: number | null;
