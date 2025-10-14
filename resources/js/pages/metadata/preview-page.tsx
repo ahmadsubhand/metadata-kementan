@@ -612,8 +612,10 @@ const SamplingPage = ({ data } : { data: MetadataStoreType }) => (
     </OptionView>
     
     {/* Jika “sampel probabilitas”, metode yang digunakan */}
-    <OptionView label="a. Jika “sampel probabilitas”, metode yang digunakan:" number="5.3." selectedValues={[data.probability_sampling_method_id]}>
-      <OptionColumn selectedValues={[data.probability_sampling_method_id]} options={[
+    <OptionView label="a. Jika “sampel probabilitas”, metode yang digunakan:" number="5.3." selectedValues={
+      [1, 2, 3, 4, 5, null].includes(data.sampling_method_id) ? [data.sampling_method_id] : []
+    }>
+      <OptionColumn selectedValues={[data.sampling_method_id]} options={[
         { label: 'Simple Random Sampling', value: 1 },
         { label: 'Systematic Random Sampling', value: 2 },
         { label: 'Stratified Random Sampling', value: 3 },
@@ -623,8 +625,10 @@ const SamplingPage = ({ data } : { data: MetadataStoreType }) => (
     </OptionView>
 
     {/* Jika “sampel nonprobabilitas”, metode yang digunakan */}
-    <OptionView label="b. Jika “sampel nonprobabilitas”, metode yang digunakan:" number="5.3." selectedValues={[data.nonprobability_sampling_method_id]}>
-      <OptionColumn selectedValues={[data.nonprobability_sampling_method_id]} options={[
+    <OptionView label="b. Jika “sampel nonprobabilitas”, metode yang digunakan:" number="5.3." selectedValues={
+      [6, 7, 8, 9, 10, null].includes(data.sampling_method_id) ? [data.sampling_method_id] : []
+    }>
+      <OptionColumn selectedValues={[data.sampling_method_id]} options={[
         { label: 'Quota Sampling', value: 6 },
         { label: 'Accidental Sampling', value: 7 },
         { label: 'Purposive Sampling', value: 8 },
@@ -1000,7 +1004,10 @@ const OptionView = (
         </View>
       </View>
       <View style={[styles.border, styles.sectionPadding]}>
-        <Text>{(displayValue && (typeof(displayValue[0]) === 'number')) ? displayValue.join(', ') : '  '}</Text>
+        <Text>{
+          (displayValue && (typeof(displayValue[0]) === 'number')) ? 
+          displayValue.sort((a, b) => ((typeof(a) === 'number') && (typeof(b) === 'number')) ? (a - b) : 0).join(', ') : '  '
+        }</Text>
       </View>
     </WrapView>
   )

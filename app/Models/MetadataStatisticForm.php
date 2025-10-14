@@ -53,10 +53,10 @@ class MetadataStatisticForm extends Model
         // Many-to-many: data_collection_methods, data_collection_tools, data_collection_units
 
         // V. DESAIN SAMPEL
-        'sample_design_type_id', 'final_stage_sampling_method_id',
-        'probability_sampling_method_id', 'nonprobability_sampling_method_id',
-        'final_stage_sampling_frame_id', 'overall_sample_fraction',
-        'estimated_sampling_error', 'sampling_unit', 'observation_unit',
+        'sample_design_type_id', 'final_stage_sampling_method_id', 
+        'sampling_method_id', 'final_stage_sampling_frame_id', 
+        'overall_sample_fraction', 'estimated_sampling_error', 
+        'sampling_unit', 'observation_unit',
 
         // VI. PENGUMPULAN DATA
         'pilot_survey', 'nonresponse_adjustment',
@@ -148,14 +148,9 @@ class MetadataStatisticForm extends Model
         return $this->belongsTo(FinalStageSamplingMethod::class);
     }
 
-    public function probabilitySamplingMethod(): BelongsTo
+    public function samplingMethod(): BelongsTo
     {
-        return $this->belongsTo(ProbabilitySamplingMethod::class);
-    }
-
-    public function nonprobabilitySamplingMethod(): BelongsTo
-    {
-        return $this->belongsTo(NonprobabilitySamplingMethod::class);
+        return $this->belongsTo(SamplingMethod::class);
     }
 
     public function finalStageSamplingFrame(): BelongsTo

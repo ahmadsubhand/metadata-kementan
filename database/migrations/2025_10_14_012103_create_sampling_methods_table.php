@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('nonprobability_sampling_methods', function (Blueprint $table) {
+        Schema::create('sampling_methods', function (Blueprint $table) {
             $table->id();
             $table->integer('code');
             $table->string('label');
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('nonprobability_sampling_methods');
+        Schema::dropIfExists('sampling_methods');
     }
 };

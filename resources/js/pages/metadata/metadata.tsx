@@ -95,8 +95,7 @@ export default function Metadata({ metadata_form } : { metadata_form?: Omit<Meta
                 // V. DESAIN SAMPEL
                 sample_design_type_id: metadata_form.sample_design_type_id,
                 final_stage_sampling_method_id: metadata_form.final_stage_sampling_method_id,
-                probability_sampling_method_id: metadata_form.probability_sampling_method_id,
-                nonprobability_sampling_method_id: metadata_form.nonprobability_sampling_method_id,
+                sampling_method_id: metadata_form.sampling_method_id,
                 final_stage_sampling_frame_id: metadata_form.final_stage_sampling_frame_id,
                 overall_sample_fraction: metadata_form.overall_sample_fraction,
                 estimated_sampling_error: metadata_form.estimated_sampling_error,

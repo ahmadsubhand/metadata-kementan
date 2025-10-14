@@ -80,8 +80,7 @@ return new class extends Migration
             // V. DESAIN SAMPEL
             $table->foreignId('sample_design_type_id')->nullable()->constrained();
             $table->foreignId('final_stage_sampling_method_id')->nullable()->constrained();
-            $table->foreignId('probability_sampling_method_id')->nullable()->constrained();
-            $table->foreignId('nonprobability_sampling_method_id')->nullable()->constrained();
+            $table->foreignId('sampling_method_id')->nullable()->constrained();
             $table->foreignId('final_stage_sampling_frame_id')->nullable()->constrained();
             $table->integer('overall_sample_fraction')->nullable();
             $table->integer('estimated_sampling_error')->nullable();

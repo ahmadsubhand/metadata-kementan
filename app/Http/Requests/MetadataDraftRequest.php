@@ -94,8 +94,7 @@ class MetadataDraftRequest extends FormRequest
             // V. DESAIN SAMPEL
             'sample_design_type_id' => 'nullable|exists:sample_design_types,id',
             'final_stage_sampling_method_id' => 'nullable|exists:final_stage_sampling_methods,id',
-            'probability_sampling_method_id' => 'nullable|exists:probability_sampling_methods,id',
-            'nonprobability_sampling_method_id' => 'nullable|exists:nonprobability_sampling_methods,id',
+            'sampling_method_id' => 'nullable|exists:sampling_methods,id',
             'final_stage_sampling_frame_id' => 'nullable|exists:final_stage_sampling_frames,id',
             'overall_sample_fraction' => 'nullable|integer',
             'estimated_sampling_error' => 'nullable|integer',

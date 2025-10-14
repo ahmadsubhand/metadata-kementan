@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class ProbabilitySamplingMethod extends Model
+class SamplingMethod extends Model
 {
-    /** @use HasFactory<\Database\Factories\ProbabilitySamplingMethodFactory> */
+    /** @use HasFactory<\Database\Factories\SamplingMethodFactory> */
     use HasFactory;
 
     protected $fillable = ['code', 'label'];

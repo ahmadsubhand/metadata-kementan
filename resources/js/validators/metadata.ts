@@ -83,8 +83,7 @@ export const metadataStoreSchema = z.object({
     // V. DESAIN SAMPEL
     sample_design_type_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
     final_stage_sampling_method_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    probability_sampling_method_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    nonprobability_sampling_method_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
+    sampling_method_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
     final_stage_sampling_frame_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
     overall_sample_fraction: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
     estimated_sampling_error: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),

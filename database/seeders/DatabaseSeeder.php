@@ -25,6 +25,7 @@ use App\Models\AnalysisUnit;
 use App\Models\CollectedVariable;
 use App\Models\MetadataStatisticForm;
 use App\Models\PresentationLevel;
+use App\Models\SamplingMethod;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -152,16 +153,12 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Probability Sampling Method
-        ProbabilitySamplingMethod::factory()->createMany([
+        SamplingMethod::factory()->createMany([
             ['label' => 'Simple Random Sampling', 'code' => 1],
             ['label' => 'Systematic Random Sampling', 'code' => 2],
             ['label' => 'Stratified Random Sampling', 'code' => 3],
             ['label' => 'Cluster Sampling', 'code' => 4],
             ['label' => 'Probability Proportional to Size Sampling', 'code' => 5],
-        ]);
-
-        // Nonprobability Sampling Method
-        NonprobabilitySamplingMethod::factory()->createMany([
             ['label' => 'Quota Sampling', 'code' => 6],
             ['label' => 'Accidental Sampling', 'code' => 7],
             ['label' => 'Purposive Sampling', 'code' => 8],
@@ -313,8 +310,7 @@ class DatabaseSeeder extends Seeder
                 // V. DESAIN SAMPEL
                 'sample_design_type_id' => null,
                 'final_stage_sampling_method_id' => null,
-                'probability_sampling_method_id' => null,
-                'nonprobability_sampling_method_id' => null,
+                'sampling_method_id' => null,
                 'final_stage_sampling_frame_id' => null,
                 'overall_sample_fraction' => null,
                 'estimated_sampling_error' => null,
