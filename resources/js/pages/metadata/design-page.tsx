@@ -31,6 +31,9 @@ export default function DesignPage({ form } : SectionProps) {
         if (fields.length) remove(fields.length - 1);
     };
 
+    const activityConductId = form.watch('activity_conduct_id') as number | null;
+    const dataCollectionCoverageId = form.watch('data_collection_coverage_id') as number | null;
+
     return (
         <FormLayout>
             <H2 text='IV. DESAIN KEGIATAN'/>
@@ -47,6 +50,7 @@ export default function DesignPage({ form } : SectionProps) {
             />
 
             {/* Jika “berulang”, frekuensi penyelenggaraan */}
+            { (activityConductId === 2) && 
             <SelectOption
                 form={form}
                 selectLabel={<H3 text='4.2. Jika “berulang”, frekuensi Penyelenggaraan' />}
@@ -63,6 +67,7 @@ export default function DesignPage({ form } : SectionProps) {
                     { label: '> Dua Tahunan', value: 8 },
                 ]}
             />  
+            }
 
             {/* Tipe Pengumpulan Data */}
             <SelectOption 
@@ -88,74 +93,78 @@ export default function DesignPage({ form } : SectionProps) {
                     { label: 'Sebagian Wilayah Indonesia', value: 2 },
                 ]}
             />  
-
+            
             {/* Jika “sebagian wilayah Indonesia”, wilayah kegiatan */}
-            <H3 text='4.5. Jika “sebagian wilayah Indonesia”, wilayah kegiatan' />
+            {dataCollectionCoverageId === 2 &&
+            <>
+                <H3 text='4.5. Jika “sebagian wilayah Indonesia”, wilayah kegiatan' />
 
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead className="text-center">No</TableHead>
-                        <TableHead className="text-center">Provinsi</TableHead>
-                        <TableHead className="text-center">Kabupaten/Kota</TableHead>
-                    </TableRow>
-                </TableHeader>
-                {
-                    fields.length > 0 ? (
-                        <TableBody>
-                            {fields.map((field, index) => (
-                                <TableRow key={field.id}>
-                                    <TableCell className="text-center">{index + 1}</TableCell>
-                                    <TableCell>
-                                        <InputField 
-                                            form={form}
-                                            inputName={`activity_regions.${index}.province`}
-                                            inputPlaceholder=""
-                                        />
-                                    </TableCell>
-                                    <TableCell>
-                                        <InputField 
-                                            form={form}
-                                            inputName={`activity_regions.${index}.city_or_regency`}
-                                        />
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    ) : (
+                <Table>
+                    <TableHeader>
                         <TableRow>
-                            <TableCell colSpan={5} className="text-center py-4">
-                                Silakan tambahkan baris baru pada menu aksi tabel di kanan bawah tabel untuk mulai mengisi data
-                            </TableCell>
+                            <TableHead className="text-center">No</TableHead>
+                            <TableHead className="text-center">Provinsi</TableHead>
+                            <TableHead className="text-center">Kabupaten/Kota</TableHead>
                         </TableRow>
-                    )
-                }
-            </Table>
-            <div className="self-end">
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm">
-                            Aksi tabel <ChevronDown />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        <DropdownMenuLabel>Aksi</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                            onClick={addRow}
-                            className="flex justify-between gap-4"
-                        >
-                            Tambah baris baru <Plus />
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            onClick={removeLastRow}
-                            className="flex justify-between gap-4"
-                        >
-                            Hapus baris terakhir <Trash />
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </div>
+                    </TableHeader>
+                    {
+                        fields.length > 0 ? (
+                            <TableBody>
+                                {fields.map((field, index) => (
+                                    <TableRow key={field.id}>
+                                        <TableCell className="text-center">{index + 1}</TableCell>
+                                        <TableCell>
+                                            <InputField 
+                                                form={form}
+                                                inputName={`activity_regions.${index}.province`}
+                                                inputPlaceholder=""
+                                            />
+                                        </TableCell>
+                                        <TableCell>
+                                            <InputField 
+                                                form={form}
+                                                inputName={`activity_regions.${index}.city_or_regency`}
+                                            />
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        ) : (
+                            <TableRow>
+                                <TableCell colSpan={5} className="text-center py-4">
+                                    Silakan tambahkan baris baru pada menu aksi tabel di kanan bawah tabel untuk mulai mengisi data
+                                </TableCell>
+                            </TableRow>
+                        )
+                    }
+                </Table>
+                <div className="self-end">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="outline" size="sm">
+                                Aksi tabel <ChevronDown />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuLabel>Aksi</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                                onClick={addRow}
+                                className="flex justify-between gap-4"
+                            >
+                                Tambah baris baru <Plus />
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={removeLastRow}
+                                className="flex justify-between gap-4"
+                            >
+                                Hapus baris terakhir <Trash />
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
+            </>
+            }
             
             {/* Metode Pengumpulan Data */}
             <CheckboxOption 

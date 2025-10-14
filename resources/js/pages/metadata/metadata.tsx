@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AppLayout from '@/layouts/app-layout';
 import { metadata } from '@/routes'
-import { draft, draftUpdate } from '@/routes/metadata'
+import { draft, draftUpdate, submit, submitUpdate } from '@/routes/metadata'
 import { type BreadcrumbItem } from '@/types';
 import { Head, router, usePage } from '@inertiajs/react';
 import { FieldErrors, Path, useForm  } from 'react-hook-form';
@@ -133,14 +133,56 @@ export default function Metadata({ metadata_form } : { metadata_form?: Omit<Meta
     })
 
     const [isLoading, setIsLoading] = useState(false);
-    function onSubmit(data:MetadataStoreType) {
+
+    function clearConditionalQuestion(data:MetadataStoreType) {
+       // Clear conditional question
+        if (!data.activity_conduct_id || (data.activity_conduct_id === 1)) {
+            data.frequency_of_implementation_id = null;
+        }
+        if (!data.data_collection_coverage_id || (data.data_collection_coverage_id === 1)) {
+            data.activity_regions = null;
+        }
+        if (!data.data_collection_tools || !data.data_collection_tools.some(num => [1, 2, 3].includes(num))) {
+            data.data_collector_type_id = null;
+            data.minimum_education_requirement_id = null;
+            data.minimum_education_requirement_id = null;
+            data.number_of_supervisors = null;
+            data.number_of_enumerators = null;
+            data.training_of_data_collector = null;
+        }
+        
+        return data;
+    }
+
+    // ! THERE ARE NO VALIDATION ABOUT CONDITIONAL QUESTION ON BACKEND VALIDATOR (MetadataDraftRequest)
+
+    function onDraft(data:MetadataStoreType) {
         setIsLoading(true);
+
+        data = clearConditionalQuestion(data);
+
         if (metadata_form) {
-            router.post(draftUpdate(metadata_form.id).url, data, {
+            router.put(draftUpdate(metadata_form.id).url, data, {
                 onFinish: () => setIsLoading(false)    
             })
         } else {
             router.post(draft.url(), data, {
+                onFinish: () => setIsLoading(false)
+            });
+        }
+    }
+
+    function onSubmit(data:MetadataStoreType) {
+        setIsLoading(true);
+
+        data = clearConditionalQuestion(data);
+
+        if (metadata_form) {
+            router.put(submitUpdate(metadata_form.id).url, data, {
+                onFinish: () => setIsLoading(false)    
+            })
+        } else {
+            router.post(submit.url(), data, {
                 onFinish: () => setIsLoading(false)
             });
         }
@@ -304,7 +346,7 @@ export default function Metadata({ metadata_form } : { metadata_form?: Omit<Meta
                                 {isLoading && (<LoaderCircle className="animate-spin" />)}
                                 Kirim
                             </Button>
-                            <Button type='submit' disabled={isLoading} variant={'outline'}>
+                            <Button disabled={isLoading} variant={'outline'} onClick={form.handleSubmit(onDraft, onInvalid)}>
                                 {isLoading && (<LoaderCircle className="animate-spin" />)}
                                 Simpan sebagai draft
                             </Button>

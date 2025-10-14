@@ -37,7 +37,7 @@ export default function Api({ api_token_request } : { api_token_request: ApiToke
     function onSubmit(data:apiTokenRequestType) {
         setIsLoading(true);
         if (api_token_request) {
-            router.post(update(api_token_request.id).url, data, {
+            router.put(update(api_token_request.id).url, data, {
                 onFinish: () => setIsLoading(false)
             })
         } else {

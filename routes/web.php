@@ -18,8 +18,10 @@ Route::middleware(['auth', 'verified', 'approved'])->group(function () {
         ->group(function () {
             Route::get('/', 'editOrCreate')->name('metadata');
             Route::get('/{id}', 'editOrCreate')->name('metadata.edit');
-            Route::post('/', 'saveAsDraft')->name('metadata.draft');
-            Route::post('/{id}', 'saveAsDraft')->name('metadata.draft-update');
+            Route::post('/draft', 'saveAsDraft')->name('metadata.draft');
+            Route::put('/{id}/draft', 'saveAsDraft')->name('metadata.draft-update');
+            Route::post('/submit', 'saveAsPending')->name('metadata.submit');
+            Route::put('/{id}/submit', 'saveAsPending')->name('metadata.submit-update');
             Route::delete('/{id}', 'destroy')->name('metadata.destroy');
         });  
 
@@ -30,7 +32,7 @@ Route::middleware(['auth', 'verified', 'approved'])->group(function () {
             Route::get('/{id}', 'editOrCreate')->name('api.edit');
             Route::post('/', 'updateOrStore')->name('api.store');
             Route::post('/{id}/generate', 'generate')->name('api.generate');
-            Route::post('/{id}', 'updateOrStore')->name('api.update');
+            Route::put('/{id}', 'updateOrStore')->name('api.update');
             Route::delete('/{id}', 'destroy')->name('api.destroy');
         });
 });

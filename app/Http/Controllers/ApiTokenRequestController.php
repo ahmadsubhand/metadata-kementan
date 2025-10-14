@@ -27,7 +27,7 @@ class ApiTokenRequestController extends Controller
         ]);
     }
 
-    // POST - Create or Update
+    // POST - Create | PUT - Update
     public function updateOrStore(ApiTokenStoreRequest $request, ?int $id = null): RedirectResponse
     {
         $data = $request->validated();

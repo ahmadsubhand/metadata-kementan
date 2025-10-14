@@ -7,6 +7,8 @@ import SelectOption from "@/components/input/select-option";
 import InputField from "@/components/input/input-field";
 
 export default function SamplingPage({ form } : SectionProps) {
+    const finalStageSamplingMethodId = form.watch('final_stage_sampling_method_id') as number | null;
+
     return (
         <FormLayout>
             <H2 text='V. DESAIN SAMPEL' />
@@ -22,6 +24,7 @@ export default function SamplingPage({ form } : SectionProps) {
                 ]}
             />
         
+            {/* Metode Pemilihan Sampel Tahap Terakhir */}
             <RadioOption
                 form={form}
                 radioName='final_stage_sampling_method_id'
@@ -34,24 +37,33 @@ export default function SamplingPage({ form } : SectionProps) {
             
             {/* selectLabel={<H3 text='5.3.a Jika “sampel probabilitas”, metode yang digunakan' />} */}
             {/* selectLabel={<H3 text='5.3.b Jika “sampel nonprobabilitas”, metode yang digunakan' />} */}
-            <SelectOption
-                form={form}
-                selectName='sampling_method_id'
-                selectPlaceholder='Pilih metode yang digunakan'
-                selectLabel={<H3 text='5.3. Metode yang Digunakan:' />}
-                options={[
-                    { label: 'Simple Random Sampling', value: 1 },
-                    { label: 'Systematic Random Sampling', value: 2 },
-                    { label: 'Stratified Random Sampling', value: 3 },
-                    { label: 'Cluster Sampling', value: 4 },
-                    { label: 'Probability Proportional to Size Sampling', value: 5 },
-                    { label: 'Quota Sampling', value: 6 },
-                    { label: 'Accidental Sampling', value: 7 },
-                    { label: 'Purposive Sampling', value: 8 },
-                    { label: 'Snowball Sampling', value: 9 },
-                    { label: 'Saturation Sampling', value: 10 },
-                ]}
-            />
+            { finalStageSamplingMethodId &&
+                <SelectOption
+                    form={form}
+                    selectName='sampling_method_id'
+                    selectPlaceholder='Pilih metode yang digunakan'
+                    selectLabel={<H3 text={
+                        finalStageSamplingMethodId === 1 ? 
+                        '5.3.a Jika “sampel probabilitas”, metode yang digunakan' :
+                        '5.3.b Jika “sampel nonprobabilitas”, metode yang digunakan'
+                    } />}
+                    options={
+                        finalStageSamplingMethodId === 1 ? [
+                            { label: 'Simple Random Sampling', value: 1 },
+                            { label: 'Systematic Random Sampling', value: 2 },
+                            { label: 'Stratified Random Sampling', value: 3 },
+                            { label: 'Cluster Sampling', value: 4 },
+                            { label: 'Probability Proportional to Size Sampling', value: 5 },
+                        ] : [
+                            { label: 'Quota Sampling', value: 6 },
+                            { label: 'Accidental Sampling', value: 7 },
+                            { label: 'Purposive Sampling', value: 8 },
+                            { label: 'Snowball Sampling', value: 9 },
+                            { label: 'Saturation Sampling', value: 10 },
+                        ]
+                    }
+                />
+            }
 
             <RadioOption
                 form={form}
