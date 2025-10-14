@@ -5,15 +5,15 @@ import { arrayOptional, dateOptional } from '.';
 export const metadataStoreSchema = z.object({
     // Halaman awal
     activity_title: z.string('Wajib diisi').min(3, 'Minimal 3 karakter').max(255, 'Maksimal 255 karakter'),
-    activity_year: z.coerce
+    activity_year: z
         .number('Wajib diisi')
         .int()
         .min(1900, 'Masukkan tahun yang valid')
         .max(dayjs().year(), 'Maksimal dilaksanakan tahun ini'),
-    data_collection_approach_id: z.coerce.number('Wajib diisi').int(),
-    activity_sector_id: z.coerce.number('Wajib diisi').int(),
-    statistical_activity_type_id: z.coerce.number('Wajib diisi').int(),
-    statistical_activity_recommendation: z.coerce.number('Wajib diisi').int().min(1).max(2),
+    data_collection_approach_id: z.number('Wajib diisi').int(),
+    activity_sector_id: z.number('Wajib diisi').int(),
+    statistical_activity_type_id: z.number('Wajib diisi').int(),
+    statistical_activity_recommendation: z.number('Wajib diisi').int().min(1).max(2),
     recommendation_identity: z.preprocess(val => !val ? null : val, z.string().max(255, 'Maksimal 255 karakter').nullable()),
 
     // I. PENYELENGGARA
@@ -63,10 +63,10 @@ export const metadataStoreSchema = z.object({
     ),
 
     // IV. DESAIN KEGIATAN
-    activity_conduct_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    frequency_of_implementation_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    data_collection_type_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    data_collection_coverage_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
+    activity_conduct_id: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    frequency_of_implementation_id: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    data_collection_type_id: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    data_collection_coverage_id: z.preprocess(val => !val ? null : val, z.number().nullable()),
     data_collection_methods: arrayOptional,
     data_collection_tools: arrayOptional,
     data_collection_units: arrayOptional,
@@ -81,38 +81,38 @@ export const metadataStoreSchema = z.object({
     ),
 
     // V. DESAIN SAMPEL
-    sample_design_type_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    final_stage_sampling_method_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    sampling_method_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    final_stage_sampling_frame_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    overall_sample_fraction: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    estimated_sampling_error: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    sampling_unit: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    observation_unit: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
+    sample_design_type_id: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    final_stage_sampling_method_id: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    sampling_method_id: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    final_stage_sampling_frame_id: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    overall_sample_fraction: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    estimated_sampling_error: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    sampling_unit: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    observation_unit: z.preprocess(val => !val ? null : val, z.number().nullable()),
 
     // VI. PENGUMPULAN DATA
-    pilot_survey: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
+    pilot_survey: z.preprocess(val => !val ? null : val, z.number().nullable()),
     data_quality_check_methods: arrayOptional,
-    nonresponse_adjustment: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    data_collector_type_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    minimum_education_requirement_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    number_of_supervisors: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    number_of_enumerators: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    training_of_data_collector: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
+    nonresponse_adjustment: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    data_collector_type_id: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    minimum_education_requirement_id: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    number_of_supervisors: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    number_of_enumerators: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    training_of_data_collector: z.preprocess(val => !val ? null : val, z.number().nullable()),
 
     // VII. PENGOLAHAN DAN ANALISIS
-    editing_step: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    coding_step: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    data_entry_step: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    validation_step: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    analysis_method_id: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
+    editing_step: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    coding_step: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    data_entry_step: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    validation_step: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    analysis_method_id: z.preprocess(val => !val ? null : val, z.number().nullable()),
     analysis_units: arrayOptional,
     presentation_levels: arrayOptional,
 
     // VIII. DISEMINASI HASIL
-    printed_product: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    digital_product: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
-    microdata_product: z.preprocess(val => !val ? null : val, z.coerce.number().nullable()),
+    printed_product: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    digital_product: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    microdata_product: z.preprocess(val => !val ? null : val, z.number().nullable()),
     printed_release_date: dateOptional,
     digital_release_date: dateOptional,
     microdata_release_date: dateOptional,

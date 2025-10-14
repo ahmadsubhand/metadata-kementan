@@ -33,7 +33,16 @@ export default function InputField<T extends FieldValues>({
                         <FormLabel>{inputLabel}</FormLabel>
                     }
                     <FormControl>
-                        <Input {...(inputPlaceholder && { placeholder: inputPlaceholder })} {...field} type={inputType} />
+                        <Input 
+                            type={inputType} 
+                            { ...field }
+                            {...(inputPlaceholder && { placeholder: inputPlaceholder })} 
+                            { ...(inputType === 'number' &&
+                                { 
+                                    onChange: (e) => field.onChange(parseInt(e.target.value)),
+                                }
+                            )}
+                        />
                     </FormControl>
                     <FormMessage />
                 </FormItem>
