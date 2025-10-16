@@ -15,6 +15,8 @@ import { MetadataStoreType } from '@/validators/metadata';
 import { MetadataDocument } from './metadata/preview-page';
 import { pdf } from '@react-pdf/renderer';
 import { saveAs } from 'file-saver';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { TabsContent } from '@radix-ui/react-tabs';
 
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -80,9 +82,9 @@ export default function Dashboard({ forms, api_token_requests } : DashboardType)
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
-            <div className="flex h-full flex-1 flex-col gap-8 overflow-x-auto rounded-xl">
+            <div className="flex h-full flex-1 flex-col gap-8 overflow-x-auto rounded-xl p-4">
                 {tokenVisible && (
-                    <Card className="m-4 p-4 bg-primary text-sm text-primary-foreground w-fit flex flex-col gap-4 relative">
+                    <Card className="p-4 bg-primary text-sm text-primary-foreground w-fit flex flex-col gap-4 relative">
                         <p className="font-bold">Token API Baru:</p>
                         <code className="break-all italic flex items-center relative">
                             <p id='token'>{flash?.token}</p>
@@ -102,164 +104,171 @@ export default function Dashboard({ forms, api_token_requests } : DashboardType)
                         </Button>
                     </Card>
                 )}
-
-                {/* List Metadata Statistic */}
-                <div className="flex flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                    <h1 className='font-bold'>List Metadata Kegiatan Tersimpan</h1>
-                    {(forms.length > 0) ? (
-                        <Table>
-                            <TableCaption>List Metadata Kegiatan Tersimpan</TableCaption>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>No</TableHead>
-                                    <TableHead>Judul</TableHead>
-                                    <TableHead>Tahun</TableHead>
-                                    <TableHead>Cara pengumpulan data</TableHead>
-                                    <TableHead>Sektor kegiatan</TableHead>
-                                    <TableHead>Jenis kegiatan statistik</TableHead>
-                                    <TableHead>Status</TableHead>
-                                    <TableHead>Aksi lainnya</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {
-                                    forms.map((form, index) => (
-                                        <TableRow key={form.id}>
-                                            <TableCell>{index + 1}</TableCell>
-                                            <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{form.activity_title}</TableCell>
-                                            <TableCell>{form.activity_year}</TableCell>
-                                            <TableCell>{form.data_collection_approach?.label}</TableCell>
-                                            <TableCell>{form.activity_sector?.label}</TableCell>
-                                            <TableCell>{form.statistical_activity_type?.label}</TableCell>
-                                            <TableCell className='capitalize'>{form.status}</TableCell>
-                                            <TableCell>
-                                                <DropdownMenu>
-                                                    <DropdownMenuTrigger asChild>
-                                                        <Button variant="ghost" size="sm">
-                                                            <MoreHorizontal />
-                                                        </Button>
-                                                    </DropdownMenuTrigger>
-                                                    <DropdownMenuContent>
-                                                        <DropdownMenuLabel>Aksi</DropdownMenuLabel>
-                                                        <DropdownMenuSeparator />
-                                                        <DropdownMenuItem className='flex justify-between gap-4'
-                                                            onClick={() => handleDownload(form)}
-                                                        >
-                                                            Unduh pratinjau <Download />
-                                                        </DropdownMenuItem>
-                                                        <DropdownMenuItem asChild>
-                                                            <Link className='flex justify-between gap-4' href={editMetadata(form.id).url}>
-                                                                Edit data <Pencil />
-                                                            </Link>
-                                                        </DropdownMenuItem>
-                                                        <AlertButton
-                                                            alertTrigger={
-                                                                <DropdownMenuItem 
-                                                                    className='flex justify-between gap-4'
-                                                                    onSelect={(e) => e.preventDefault()}
-                                                                >
-                                                                    Hapus data <Trash />
-                                                                </DropdownMenuItem>
-                                                            }
-                                                            label="Hapus data"
-                                                            icon={<Trash />}
-                                                            alertDescription={`Metadata kegiatan ${form.activity_title} akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan.`}
-                                                            link={destroyMetadata(form.id).url}
-                                                            method="delete"
-                                                        />
-                                                    </DropdownMenuContent>
-                                                </DropdownMenu>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))
-                                }
-                            </TableBody>
-                        </Table>
-                    ) : (
-                        <p>Tidak ada formulir metadata tersimpan, klik tombol di bawah untuk mulai mengisi</p>
-                    )
-                    }
-                    <Link as={'button'} href={metadata.url()} className='self-start'>
-                        <Button>Tambah <FilePenLine /></Button>
-                    </Link>
-                </div>
                 
-                {/* List API Token */}
-                <div className="flex flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                    <h1 className='font-bold'>List Token API</h1>
-                    {(api_token_requests.length > 0) ? (
-                        <Table>
-                            <TableCaption>List Token API</TableCaption>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>No</TableHead>
-                                    <TableHead>Nama Aplikasi</TableHead>
-                                    <TableHead>Deskripsi Aplikasi</TableHead>
-                                    <TableHead>Status</TableHead>
-                                    <TableHead>Pesan Admin</TableHead>
-                                    <TableHead>Aksi lainnya</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {
-                                    api_token_requests.map((api, index) => (
-                                        <TableRow key={api.id}>
-                                            <TableCell>{index + 1}</TableCell>
-                                            <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{api.application_name}</TableCell>
-                                            <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{api.application_description}</TableCell>
-                                            <TableCell className='capitalize'>{api.status}</TableCell>
-                                            <TableCell>{api.message || '-'}</TableCell>
-                                            <TableCell>
-                                                <DropdownMenu>
-                                                    <DropdownMenuTrigger asChild>
-                                                        <Button variant="ghost" size="sm">
-                                                            <MoreHorizontal />
-                                                        </Button>
-                                                    </DropdownMenuTrigger>
-                                                    <DropdownMenuContent>
-                                                        <DropdownMenuLabel>Aksi</DropdownMenuLabel>
-                                                        <DropdownMenuSeparator />
-                                                        <DropdownMenuItem asChild disabled={api.status !== 'approved'}>
-                                                            <Link className='flex justify-between gap-4 w-full' href={generate(api.id).url} method='post'>
-                                                                Buat token baru <RefreshCw />
-                                                            </Link>
-                                                        </DropdownMenuItem>
-                                                        <DropdownMenuItem asChild>
-                                                            <Link className='flex justify-between gap-4 w-full' href={editApi(api.id).url}>
-                                                                Edit data <Pencil />
-                                                            </Link>
-                                                        </DropdownMenuItem>
-                                                        <AlertButton
-                                                            alertTrigger={
-                                                                <DropdownMenuItem 
-                                                                    className='flex justify-between gap-4 w-full'
-                                                                    onSelect={(e) => e.preventDefault()}
-                                                                >
-                                                                    Hapus token <Trash />
-                                                                </DropdownMenuItem>
-                                                            }
-                                                            label="Hapus token"
-                                                            icon={<Trash />}
-                                                            alertDescription={`Token API ${api.application_name} akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan. Pastikan tidak ada aplikasi yang sedang menggunakan token ini.`}
-                                                            link={destroyApi(api.id).url}
-                                                            method="delete"
-                                                        />
-                                                    </DropdownMenuContent>
-                                                </DropdownMenu>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))
-                                }
-                            </TableBody>
-                        </Table>
-                    ) : (
-                        <p>Tidak ada list akses token API, klik tombol di bawah untuk mengajukan permintaan</p>
-                    )
-                    }
-                    <Link as={'button'} href={api.url()} className='self-start'>
-                        <Button>Pengajuan <KeyRound /></Button>
-                    </Link>
-                </div>
+                <Tabs defaultValue='metadata'>
+                    <TabsList className='mb-4'>
+                        <TabsTrigger value='metadata'>Metadata Statistik</TabsTrigger>
+                        <TabsTrigger value='api'>Token API</TabsTrigger>
+                    </TabsList>
+
+                    <TabsContent value='metadata' className="flex flex-col gap-4 overflow-x-auto rounded-xl">
+                        {/* List Metadata Statistic */}
+                        <h1 className='font-bold'>List Metadata Kegiatan Tersimpan</h1>
+                        {(forms.length > 0) ? (
+                            <Table>
+                                <TableCaption>List Metadata Kegiatan Tersimpan</TableCaption>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>No</TableHead>
+                                        <TableHead>Judul</TableHead>
+                                        <TableHead>Tahun</TableHead>
+                                        <TableHead>Cara pengumpulan data</TableHead>
+                                        <TableHead>Sektor kegiatan</TableHead>
+                                        <TableHead>Jenis kegiatan statistik</TableHead>
+                                        <TableHead>Status</TableHead>
+                                        <TableHead>Aksi lainnya</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {
+                                        forms.map((form, index) => (
+                                            <TableRow key={form.id}>
+                                                <TableCell>{index + 1}</TableCell>
+                                                <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{form.activity_title}</TableCell>
+                                                <TableCell>{form.activity_year}</TableCell>
+                                                <TableCell>{form.data_collection_approach?.label}</TableCell>
+                                                <TableCell>{form.activity_sector?.label}</TableCell>
+                                                <TableCell>{form.statistical_activity_type?.label}</TableCell>
+                                                <TableCell className='capitalize'>{form.status}</TableCell>
+                                                <TableCell>
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger asChild>
+                                                            <Button variant="ghost" size="sm">
+                                                                <MoreHorizontal />
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent>
+                                                            <DropdownMenuLabel>Aksi</DropdownMenuLabel>
+                                                            <DropdownMenuSeparator />
+                                                            <DropdownMenuItem className='flex justify-between gap-4'
+                                                                onClick={() => handleDownload(form)}
+                                                            >
+                                                                Unduh pratinjau <Download />
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem asChild>
+                                                                <Link className='flex justify-between gap-4' href={editMetadata(form.id).url}>
+                                                                    Edit data <Pencil />
+                                                                </Link>
+                                                            </DropdownMenuItem>
+                                                            <AlertButton
+                                                                alertTrigger={
+                                                                    <DropdownMenuItem 
+                                                                        className='flex justify-between gap-4'
+                                                                        onSelect={(e) => e.preventDefault()}
+                                                                    >
+                                                                        Hapus data <Trash />
+                                                                    </DropdownMenuItem>
+                                                                }
+                                                                label="Hapus data"
+                                                                icon={<Trash />}
+                                                                alertDescription={`Metadata kegiatan ${form.activity_title} akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan.`}
+                                                                link={destroyMetadata(form.id).url}
+                                                                method="delete"
+                                                            />
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))
+                                    }
+                                </TableBody>
+                            </Table>
+                        ) : (
+                            <p>Tidak ada formulir metadata tersimpan, klik tombol di bawah untuk mulai mengisi</p>
+                        )
+                        }
+                        <Link as={'button'} href={metadata.url()} className='self-start'>
+                            <Button>Tambah <FilePenLine /></Button>
+                        </Link>
+                    </TabsContent>
+
+                    <TabsContent value='api' className="flex flex-col gap-4 overflow-x-auto rounded-xl">
+                        {/* List API Token */}
+                        <h1 className='font-bold'>List Token API</h1>
+                        {(api_token_requests.length > 0) ? (
+                            <Table>
+                                <TableCaption>List Token API</TableCaption>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>No</TableHead>
+                                        <TableHead>Nama Aplikasi</TableHead>
+                                        <TableHead>Deskripsi Aplikasi</TableHead>
+                                        <TableHead>Status</TableHead>
+                                        <TableHead>Pesan Admin</TableHead>
+                                        <TableHead>Aksi lainnya</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {
+                                        api_token_requests.map((api, index) => (
+                                            <TableRow key={api.id}>
+                                                <TableCell>{index + 1}</TableCell>
+                                                <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{api.application_name}</TableCell>
+                                                <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{api.application_description}</TableCell>
+                                                <TableCell className='capitalize'>{api.status}</TableCell>
+                                                <TableCell>{api.message || '-'}</TableCell>
+                                                <TableCell>
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger asChild>
+                                                            <Button variant="ghost" size="sm">
+                                                                <MoreHorizontal />
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent>
+                                                            <DropdownMenuLabel>Aksi</DropdownMenuLabel>
+                                                            <DropdownMenuSeparator />
+                                                            <DropdownMenuItem asChild disabled={api.status !== 'approved'}>
+                                                                <Link className='flex justify-between gap-4 w-full' href={generate(api.id).url} method='post'>
+                                                                    Buat token baru <RefreshCw />
+                                                                </Link>
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem asChild>
+                                                                <Link className='flex justify-between gap-4 w-full' href={editApi(api.id).url}>
+                                                                    Edit data <Pencil />
+                                                                </Link>
+                                                            </DropdownMenuItem>
+                                                            <AlertButton
+                                                                alertTrigger={
+                                                                    <DropdownMenuItem 
+                                                                        className='flex justify-between gap-4 w-full'
+                                                                        onSelect={(e) => e.preventDefault()}
+                                                                    >
+                                                                        Hapus token <Trash />
+                                                                    </DropdownMenuItem>
+                                                                }
+                                                                label="Hapus token"
+                                                                icon={<Trash />}
+                                                                alertDescription={`Token API ${api.application_name} akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan. Pastikan tidak ada aplikasi yang sedang menggunakan token ini.`}
+                                                                link={destroyApi(api.id).url}
+                                                                method="delete"
+                                                            />
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))
+                                    }
+                                </TableBody>
+                            </Table>
+                        ) : (
+                            <p>Tidak ada list akses token API, klik tombol di bawah untuk mengajukan permintaan</p>
+                        )
+                        }
+                        <Link as={'button'} href={api.url()} className='self-start'>
+                            <Button>Pengajuan <KeyRound /></Button>
+                        </Link>
+                    </TabsContent>
+                </Tabs>
             </div>
         </AppLayout>
     );

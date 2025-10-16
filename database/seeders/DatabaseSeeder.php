@@ -22,6 +22,7 @@ use App\Models\DataCollectorType;
 use App\Models\MinimumEducationRequirement;
 use App\Models\AnalysisMethod;
 use App\Models\AnalysisUnit;
+use App\Models\ApiTokenRequest;
 use App\Models\CollectedVariable;
 use App\Models\MetadataStatisticForm;
 use App\Models\PresentationLevel;
@@ -445,5 +446,11 @@ class DatabaseSeeder extends Seeder
                 }
             })
             ->create();
+        
+        $users = User::factory(10)->create();
+        User::factory(10)->unapproved()->create();
+
+        MetadataStatisticForm::factory(49)->recycle($users)->create();
+        ApiTokenRequest::factory(50)->recycle($users)->create();
     }
 }

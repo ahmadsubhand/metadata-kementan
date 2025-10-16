@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ApiRequestStatus;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,6 +11,8 @@ use Laravel\Sanctum\PersonalAccessToken;
 
 class ApiTokenRequest extends Model
 {
+    use HasFactory;
+    
     protected $fillable = [
        'personal_access_token_id',
        'user_id',

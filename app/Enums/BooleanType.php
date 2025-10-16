@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum BooleanType: string
+enum BooleanType: int
 {
     case Yes = 1;
     case No = 2;
