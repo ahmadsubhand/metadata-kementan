@@ -10,12 +10,23 @@ use Inertia\Response;
 
 class UserManagementController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $users = DB::table('users')
+        $status = $request->validate([
+            'status' => 'nullable|in:approved,pending',
+        ])['status'] ?? 'all';
+
+        $query = DB::table('users')
             ->orderBy('approved_at','asc')
-            ->orderBy('email_verified_at', 'desc')
-            ->get();
+            ->orderBy('email_verified_at', 'desc');
+        
+        if ($status === 'pending') {
+            $query->where('approved_at', null);
+        } else if ($status === 'approved') {
+            $query->where('approved_at', '!=', null);
+        }
+
+        $users = $query->simplePaginate(10)->withQueryString();
 
         return Inertia::render('admin/manage-user', [
             'users' => $users

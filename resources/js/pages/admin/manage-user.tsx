@@ -1,14 +1,16 @@
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { approve, admin, destroy } from '@/routes/manage-user';
 import { manageUser } from '@/routes';
-import { SharedData, type BreadcrumbItem } from '@/types';
+import { SharedData, SimplePaginatedResponse, type BreadcrumbItem } from '@/types';
 import { Head, } from '@inertiajs/react';
 import dayjs from 'dayjs';
 import { KeyRound, MoreHorizontal, Trash, UserRoundCheck } from 'lucide-react';
 import AlertButton from '@/components/alert-button';
+import AppFilter from '@/components/app-filter';
+import { SimplePagination } from '@/components/app-pagination';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -16,16 +18,30 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: manageUser().url,
     },
 ];
-
-export default function ManageUser({ users } : { users: SharedData['auth']['user'][] }) {
+type ManageUserTypes = {
+    users: SimplePaginatedResponse<
+        SharedData['auth']['user']
+    >
+}
+export default function ManageUser({ users } : ManageUserTypes) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Manajemen Pengguna" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <h1 className='font-bold'>List Pengguna</h1>
+                <div className="w-full flex justify-between">
+                    <AppFilter url={users.path} status={[
+                        { value: '', label: 'Semua' },
+                        { label: 'Pending', value: 'pending' },
+                        { label: 'Approved', value: 'approved' },
+                    ]} />
+                    <SimplePagination
+                        prev_page_link={users.prev_page_url}
+                        next_page_link={users.next_page_url}
+                    />
+                </div>
                 <Table>
-                    <TableCaption>List Pengguna</TableCaption>
                     <TableHeader>
                         <TableRow>
                             <TableHead>No</TableHead>
@@ -39,9 +55,9 @@ export default function ManageUser({ users } : { users: SharedData['auth']['user
                     </TableHeader>
                     <TableBody>
                         {
-                            users.map((user, index) => (
+                            users.data.map((user, index) => (
                                 <TableRow key={index}>
-                                    <TableCell>{index + 1}</TableCell>
+                                    <TableCell>{users.from + index}</TableCell>
                                     <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{user.name}</TableCell>
                                     <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{user.email}</TableCell>
                                     <TableCell className='capitalize'>{user.role}</TableCell>

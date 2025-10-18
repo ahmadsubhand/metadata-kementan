@@ -1,9 +1,9 @@
 import AppLayout from '@/layouts/app-layout';
 import { api, dashboard, metadata } from '@/routes'
-import { ApiTokenRequestType, type BreadcrumbItem } from '@/types';
+import { ApiTokenRequestType, SimplePaginatedResponse, type BreadcrumbItem } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Copy, Download, FilePenLine, KeyRound, MoreHorizontal, Pencil, RefreshCw, Trash, X } from 'lucide-react';
 import { destroy as destroyMetadata, edit as editMetadata } from '@/routes/metadata';
@@ -17,6 +17,7 @@ import { pdf } from '@react-pdf/renderer';
 import { saveAs } from 'file-saver';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TabsContent } from '@radix-ui/react-tabs';
+import { SimplePagination } from '@/components/app-pagination';
 
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -26,24 +27,26 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 type DashboardType = {
-    forms : (MetadataStoreType & {
-        id: number;
-        status: 'draft' | 'pending' | 'revising' | 'approved' | 'rejected' | 'finalized';
-        message: string | null;
-        data_collection_approach?: {
-            id: number
-            label: string
-        } | null;
-        activity_sector?: {
-            id: number
-            label: string
-        } | null;
-        statistical_activity_type?: {
-            id: number
-            label: string
-        } | null;
-    })[],
-    api_token_requests: ApiTokenRequestType[]
+    forms : SimplePaginatedResponse<
+        (MetadataStoreType & {
+            id: number;
+            status: 'draft' | 'pending' | 'revising' | 'approved' | 'rejected' | 'finalized';
+            message: string | null;
+            data_collection_approach?: {
+                id: number
+                label: string
+            } | null;
+            activity_sector?: {
+                id: number
+                label: string
+            } | null;
+            statistical_activity_type?: {
+                id: number
+                label: string
+            } | null;
+        })
+    >,
+    api_token_requests: SimplePaginatedResponse<ApiTokenRequestType>
 }
 export default function Dashboard({ forms, api_token_requests } : DashboardType) {
     const { flash } = usePage().props as {
@@ -114,9 +117,15 @@ export default function Dashboard({ forms, api_token_requests } : DashboardType)
                     <TabsContent value='metadata' className="flex flex-col gap-4 overflow-x-auto rounded-xl">
                         {/* List Metadata Statistic */}
                         <h1 className='font-bold'>List Metadata Kegiatan Tersimpan</h1>
-                        {(forms.length > 0) ? (
+                        <div className="w-full flex justify-between">
+                            <SimplePagination
+                                prev_page_link={forms.prev_page_url}
+                                next_page_link={forms.next_page_url}
+                                isDashboard={true}
+                            />
+                        </div>
+                        {(forms.data.length > 0) ? (
                             <Table>
-                                <TableCaption>List Metadata Kegiatan Tersimpan</TableCaption>
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead>No</TableHead>
@@ -131,7 +140,7 @@ export default function Dashboard({ forms, api_token_requests } : DashboardType)
                                 </TableHeader>
                                 <TableBody>
                                     {
-                                        forms.map((form, index) => (
+                                        forms.data.map((form, index) => (
                                             <TableRow key={form.id}>
                                                 <TableCell>{index + 1}</TableCell>
                                                 <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{form.activity_title}</TableCell>
@@ -195,9 +204,15 @@ export default function Dashboard({ forms, api_token_requests } : DashboardType)
                     <TabsContent value='api' className="flex flex-col gap-4 overflow-x-auto rounded-xl">
                         {/* List API Token */}
                         <h1 className='font-bold'>List Token API</h1>
-                        {(api_token_requests.length > 0) ? (
+                        <div className="w-full flex justify-end">
+                            <SimplePagination
+                                prev_page_link={api_token_requests.prev_page_url}
+                                next_page_link={api_token_requests.next_page_url}
+                                isDashboard={true}
+                            />
+                        </div>
+                        {(api_token_requests.data.length > 0) ? (
                             <Table>
-                                <TableCaption>List Token API</TableCaption>
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead>No</TableHead>
@@ -210,7 +225,7 @@ export default function Dashboard({ forms, api_token_requests } : DashboardType)
                                 </TableHeader>
                                 <TableBody>
                                     {
-                                        api_token_requests.map((api, index) => (
+                                        api_token_requests.data.map((api, index) => (
                                             <TableRow key={api.id}>
                                                 <TableCell>{index + 1}</TableCell>
                                                 <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{api.application_name}</TableCell>

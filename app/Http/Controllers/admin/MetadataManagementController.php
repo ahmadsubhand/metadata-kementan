@@ -2,18 +2,24 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\FormStatus;
 use App\Http\Controllers\Controller;
 use App\Models\MetadataStatisticForm;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class MetadataManagementController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $metadata_forms = MetadataStatisticForm::with([
+        $status = $request->validate([
+            'status' => ['nullable', Rule::enum(FormStatus::class)],
+        ])['status'] ?? 'all';
+
+        $query = MetadataStatisticForm::with([
             'user:id,name',
 
             // Checkbox
@@ -29,20 +35,26 @@ class MetadataManagementController extends Controller
             'collectedVariables'
         ])
         ->orderBy('approved_at','asc')
-        ->orderBy('updated_at', 'desc')
-        ->get()
-        ->map(function ($item) {
-            $arr = $item->toArray();
+        ->orderBy('updated_at', 'desc');
 
-            $arr['data_collection_methods'] = $item->dataCollectionMethods->pluck('id')->all();
-            $arr['data_collection_tools'] = $item->dataCollectionTools->pluck('id')->all();
-            $arr['data_collection_units'] = $item->dataCollectionUnits->pluck('id')->all();
-            $arr['data_quality_check_methods'] = $item->dataQualityCheckMethods->pluck('id')->all();
-            $arr['analysis_units'] = $item->analysisUnits->pluck('id')->all();
-            $arr['presentation_levels'] = $item->presentationLevels->pluck('id')->all();
+        if ($status !== 'all') {
+            $query->where('status', $status);
+        }
 
-            return $arr;
-        });
+        $metadata_forms = $query->simplePaginate(10)
+            ->withQueryString()
+            ->through(function ($item) {
+                $arr = $item->toArray();
+
+                $arr['data_collection_methods'] = $item->dataCollectionMethods->pluck('id')->all();
+                $arr['data_collection_tools'] = $item->dataCollectionTools->pluck('id')->all();
+                $arr['data_collection_units'] = $item->dataCollectionUnits->pluck('id')->all();
+                $arr['data_quality_check_methods'] = $item->dataQualityCheckMethods->pluck('id')->all();
+                $arr['analysis_units'] = $item->analysisUnits->pluck('id')->all();
+                $arr['presentation_levels'] = $item->presentationLevels->pluck('id')->all();
+
+                return $arr;
+            });
         
         return Inertia::render('admin/manage-metadata', [
             'metadata_forms' => $metadata_forms

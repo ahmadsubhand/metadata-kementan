@@ -2,22 +2,34 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\ApiRequestStatus;
 use App\Http\Controllers\Controller;
 use App\Models\ApiTokenRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class ApiAccessManagementController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $api_token_requests = ApiTokenRequest::with([
+        $status = $request->validate([
+            'status' => ['nullable', Rule::enum(ApiRequestStatus::class)],
+        ])['status'] ?? 'all';
+
+        $query = ApiTokenRequest::with([
             'user:id,name'
         ])
         ->orderBy('approved_at','asc')
-        ->orderBy('updated_at', 'desc')
-        ->get();
+        ->orderBy('updated_at', 'desc');
+
+        if ($status !== 'all') {
+            $query->where('status', $status);
+        }
+
+        $api_token_requests = $query->simplePaginate(10)->withQueryString();
 
         return Inertia::render('admin/manage-api', [
             'api_token_requests' => $api_token_requests

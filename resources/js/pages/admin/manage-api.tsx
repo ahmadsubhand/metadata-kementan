@@ -1,13 +1,16 @@
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { approve, remove } from '@/routes/manage-api';
 import { manageApi } from '@/routes';
-import { ApiTokenRequestType, type BreadcrumbItem } from '@/types';
-import { Head, } from '@inertiajs/react';
+import { ApiTokenRequestType, SimplePaginatedResponse, type BreadcrumbItem } from '@/types';
+import { Head } from '@inertiajs/react';
 import { KeyIcon, MoreHorizontal, Trash } from 'lucide-react';
 import AlertButton from '@/components/alert-button';
+import { useEffect } from 'react';
+import { SimplePagination } from '@/components/app-pagination';
+import AppFilter from '@/components/app-filter';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -17,21 +20,36 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 type ManageApiType = {
-    api_token_requests : (ApiTokenRequestType & {
-        user: {
-            name: string
-        }
-    })[]
+    api_token_requests: SimplePaginatedResponse<
+        (ApiTokenRequestType & {
+            user: {
+                name: string
+            }
+        })
+    >
 }
 export default function ManageApi({ api_token_requests } : ManageApiType) {
-
+    useEffect(() => {
+        console.log(api_token_requests);
+    }, [api_token_requests])
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Manajemen Akses API" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <h1 className='font-bold'>List Akses API</h1>
+                <div className="w-full flex justify-between">
+                    <AppFilter url={api_token_requests.path} status={[
+                        { value: '', label: 'Semua' },
+                        { value: 'pending', label: 'Pending' },
+                        { value: 'rejected', label: 'Rejected' },
+                        { value: 'Approved', label: 'Approved' },
+                    ]} />
+                    <SimplePagination 
+                        prev_page_link={api_token_requests.prev_page_url}
+                        next_page_link={api_token_requests.next_page_url}
+                    />
+                </div>
                 <Table>
-                    <TableCaption>List Akses API</TableCaption>
                     <TableHeader>
                         <TableRow>
                             <TableHead>No</TableHead>
@@ -45,9 +63,9 @@ export default function ManageApi({ api_token_requests } : ManageApiType) {
                     </TableHeader>
                     <TableBody>
                         {
-                            api_token_requests.map((api, index) => (
+                            api_token_requests.data.map((api, index) => (
                                 <TableRow key={index}>
-                                    <TableCell>{index + 1}</TableCell>
+                                    <TableCell>{api_token_requests.from + index}</TableCell>
                                     <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{api.user.name}</TableCell>
                                     <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{api.application_name}</TableCell>
                                     <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{api.application_description}</TableCell>

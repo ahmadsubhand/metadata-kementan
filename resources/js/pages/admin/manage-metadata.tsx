@@ -1,18 +1,19 @@
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { approve, destroy } from '@/routes/manage-metadata';
 import { manageUser } from '@/routes';
-import { type BreadcrumbItem } from '@/types';
+import { SimplePaginatedResponse, type BreadcrumbItem } from '@/types';
 import { Head, Link, } from '@inertiajs/react';
 import { Download, FileCheck2, MoreHorizontal, Trash } from 'lucide-react';
 import AlertButton from '@/components/alert-button';
 import { MetadataStoreType } from '@/validators/metadata';
-import { pdf, PDFDownloadLink } from '@react-pdf/renderer';
+import { pdf } from '@react-pdf/renderer';
 import { MetadataDocument } from '../metadata/preview-page';
-import { useEffect } from 'react';
 import { saveAs } from 'file-saver';
+import AppFilter from '@/components/app-filter';
+import { SimplePagination } from '@/components/app-pagination';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -22,14 +23,16 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 type ManageMetadataType = {
-    metadata_forms : (MetadataStoreType & {
-        id: number,
-        user: {
-            name: string
-        },
-        status: 'draft' | 'pending' | 'revising' | 'approved' | 'rejected' | 'finalized'
-        message: string | null;
-    })[]
+    metadata_forms : SimplePaginatedResponse<
+        (MetadataStoreType & {
+            id: number,
+            user: {
+                name: string
+            },
+            status: 'draft' | 'pending' | 'revising' | 'approved' | 'rejected' | 'finalized'
+            message: string | null;
+        })
+    >
 }
 export default function ManageMetadata({ metadata_forms } : ManageMetadataType) {
     
@@ -42,8 +45,22 @@ export default function ManageMetadata({ metadata_forms } : ManageMetadataType) 
             <Head title="Manajemen Metadata" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <h1 className='font-bold'>List Metadata Statistik Pengguna</h1>
+                <div className="w-full flex justify-between">
+                    <AppFilter url={metadata_forms.path} status={[
+                        { value: '', label: 'Semua' },
+                        { label: 'Draft', value: 'draft' },
+                        { label: 'Pending', value: 'pending' },
+                        { label: 'Revising', value: 'revising' },
+                        { label: 'Approved', value: 'approved' },
+                        { label: 'Rejected', value: 'rejected' },
+                        { label: 'Finalized', value: 'finalized' },                        
+                    ]} />
+                    <SimplePagination
+                        prev_page_link={metadata_forms.prev_page_url}
+                        next_page_link={metadata_forms.next_page_url}
+                    />
+                </div>
                 <Table>
-                    <TableCaption>List Metadata Statistik Pengguna</TableCaption>
                     <TableHeader>
                         <TableRow>
                             <TableHead>No</TableHead>
@@ -57,9 +74,9 @@ export default function ManageMetadata({ metadata_forms } : ManageMetadataType) 
                     </TableHeader>
                     <TableBody>
                         {
-                            metadata_forms.map((form, index) => (
-                                <TableRow key={form.id}>
-                                    <TableCell>{index + 1}</TableCell>
+                            metadata_forms.data.map((form, index) => (
+                                <TableRow key={index}>
+                                    <TableCell>{metadata_forms.from + index}</TableCell>
                                     <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{form.user.name}</TableCell>
                                     <TableCell className='max-w-sm overflow-hidden text-ellipsis'>{form.activity_title}</TableCell>
                                     <TableCell>{form.activity_year}</TableCell>

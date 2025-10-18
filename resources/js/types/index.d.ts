@@ -86,3 +86,36 @@ export type ApiTokenRequestType = {
     status: "pending" | "approved" | "rejected";
     message: string | null;
 }
+
+export type PaginatedResponse<T> = {
+    current_page: number;
+    data: T[];
+    first_page_url: string;
+    from: number;
+    last_page: number;
+    last_page_url: string;
+    links: {
+        url: string | null;
+        label: string;
+        active: boolean;
+    }[];
+    next_page_url: string | null;
+    path: string;
+    per_page: number;
+    prev_page_url: string | null;
+    to: number;
+    total: number;
+}
+
+export type SimplePaginatedResponse<T> = {
+    data: T[];
+    current_page: number;
+    current_page_url: string;
+    first_page_url: string;
+    from: number;
+    to: number;
+    next_page_url: string | null;
+    prev_page_url: string | null;
+    path: string;
+    per_page: number;
+}

@@ -33,8 +33,9 @@ class DashboardController extends Controller
         ->where('user_id', Auth::id())
         ->orderBy('approved_at','asc')
         ->orderBy('updated_at', 'desc')
-        ->get()
-        ->map(function ($item) {
+        ->simplePaginate(10)
+        ->withQueryString()
+        ->through(function ($item) {
             $arr = $item->toArray();
 
             $arr['data_collection_methods'] = $item->dataCollectionMethods->pluck('id')->all();
@@ -51,7 +52,8 @@ class DashboardController extends Controller
             ->apiTokenRequests()
             ->orderBy('approved_at','asc')
             ->orderBy('updated_at', 'desc')
-            ->get();
+            ->simplePaginate(10)
+            ->withQueryString();
 
         return Inertia::render('dashboard', [
             "forms" => $forms,
