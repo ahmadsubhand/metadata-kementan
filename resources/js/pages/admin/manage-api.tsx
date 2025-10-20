@@ -29,9 +29,6 @@ type ManageApiType = {
     >
 }
 export default function ManageApi({ api_token_requests } : ManageApiType) {
-    useEffect(() => {
-        console.log(api_token_requests);
-    }, [api_token_requests])
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Manajemen Akses API" />
@@ -42,7 +39,7 @@ export default function ManageApi({ api_token_requests } : ManageApiType) {
                         { value: '', label: 'Semua' },
                         { value: 'pending', label: 'Pending' },
                         { value: 'rejected', label: 'Rejected' },
-                        { value: 'Approved', label: 'Approved' },
+                        { value: 'approved', label: 'Approved' },
                     ]} />
                     <SimplePagination 
                         prev_page_link={api_token_requests.prev_page_url}

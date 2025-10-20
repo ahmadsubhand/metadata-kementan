@@ -33,7 +33,7 @@ export default function ResponsiblePage({ form } : SectionProps) {
             {/* Penanggung Jawab Teknis (setingkat Eselon 3) */}
             <H3 text='2.2. Penanggung Jawab Teknis (setingkat Eselon 3)' />
 
-            <SectionLayout className="grid grid-cols-2">
+            <SectionLayout className="grid grid-cols-2use">
                 <InputField
                     form={form}
                     inputName='technical_responsible_name'
