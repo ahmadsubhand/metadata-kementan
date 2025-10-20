@@ -304,6 +304,7 @@ class DatabaseSeeder extends Seeder
                 'frequency_of_implementation_id' => 7,
                 'data_collection_type_id' => 3,
                 'data_collection_coverage_id' => 1,
+                'data_collection_unit_other' => 'Wilayah administratif',
                 // 'data_collection_methods' => '',
                 // 'data_collection_tools' => '',
                 // 'data_collection_units' => '',
@@ -320,6 +321,7 @@ class DatabaseSeeder extends Seeder
             
                 // VI. PENGUMPULAN DATA
                 'pilot_survey' => 2,
+                'data_quality_check_method_other' => 'verifikasi dan Validasi berjenjang',
                 // 'data_quality_check_method' => '',
                 'nonresponse_adjustment' => 2,
                 'data_collector_type_id' => 1,
@@ -334,6 +336,7 @@ class DatabaseSeeder extends Seeder
                 'data_entry_step' => 1,
                 'validation_step' => 1,
                 'analysis_method_id' => 1,
+                'analysis_unit_other' => 'wilayah administratif',
                 // 'analysis_units' => '',
                 // 'presentation_levels' => '',
             

@@ -6,6 +6,8 @@ import SelectOption from "@/components/input/select-option";
 import RadioOption from "@/components/input/radio-option";
 
 export default function FirstPage({ form } : SectionProps) {
+    const statisticalActivityRecommendation = form.watch('statistical_activity_recommendation');
+
     return (
         <FormLayout>
             <SectionLayout>
@@ -100,15 +102,17 @@ export default function FirstPage({ form } : SectionProps) {
                     { label: 'Tidak', value: 2 },
                 ]}
             />
-            <SectionLayout>
-                <InputField 
-                    form={form}
-                    inputName={'recommendation_identity'}
-                    inputLabel={'Jika “Ya”, Identitas Rekomendasi'}
-                    inputPlaceholder={'Nama'}
-                    inputType={'text'}
-                />
-            </SectionLayout>
+            {(statisticalActivityRecommendation === 1) && (
+                <SectionLayout>
+                    <InputField 
+                        form={form}
+                        inputName={'recommendation_identity'}
+                        inputLabel={'Jika “Ya”, Identitas Rekomendasi'}
+                        inputPlaceholder={'Nama'}
+                        inputType={'text'}
+                    />
+                </SectionLayout>
+            )}
         </FormLayout>
     )
 }

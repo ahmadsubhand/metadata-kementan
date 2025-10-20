@@ -72,6 +72,9 @@ return new class extends Migration
             $table->foreignId('frequency_of_implementation_id')->nullable()->constrained();
             $table->foreignId('data_collection_type_id')->nullable()->constrained();
             $table->foreignId('data_collection_coverage_id')->nullable()->constrained();
+            $table->string('data_collection_method_other')->nullable();
+            $table->string('data_collection_tool_other')->nullable();
+            $table->string('data_collection_unit_other')->nullable();
             // activity_regions table
             // data_collection_methods checkbox
             // data_collection_tools checkbox
@@ -89,6 +92,7 @@ return new class extends Migration
 
             // VI. PENGUMPULAN DATA
             $table->enum('pilot_survey', array_column(BooleanType::cases(), 'value'))->nullable();
+            $table->string('data_quality_check_method_other')->nullable();
             // data_quality_check_method checkbox
             $table->enum('nonresponse_adjustment', array_column(BooleanType::cases(), 'value'))->nullable();
             $table->foreignId('data_collector_type_id')->nullable()->constrained();
@@ -103,6 +107,8 @@ return new class extends Migration
             $table->enum('data_entry_step', array_column(BooleanType::cases(), 'value'))->nullable();
             $table->enum('validation_step', array_column(BooleanType::cases(), 'value'))->nullable();
             $table->foreignId('analysis_method_id')->nullable()->constrained();
+            $table->string('analysis_unit_other')->nullable();
+            $table->string('presentation_level_other')->nullable();
             // analysis_units checkbox
             // presentation_levels checkbox
 

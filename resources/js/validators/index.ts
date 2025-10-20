@@ -1,5 +1,17 @@
 import { z, ZodType } from 'zod';
 
+export const varChar255Optional = z.preprocess(val => !val ? null : val, z.string().max(255, 'Maksimal 255 karakter').nullable())
+
+export const varChar50Optional = z.preprocess(val => !val ? null : val, z.string().max(50, 'Maksimal 50 karakter').nullable())
+
+export const textOptional = z.preprocess(val => !val ? null : val, z.string().nullable())
+
+export const idOptional = z.preprocess(val => !val ? null : val, z.int().positive().nullable())
+
+export const numberOptional = z.preprocess(val => !val ? null : val, z.number().nullable())
+
+export const booleanNumberOptional = z.preprocess(val => !val ? null : val, z.number().min(1).max(2).nullable())
+
 export const dateOptional = z.preprocess(val => !val ? null : val, z.string({ message: 'Tanggal tidak valid' })
     .regex(/^\d{4}-\d{2}-\d{2}$/, "Tanggal tidak valid")
     .refine(
@@ -8,7 +20,7 @@ export const dateOptional = z.preprocess(val => !val ? null : val, z.string({ me
     )
     .nullable())
 
-export const arrayOptional = z.preprocess(val => !val ? null : val,  z.array(z.coerce.number()).nullable());
+export const arrayOptional = z.preprocess(val => !val ? null : val,  z.array(z.int().positive()).nullable());
 
 export const tableOptional = (schema: ZodType, exceptField: string) =>
     z.preprocess((val) => {

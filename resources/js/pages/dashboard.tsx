@@ -117,14 +117,15 @@ export default function Dashboard({ forms, api_token_requests } : DashboardType)
                     <TabsContent value='metadata' className="flex flex-col gap-4 overflow-x-auto rounded-xl">
                         {/* List Metadata Statistic */}
                         <h1 className='font-bold'>List Metadata Kegiatan Tersimpan</h1>
-                        <div className="w-full flex justify-between">
-                            <SimplePagination
-                                prev_page_link={forms.prev_page_url}
-                                next_page_link={forms.next_page_url}
-                                isDashboard={true}
-                            />
-                        </div>
                         {(forms.data.length > 0) ? (
+                        <>
+                            <div className="w-full flex justify-between">
+                                <SimplePagination
+                                    prev_page_link={forms.prev_page_url}
+                                    next_page_link={forms.next_page_url}
+                                    isDashboard={true}
+                                />
+                            </div>
                             <Table>
                                 <TableHeader>
                                     <TableRow>
@@ -192,6 +193,7 @@ export default function Dashboard({ forms, api_token_requests } : DashboardType)
                                     }
                                 </TableBody>
                             </Table>
+                        </>
                         ) : (
                             <p>Tidak ada formulir metadata tersimpan, klik tombol di bawah untuk mulai mengisi</p>
                         )
@@ -204,14 +206,15 @@ export default function Dashboard({ forms, api_token_requests } : DashboardType)
                     <TabsContent value='api' className="flex flex-col gap-4 overflow-x-auto rounded-xl">
                         {/* List API Token */}
                         <h1 className='font-bold'>List Token API</h1>
-                        <div className="w-full flex justify-end">
-                            <SimplePagination
-                                prev_page_link={api_token_requests.prev_page_url}
-                                next_page_link={api_token_requests.next_page_url}
-                                isDashboard={true}
-                            />
-                        </div>
                         {(api_token_requests.data.length > 0) ? (
+                        <>
+                            <div className="w-full flex justify-end">
+                                <SimplePagination
+                                    prev_page_link={api_token_requests.prev_page_url}
+                                    next_page_link={api_token_requests.next_page_url}
+                                    isDashboard={true}
+                                />
+                            </div>
                             <Table>
                                 <TableHeader>
                                     <TableRow>
@@ -275,6 +278,7 @@ export default function Dashboard({ forms, api_token_requests } : DashboardType)
                                     }
                                 </TableBody>
                             </Table>
+                        </>
                         ) : (
                             <p>Tidak ada list akses token API, klik tombol di bawah untuk mengajukan permintaan</p>
                         )

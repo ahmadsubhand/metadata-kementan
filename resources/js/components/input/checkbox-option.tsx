@@ -2,6 +2,7 @@ import { Control, FieldValues, Path } from 'react-hook-form';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { ReactNode } from 'react';
 import { Checkbox } from '../ui/checkbox';
+import InputField from './input-field';
 
 interface Option {
     label: string;
@@ -16,6 +17,7 @@ interface CheckboxOptionProps<T extends FieldValues> {
     checkboxLabel: ReactNode;
     options: Option[];
     className?: string;
+    otherFieldName?: Path<T>;
 }
 
 export default function CheckboxOption<T extends FieldValues>({
@@ -24,6 +26,7 @@ export default function CheckboxOption<T extends FieldValues>({
     checkboxLabel,
     options,
     className = '',
+    otherFieldName
 }: CheckboxOptionProps<T>) {
     return (
         <FormField
@@ -32,7 +35,7 @@ export default function CheckboxOption<T extends FieldValues>({
             render={() => (
                 <FormItem className={`flex flex-col gap-2 ${className}`}>
                     <FormLabel>{checkboxLabel}</FormLabel>
-                    {options.map((option) => (
+                    {options.map((option, index) => (
                         <FormField 
                             key={option.value}
                             control={form.control}
@@ -40,27 +43,36 @@ export default function CheckboxOption<T extends FieldValues>({
                             render={({ field }) => (
                                 <FormItem
                                     key={option.value}
-                                    className={`flex gap-2`}
+                                    className={`flex gap-2 flex-col items-start`}
                                 >
-                                    <FormControl>
-                                        <Checkbox 
-                                            checked={field.value?.includes(option.value)}
-                                            onCheckedChange={(checked) => {
-                                                if (field.value) {
-                                                    return checked
-                                                        ? field.onChange([...field.value, option.value])
-                                                        : field.onChange(
-                                                            field.value?.filter(
-                                                                (value: number) => value !== option.value
+                                    <div className="flex gap-2">
+                                        <FormControl>
+                                            <Checkbox 
+                                                checked={field.value?.includes(option.value)}
+                                                onCheckedChange={(checked) => {
+                                                    if (field.value) {
+                                                        return checked
+                                                            ? field.onChange([...field.value, option.value])
+                                                            : field.onChange(
+                                                                field.value?.filter(
+                                                                    (value: number) => value !== option.value
+                                                                )
                                                             )
-                                                        )
-                                                } else {
-                                                    return field.onChange([option.value])
-                                                }
-                                            }}
-                                        />
-                                    </FormControl>
-                                    <FormLabel className='font-normal'>{option.label}</FormLabel>
+                                                    } else {
+                                                        return field.onChange([option.value])
+                                                    }
+                                                }}
+                                            />
+                                        </FormControl>
+                                        <FormLabel className='font-normal'>{option.label}</FormLabel>
+                                    </div>
+                                    {(otherFieldName && (options.length === (index + 1)) && field.value?.includes(option.value)) && 
+                                        (<InputField 
+                                            form={form}
+                                            inputName={otherFieldName}
+                                            inputPlaceholder='Sebutkan lainnya'
+                                        />)
+                                    }
                                 </FormItem>
 
                             )}

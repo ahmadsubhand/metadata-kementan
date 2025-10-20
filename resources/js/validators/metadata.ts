@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { z } from 'zod';
-import { arrayOptional, dateOptional } from '.';
+import { arrayOptional, booleanNumberOptional, dateOptional, idOptional, numberOptional, textOptional, varChar255Optional, varChar50Optional } from '.';
 
 export const metadataStoreSchema = z.object({
     // Halaman awal
@@ -14,28 +14,28 @@ export const metadataStoreSchema = z.object({
     activity_sector_id: z.number('Wajib diisi').int(),
     statistical_activity_type_id: z.number('Wajib diisi').int(),
     statistical_activity_recommendation: z.number('Wajib diisi').int().min(1).max(2),
-    recommendation_identity: z.preprocess(val => !val ? null : val, z.string().max(255, 'Maksimal 255 karakter').nullable()),
+    recommendation_identity: varChar255Optional,
 
     // I. PENYELENGGARA
-    organizing_agency: z.preprocess(val => !val ? null : val, z.string().max(255).nullable()),
-    organizing_agency_full_address: z.preprocess(val => !val ? null : val, z.string().max(255).nullable()),
-    organizing_agency_phone: z.preprocess(val => !val ? null : val, z.string().max(50).nullable()),
-    organizing_agency_fax: z.preprocess(val => !val ? null : val, z.string().max(50).nullable()),
+    organizing_agency: varChar255Optional,
+    organizing_agency_full_address: varChar255Optional,
+    organizing_agency_phone: varChar50Optional,
+    organizing_agency_fax: varChar50Optional,
     organizing_agency_email: z.preprocess(val => !val ? null : val, z.email('Email tidak valid').nullable()),
 
     // II. PENANGGUNG JAWAB
-    responsible_echelon_1_unit: z.preprocess(val => !val ? null : val, z.string().max(255).nullable()),
-    responsible_echelon_2_unit: z.preprocess(val => !val ? null : val, z.string().max(255).nullable()),
-    technical_responsible_name: z.preprocess(val => !val ? null : val, z.string().max(255).nullable()),
-    technical_responsible_position: z.preprocess(val => !val ? null : val, z.string().max(255).nullable()),
-    technical_responsible_address: z.preprocess(val => !val ? null : val, z.string().max(255).nullable()),
-    technical_responsible_phone: z.preprocess(val => !val ? null : val, z.string().max(50).nullable()),
-    technical_responsible_fax: z.preprocess(val => !val ? null : val, z.string().max(50).nullable()),
+    responsible_echelon_1_unit: varChar255Optional,
+    responsible_echelon_2_unit: varChar255Optional,
+    technical_responsible_name: varChar255Optional,
+    technical_responsible_position: varChar255Optional,
+    technical_responsible_address: varChar255Optional,
+    technical_responsible_phone: varChar50Optional,
+    technical_responsible_fax: varChar50Optional,
     technical_responsible_email: z.preprocess(val => !val ? null : val, z.email('Email tidak valid').nullable()),
 
     // III. PERENCANAAN DAN PERSIAPAN
-    activity_background: z.preprocess(val => !val ? null : val, z.string().nullable()),
-    activity_objective: z.preprocess(val => !val ? null : val, z.string().nullable()),
+    activity_background: textOptional,
+    activity_objective: textOptional,
     activity_planning_start_date: dateOptional,
     activity_planning_end_date: dateOptional,
     design_start_date: dateOptional,
@@ -55,21 +55,24 @@ export const metadataStoreSchema = z.object({
             z.object({
                 variable_number: z.int().positive(),
                 variable_name: z.string().nonempty('Wajib diisi'),
-                variable_concept: z.preprocess(val => !val ? null : val, z.string().nullable()),
-                variable_definition: z.preprocess(val => !val ? null : val, z.string().nullable()),
-                reference_time: z.preprocess(val => !val ? null : val, z.string().nullable()),
+                variable_concept: textOptional,
+                variable_definition: textOptional,
+                reference_time: textOptional,
             })
         ).nullable()
     ),
 
     // IV. DESAIN KEGIATAN
-    activity_conduct_id: z.preprocess(val => !val ? null : val, z.number().nullable()),
-    frequency_of_implementation_id: z.preprocess(val => !val ? null : val, z.number().nullable()),
-    data_collection_type_id: z.preprocess(val => !val ? null : val, z.number().nullable()),
-    data_collection_coverage_id: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    activity_conduct_id: idOptional,
+    frequency_of_implementation_id: idOptional,
+    data_collection_type_id: idOptional,
+    data_collection_coverage_id: idOptional,
     data_collection_methods: arrayOptional,
+    data_collection_method_other: varChar255Optional,
     data_collection_tools: arrayOptional,
+    data_collection_tool_other: varChar255Optional,
     data_collection_units: arrayOptional,
+    data_collection_unit_other: varChar255Optional,
     activity_regions: z.preprocess(val => !val ? null : val, 
         z.array(
             z.object({
@@ -81,38 +84,41 @@ export const metadataStoreSchema = z.object({
     ),
 
     // V. DESAIN SAMPEL
-    sample_design_type_id: z.preprocess(val => !val ? null : val, z.number().nullable()),
-    final_stage_sampling_method_id: z.preprocess(val => !val ? null : val, z.number().nullable()),
-    sampling_method_id: z.preprocess(val => !val ? null : val, z.number().nullable()),
-    final_stage_sampling_frame_id: z.preprocess(val => !val ? null : val, z.number().nullable()),
-    overall_sample_fraction: z.preprocess(val => !val ? null : val, z.number().nullable()),
-    estimated_sampling_error: z.preprocess(val => !val ? null : val, z.number().nullable()),
-    sampling_unit: z.preprocess(val => !val ? null : val, z.number().nullable()),
-    observation_unit: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    sample_design_type_id: idOptional,
+    final_stage_sampling_method_id: idOptional,
+    sampling_method_id: idOptional,
+    final_stage_sampling_frame_id: idOptional,
+    overall_sample_fraction: numberOptional,
+    estimated_sampling_error: numberOptional,
+    sampling_unit: numberOptional,
+    observation_unit: numberOptional,
 
     // VI. PENGUMPULAN DATA
-    pilot_survey: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    pilot_survey: booleanNumberOptional,
     data_quality_check_methods: arrayOptional,
-    nonresponse_adjustment: z.preprocess(val => !val ? null : val, z.number().nullable()),
-    data_collector_type_id: z.preprocess(val => !val ? null : val, z.number().nullable()),
-    minimum_education_requirement_id: z.preprocess(val => !val ? null : val, z.number().nullable()),
-    number_of_supervisors: z.preprocess(val => !val ? null : val, z.number().nullable()),
-    number_of_enumerators: z.preprocess(val => !val ? null : val, z.number().nullable()),
-    training_of_data_collector: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    data_quality_check_method_other: varChar255Optional,
+    nonresponse_adjustment: booleanNumberOptional,
+    data_collector_type_id: idOptional,
+    minimum_education_requirement_id: idOptional,
+    number_of_supervisors: numberOptional,
+    number_of_enumerators: numberOptional,
+    training_of_data_collector: booleanNumberOptional,
 
     // VII. PENGOLAHAN DAN ANALISIS
-    editing_step: z.preprocess(val => !val ? null : val, z.number().nullable()),
-    coding_step: z.preprocess(val => !val ? null : val, z.number().nullable()),
-    data_entry_step: z.preprocess(val => !val ? null : val, z.number().nullable()),
-    validation_step: z.preprocess(val => !val ? null : val, z.number().nullable()),
-    analysis_method_id: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    editing_step: booleanNumberOptional,
+    coding_step: booleanNumberOptional,
+    data_entry_step: booleanNumberOptional,
+    validation_step: booleanNumberOptional,
+    analysis_method_id: idOptional,
     analysis_units: arrayOptional,
+    analysis_unit_other: varChar255Optional,
     presentation_levels: arrayOptional,
+    presentation_level_other: varChar255Optional,
 
     // VIII. DISEMINASI HASIL
-    printed_product: z.preprocess(val => !val ? null : val, z.number().nullable()),
-    digital_product: z.preprocess(val => !val ? null : val, z.number().nullable()),
-    microdata_product: z.preprocess(val => !val ? null : val, z.number().nullable()),
+    printed_product: booleanNumberOptional,
+    digital_product: booleanNumberOptional,
+    microdata_product: booleanNumberOptional,
     printed_release_date: dateOptional,
     digital_release_date: dateOptional,
     microdata_release_date: dateOptional,

@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('api_token_requests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('personal_access_token_id')->nullable()->constrained();
+            $table->foreignId('personal_access_token_id')->unique()->nullable()->constrained();
             $table->foreignId('user_id')->constrained();
             $table->string('application_name');
             $table->text('application_description');

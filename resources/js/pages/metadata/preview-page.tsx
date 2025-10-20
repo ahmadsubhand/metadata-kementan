@@ -184,6 +184,14 @@ const styles = StyleSheet.create({
     flexCenter: {
       justifyContent: 'center',
       alignItems: 'center'
+    },
+
+    otherValue: { 
+      width: '200px', 
+      height: '12px', 
+      position: 'absolute', 
+      left: '100%', 
+      marginLeft: '12px' 
     }
 })
 
@@ -554,7 +562,7 @@ const DesignPage = ({ data } : { data: MetadataStoreType }) => (
 
     {/* Metode Pengumpulan Data */}
     <OptionView number="4.6." isCheckbox={true} label="Metode Pengumpulan Data:" selectedValues={data.data_collection_methods}>
-      <OptionColumn isCheckbox={true} selectedValues={data.data_collection_methods} options={[
+      <OptionColumn isCheckbox={true} selectedValues={data.data_collection_methods} otherValue={data.data_collection_method_other} options={[
         { label: 'Wawancara', value: 1 },
         { label: 'Mengisi kuesioner sendiri (swacacah)', value: 2 },
         { label: 'Pengamatan (observasi)', value: 3 },
@@ -565,24 +573,28 @@ const DesignPage = ({ data } : { data: MetadataStoreType }) => (
 
     {/* Sarana Pengumpulan Data */}
     <OptionView number="4.7." isCheckbox={true} label="Sarana Pengumpulan Data:" selectedValues={data.data_collection_tools}>
-      <OptionColumn isCheckbox={true} style={[{ maxWidth: '500px' }]} selectedValues={data.data_collection_tools} options={[
-        { label: 'Pencil-and-Paper Interviewing (PAPI)', value: 1 },
-        { label: 'Computer-assisted Personal Interviewing (CAPI)', value: 2 },
-        { label: 'Computer-assisted Telephones Interviewing (CATI)', value: 3 },
-        { label: 'Computer Aided Web Interviewing (CAWI)', value: 4 },
-        { label: 'Mail', value: 5 },
-        { label: 'Lainnya', value: 6 },
-      ]}/>
+      <OptionColumn isCheckbox={true} style={[{ maxWidth: '500px' }]} selectedValues={data.data_collection_tools} 
+        otherValue={data.data_collection_tool_other} options={[
+          { label: 'Pencil-and-Paper Interviewing (PAPI)', value: 1 },
+          { label: 'Computer-assisted Personal Interviewing (CAPI)', value: 2 },
+          { label: 'Computer-assisted Telephones Interviewing (CATI)', value: 3 },
+          { label: 'Computer Aided Web Interviewing (CAWI)', value: 4 },
+          { label: 'Mail', value: 5 },
+          { label: 'Lainnya', value: 6 },
+        ]}
+      />
     </OptionView>
 
     {/* Unit Pengumpulan Data */}
     <OptionView number="4.8." isCheckbox={true} label="Unit Pengumpulan Data:"selectedValues={data.data_collection_units} >
-      <OptionColumn isCheckbox={true} selectedValues={data.data_collection_units} options={[
-        { label: 'Individu', value: 1 },
-        { label: 'Rumah tangga', value: 2 },
-        { label: 'Usaha/perusahaan', value: 3 },
-        { label: 'Lainnya', value: 4 },
-      ]}/>
+      <OptionColumn isCheckbox={true} selectedValues={data.data_collection_units} 
+        otherValue={data.data_collection_unit_other} options={[
+          { label: 'Individu', value: 1 },
+          { label: 'Rumah tangga', value: 2 },
+          { label: 'Usaha/perusahaan', value: 3 },
+          { label: 'Lainnya', value: 4 },
+        ]}
+      />
     </OptionView>
   </View>
 )
@@ -681,12 +693,14 @@ const CollectionPage = ({ data } : { data: MetadataStoreType }) => (
     {/* Metode Pemeriksaan Kualitas Pengumpulan Data */}
     <OptionView isCheckbox={true} label="Metode Pemeriksaan Kualitas Pengumpulan Data:" number="6.2." 
       selectedValues={data.data_quality_check_methods}>
-      <OptionColumn isCheckbox={true} selectedValues={data.data_quality_check_methods} options={[
-        { label: 'Kunjungan kembali (revisit)', value: 1 },
-        { label: 'Supervisi', value: 2 },
-        { label: 'Task Force', value: 3 },
-        { label: 'Lainnya', value: 4 },
-      ]} />
+      <OptionColumn isCheckbox={true} selectedValues={data.data_quality_check_methods} 
+        otherValue={data.data_quality_check_method_other} options={[
+          { label: 'Kunjungan kembali (revisit)', value: 1 },
+          { label: 'Supervisi', value: 2 },
+          { label: 'Task Force', value: 3 },
+          { label: 'Lainnya', value: 4 },
+        ]}
+      />
     </OptionView>
 
     {/* Apakah Melakukan Penyesuaian Nonrespon? */}
@@ -772,7 +786,7 @@ const AnalysisPage = ({ data } : { data: MetadataStoreType }) => (
           { value: 2, label: 'Rumah tangga' },
         ]}
       />
-      <OptionColumn isCheckbox={true} selectedValues={data.analysis_units}
+      <OptionColumn isCheckbox={true} otherValue={data.analysis_unit_other} selectedValues={data.analysis_units}
         options={[
           { value: 3, label: 'Usaha/perusahaan' },
           { value: 4, label: 'Lainnya' },
@@ -790,7 +804,7 @@ const AnalysisPage = ({ data } : { data: MetadataStoreType }) => (
           { value: 3, label: 'Kabupaten/Kota' },
         ]}
       />
-      <OptionColumn isCheckbox={true} selectedValues={data.presentation_levels}
+      <OptionColumn isCheckbox={true} otherValue={data.presentation_level_other} selectedValues={data.presentation_levels}
         options={[
           { value: 4, label: 'Kecamatan' },
           { value: 5, label: 'Lainnya' },
@@ -955,10 +969,10 @@ const WrapView = ({ children, style, wrap=false } : { children: ReactNode, style
 )
 
 const OptionColumn = (
-  { options, style=[], selectedValues=[], isCheckbox=false } : 
+  { options, style=[], selectedValues=[], isCheckbox=false, otherValue } : 
   { 
     options: {label: string, value: number}[], style?: Style[], 
-    selectedValues?: (number | null)[] | number[] | null, isCheckbox?: boolean
+    selectedValues?: (number | null)[] | number[] | null, isCheckbox?: boolean, otherValue?: string | null
   }
 ) => (
   <View style={[styles.optionColumn, styles.optionLabel, ...(style && [...style])]}>
@@ -972,6 +986,11 @@ const OptionColumn = (
               - {displayValue}
             </Text>
             {selectedValues?.includes(option.value) && (<View style={[styles.optionChecked, {...((displayValue > 9) && { left: '-4px' })}]} />)}
+            {otherValue && (options.length === (index + 1)) && (
+              <View style={styles.otherValue}>
+                <Text>{otherValue}</Text>
+              </View>
+            )}
           </View>
         </View>
       )

@@ -88,8 +88,11 @@ export default function Metadata({ metadata_form } : { metadata_form?: Omit<Meta
                 data_collection_type_id: metadata_form.data_collection_type_id,
                 data_collection_coverage_id: metadata_form.data_collection_coverage_id,
                 data_collection_methods: metadata_form.data_collection_methods,
+                data_collection_method_other: metadata_form.data_collection_method_other,
                 data_collection_tools: metadata_form.data_collection_tools,
+                data_collection_tool_other: metadata_form.data_collection_tool_other,
                 data_collection_units: metadata_form.data_collection_units,
+                data_collection_unit_other: metadata_form.data_collection_unit_other,
                 activity_regions: metadata_form.activity_regions,
             
                 // V. DESAIN SAMPEL
@@ -105,6 +108,7 @@ export default function Metadata({ metadata_form } : { metadata_form?: Omit<Meta
                 // VI. PENGUMPULAN DATA
                 pilot_survey: metadata_form.pilot_survey ? parseInt(metadata_form.pilot_survey.toString()) : null,
                 data_quality_check_methods: metadata_form.data_quality_check_methods,
+                data_quality_check_method_other: metadata_form.data_quality_check_method_other,
                 nonresponse_adjustment: metadata_form.nonresponse_adjustment ? parseInt(metadata_form.nonresponse_adjustment.toString()) : null,
                 data_collector_type_id: metadata_form.data_collector_type_id,
                 minimum_education_requirement_id: metadata_form.minimum_education_requirement_id,
@@ -119,7 +123,9 @@ export default function Metadata({ metadata_form } : { metadata_form?: Omit<Meta
                 validation_step: metadata_form.validation_step ? parseInt(metadata_form.validation_step.toString()) : null,
                 analysis_method_id: metadata_form.analysis_method_id,
                 analysis_units: metadata_form.analysis_units,
+                analysis_unit_other: metadata_form.analysis_unit_other,
                 presentation_levels: metadata_form.presentation_levels,
+                presentation_level_other: metadata_form.presentation_level_other,
             
                 // VIII. DISEMINASI HASIL
                 printed_product: metadata_form.printed_product ? parseInt(metadata_form.printed_product.toString()) : null,
@@ -135,7 +141,10 @@ export default function Metadata({ metadata_form } : { metadata_form?: Omit<Meta
     const [isLoading, setIsLoading] = useState(false);
 
     function clearConditionalQuestion(data:MetadataStoreType) {
-       // Clear conditional question
+        // Clear conditional question
+        if (data.statistical_activity_recommendation === 2) {
+            data.recommendation_identity = null;
+        }
         if (!data.activity_conduct_id || (data.activity_conduct_id === 1)) {
             data.frequency_of_implementation_id = null;
         }
@@ -240,15 +249,17 @@ export default function Metadata({ metadata_form } : { metadata_form?: Omit<Meta
         data_collection_type_id: 'design_page',
         data_collection_coverage_id: 'design_page',
         data_collection_methods: 'design_page',
+        data_collection_method_other: 'design_page',
         data_collection_tools: 'design_page',
+        data_collection_tool_other: 'design_page',
         data_collection_units: 'design_page',
+        data_collection_unit_other: 'design_page',
         activity_regions: 'design_page',
 
         // V. DESAIN SAMPEL
         sample_design_type_id: 'sampling_page',
         final_stage_sampling_method_id: 'sampling_page',
-        probability_sampling_method_id: 'sampling_page',
-        nonprobability_sampling_method_id: 'sampling_page',
+        sampling_method_id: 'sampling_page',
         final_stage_sampling_frame_id: 'sampling_page',
         overall_sample_fraction: 'sampling_page',
         estimated_sampling_error: 'sampling_page',
@@ -258,6 +269,7 @@ export default function Metadata({ metadata_form } : { metadata_form?: Omit<Meta
         // VI. PENGUMPULAN DATA
         pilot_survey: 'collection_page',
         data_quality_check_methods: 'collection_page',
+        data_quality_check_method_other: 'collection_page',
         nonresponse_adjustment: 'collection_page',
         data_collector_type_id: 'collection_page',
         minimum_education_requirement_id: 'collection_page',
@@ -272,7 +284,9 @@ export default function Metadata({ metadata_form } : { metadata_form?: Omit<Meta
         validation_step: 'analysis_page',
         analysis_method_id: 'analysis_page',
         analysis_units: 'analysis_page',
+        analysis_unit_other: 'analysis_page',
         presentation_levels: 'analysis_page',
+        presentation_level_other: 'analysis_page',
 
         // VIII. DISEMINASI HASIL
         printed_product: 'dissemination_page',

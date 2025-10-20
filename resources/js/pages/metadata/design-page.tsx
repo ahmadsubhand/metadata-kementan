@@ -171,6 +171,7 @@ export default function DesignPage({ form } : SectionProps) {
                 form={form}
                 checkboxLabel={<H3 text='4.6. Metode Pengumpulan Data' />}
                 checkboxName={'data_collection_methods'}
+                otherFieldName={'data_collection_method_other'}
                 options={[
                     { label: 'Wawancara', value: 1 },
                     { label: 'Mengisi kuesioner sendiri (swacacah)', value: 2 },
@@ -185,6 +186,7 @@ export default function DesignPage({ form } : SectionProps) {
                 form={form}
                 checkboxLabel={<H3 text='4.7. Sarana Pengumpulan Data' />}
                 checkboxName={'data_collection_tools'}
+                otherFieldName={'data_collection_tool_other'}
                 options={[
                     { label: 'Pencil-and-Paper Interviewing (PAPI)', value: 1 },
                     { label: 'Computer-assisted Personal Interviewing (CAPI)', value: 2 },
@@ -200,6 +202,7 @@ export default function DesignPage({ form } : SectionProps) {
                 form={form}
                 checkboxLabel={<H3 text='4.8. Unit Pengumpulan Data' />}
                 checkboxName={'data_collection_units'}
+                otherFieldName={'data_collection_unit_other'}
                 options={[
                     { label: 'Individu', value: 1 },
                     { label: 'Rumah tangga', value: 2 },

@@ -49,6 +49,8 @@ class MetadataStatisticForm extends Model
         // IV. DESAIN KEGIATAN
         'activity_conduct_id', 'frequency_of_implementation_id',
         'data_collection_type_id', 'data_collection_coverage_id',
+        'data_collection_method_other', 'data_collection_tool_other', 
+        'data_collection_unit_other',
         // One-to-many: activity_regions
         // Many-to-many: data_collection_methods, data_collection_tools, data_collection_units
 
@@ -62,12 +64,13 @@ class MetadataStatisticForm extends Model
         'pilot_survey', 'nonresponse_adjustment',
         'data_collector_type_id', 'minimum_education_requirement_id',
         'number_of_supervisors', 'number_of_enumerators',
-        'training_of_data_collector',
+        'training_of_data_collector', 'data_quality_check_method_other',
         // Many-to-many: data_quality_check_methods
 
         // VII. PENGOLAHAN DAN ANALISIS
         'editing_step', 'coding_step', 'data_entry_step',
         'validation_step', 'analysis_method_id',
+        'analysis_unit_other', 'presentation_level_other',
         // Many-to-many: analysis_units, presentation_levels
 
         // VIII. DISEMINASI HASIL

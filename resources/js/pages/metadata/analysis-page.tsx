@@ -74,6 +74,7 @@ export default function AnalysisPage({ form } : SectionProps) {
                 form={form}
                 checkboxLabel={<H3 text='7.3 Unit Analisis' />}
                 checkboxName="analysis_units"
+                otherFieldName={'analysis_unit_other'}
                 options={[
                     { value: 1, label: 'Individu' },
                     { value: 2, label: 'Rumah tangga' },
@@ -86,6 +87,7 @@ export default function AnalysisPage({ form } : SectionProps) {
                 form={form}
                 checkboxLabel={<H3 text='7.4 Tingkat Penyajian Hasil Analisis' />}
                 checkboxName="presentation_levels"
+                otherFieldName={'presentation_level_other'}
                 options={[
                     { value: 1, label: 'Nasional' },
                     { value: 2, label: 'Provinsi' },

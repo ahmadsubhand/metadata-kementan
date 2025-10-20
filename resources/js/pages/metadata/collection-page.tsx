@@ -30,6 +30,7 @@ export default function CollectionPage({ form } : SectionProps) {
                 form={form}
                 checkboxName="data_quality_check_methods"
                 checkboxLabel={<H3 text='6.2. Metode Pemeriksaan Kualitas Pengumpulan Data' />}
+                otherFieldName={'data_quality_check_method_other'}
                 options={[
                     { label : 'Kunjungan kembali (revisit)', value: 1 },
                     { label : 'Supervisi', value: 2 },
