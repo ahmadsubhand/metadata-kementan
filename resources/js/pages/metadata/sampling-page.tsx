@@ -5,8 +5,9 @@ import H2 from "@/components/h2";
 import H3 from "@/components/h3";
 import SelectOption from "@/components/input/select-option";
 import InputField from "@/components/input/input-field";
+import { MetadataStoreType } from "@/validators/metadata";
 
-export default function SamplingPage({ form } : SectionProps) {
+export default function SamplingPage({ form } : SectionProps<MetadataStoreType>) {
     const finalStageSamplingMethodId = form.watch('final_stage_sampling_method_id') as number | null;
 
     return (

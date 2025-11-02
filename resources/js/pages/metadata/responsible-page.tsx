@@ -4,8 +4,9 @@ import H2 from "@/components/h2";
 import H3 from "@/components/h3";
 import SectionLayout from "./section-layout";
 import InputField from "@/components/input/input-field";
+import { MetadataStoreType } from "@/validators/metadata";
 
-export default function ResponsiblePage({ form } : SectionProps) {
+export default function ResponsiblePage({ form } : SectionProps<MetadataStoreType>) {
     return (
         <FormLayout>
             <H2 text='II. PENANGGUNG JAWAB' />

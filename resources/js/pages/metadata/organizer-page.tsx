@@ -4,8 +4,9 @@ import H2 from "@/components/h2";
 import InputField from "@/components/input/input-field";
 import SectionLayout from "./section-layout";
 import H3 from "@/components/h3";
+import { MetadataStoreType } from "@/validators/metadata";
 
-export default function OrganizerPage({ form } : SectionProps) {
+export default function OrganizerPage({ form } : SectionProps<MetadataStoreType>) {
     return (
         <FormLayout>
             <H2 text='I. PENYELENGGARA' />

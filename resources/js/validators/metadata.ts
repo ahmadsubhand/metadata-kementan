@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { z } from 'zod';
-import { arrayOptional, booleanNumberOptional, dateOptional, idOptional, numberOptional, textOptional, varChar255Optional, varChar50Optional } from '.';
+import { arrayOptional, booleanNumberOptional, dateOptional, emailOptional, idOptional, numberOptional, textOptional, varChar255Optional, varChar50Optional } from '.';
 
 export const metadataStoreSchema = z.object({
     // Halaman awal
@@ -21,7 +21,7 @@ export const metadataStoreSchema = z.object({
     organizing_agency_full_address: varChar255Optional,
     organizing_agency_phone: varChar50Optional,
     organizing_agency_fax: varChar50Optional,
-    organizing_agency_email: z.preprocess(val => !val ? null : val, z.email('Email tidak valid').nullable()),
+    organizing_agency_email: emailOptional,
 
     // II. PENANGGUNG JAWAB
     responsible_echelon_1_unit: varChar255Optional,
@@ -31,7 +31,7 @@ export const metadataStoreSchema = z.object({
     technical_responsible_address: varChar255Optional,
     technical_responsible_phone: varChar50Optional,
     technical_responsible_fax: varChar50Optional,
-    technical_responsible_email: z.preprocess(val => !val ? null : val, z.email('Email tidak valid').nullable()),
+    technical_responsible_email: emailOptional,
 
     // III. PERENCANAAN DAN PERSIAPAN
     activity_background: textOptional,
@@ -50,17 +50,16 @@ export const metadataStoreSchema = z.object({
     result_dissemination_end_date: dateOptional,
     evaluation_start_date: dateOptional,
     evaluation_end_date: dateOptional,
-    collected_variables: z.preprocess(val => !val ? null : val, 
-        z.array(
-            z.object({
-                variable_number: z.int().positive(),
-                variable_name: z.string().nonempty('Wajib diisi'),
-                variable_concept: textOptional,
-                variable_definition: textOptional,
-                reference_time: textOptional,
-            })
-        ).nullable()
-    ),
+    collected_variables: z.array(
+        z.object({
+            variable_number: z.int().positive(),
+            variable_name: z.string().nonempty('Wajib diisi'),
+            variable_concept: textOptional,
+            variable_definition: textOptional,
+            reference_time: textOptional,
+        })
+    ).transform((val) => val.length > 0 ? val : null)
+    .nullable(),
 
     // IV. DESAIN KEGIATAN
     activity_conduct_id: idOptional,
@@ -73,15 +72,14 @@ export const metadataStoreSchema = z.object({
     data_collection_tool_other: varChar255Optional,
     data_collection_units: arrayOptional,
     data_collection_unit_other: varChar255Optional,
-    activity_regions: z.preprocess(val => !val ? null : val, 
-        z.array(
-            z.object({
-                number: z.int().positive(),
-                province: z.string().nonempty('Wajib diisi'),
-                city_or_regency: z.string().nonempty('Wajib diisi'),
-            })
-        ).nullable()
-    ),
+    activity_regions: z.array(
+        z.object({
+            number: z.int().positive(),
+            province: z.string().nonempty('Wajib diisi'),
+            city_or_regency: z.string().nonempty('Wajib diisi'),
+        })
+    ).transform((val) => val.length > 0 ? val : null)
+    .nullable(),
 
     // V. DESAIN SAMPEL
     sample_design_type_id: idOptional,

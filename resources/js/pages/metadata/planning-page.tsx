@@ -9,8 +9,9 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { ChevronUp, Plus, Trash } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useFieldArray } from "react-hook-form"
+import { MetadataStoreType } from "@/validators/metadata"
 
-export default function PlanningPage({ form } : SectionProps) {
+export default function PlanningPage({ form } : SectionProps<MetadataStoreType>) {
     const { fields, append, remove } = useFieldArray({
         control: form.control,
         name: "collected_variables",

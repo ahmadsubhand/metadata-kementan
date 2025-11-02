@@ -11,8 +11,9 @@ import SelectOption from "@/components/input/select-option"
 import CheckboxOption from "@/components/input/checkbox-option"
 import { useFieldArray } from "react-hook-form"
 import InputField from "@/components/input/input-field"
+import { MetadataStoreType } from "@/validators/metadata"
 
-export default function DesignPage({ form } : SectionProps) {
+export default function DesignPage({ form } : SectionProps<MetadataStoreType>) {
     const { fields, append, remove } = useFieldArray({
         control: form.control,
         name: "activity_regions",
@@ -22,7 +23,6 @@ export default function DesignPage({ form } : SectionProps) {
         append({
             number: fields.length + 1,
             province: "",
-            variable_definition: "",
             city_or_regency: "",
         });
     };

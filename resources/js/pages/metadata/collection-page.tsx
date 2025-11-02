@@ -6,8 +6,9 @@ import H3 from "@/components/h3"
 import InputLayout from "./input-layout"
 import CheckboxOption from "@/components/input/checkbox-option"
 import InputSide from "@/components/input/input-side"
+import { MetadataStoreType } from "@/validators/metadata"
 
-export default function CollectionPage({ form } : SectionProps) {
+export default function CollectionPage({ form } : SectionProps<MetadataStoreType>) {
     const dataCollectionTools = form.watch('data_collection_tools') as number[] | null;
 
     return (

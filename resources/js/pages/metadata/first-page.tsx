@@ -4,8 +4,9 @@ import SectionLayout from "./section-layout";
 import InputField from "@/components/input/input-field";
 import SelectOption from "@/components/input/select-option";
 import RadioOption from "@/components/input/radio-option";
+import { MetadataStoreType } from "@/validators/metadata";
 
-export default function FirstPage({ form } : SectionProps) {
+export default function FirstPage({ form } : SectionProps<MetadataStoreType>) {
     const statisticalActivityRecommendation = form.watch('statistical_activity_recommendation');
 
     return (

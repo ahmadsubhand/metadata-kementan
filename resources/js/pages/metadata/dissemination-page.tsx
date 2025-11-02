@@ -6,8 +6,9 @@ import H3 from "@/components/h3";
 import RadioOption from "@/components/input/radio-option";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { DatePicker } from "@/components/input/date-picker";
+import { MetadataStoreType } from "@/validators/metadata";
 
-export default function DisseminationPage({ form } : SectionProps) {
+export default function DisseminationPage({ form } : SectionProps<MetadataStoreType>) {
     return (
         <FormLayout>
             <H2 text='VIII.	DISEMINASI HASIL' />

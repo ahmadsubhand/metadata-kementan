@@ -5,8 +5,9 @@ import InputLayout from "./input-layout"
 import H3 from "@/components/h3"
 import RadioOption from "@/components/input/radio-option"
 import CheckboxOption from "@/components/input/checkbox-option"
+import { MetadataStoreType } from "@/validators/metadata"
 
-export default function AnalysisPage({ form } : SectionProps) {
+export default function AnalysisPage({ form } : SectionProps<MetadataStoreType>) {
     return (
         <FormLayout>
             <H2 text='VII. PENGOLAHAN DAN ANALISIS' />

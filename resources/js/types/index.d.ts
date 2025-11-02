@@ -46,8 +46,8 @@ export interface User {
     [key: string]: unknown; // This allows for additional properties...
 }
 
-export interface SectionProps {
-    form: UseFormReturn;
+export interface SectionProps<T> {
+    form: UseFormReturn<T>;
 }
 
 export type MetadataForm = {
